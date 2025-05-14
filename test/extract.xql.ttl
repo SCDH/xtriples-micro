@@ -1,0 +1,62 @@
+@prefix gods: <https://xtriples.lod.academy/examples/gods/> .
+@prefix rel: <http://purl.org/vocab/relationship/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs: <http://www.w3.org/2001/XMLSchema> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+gods:1 a foaf:Person ;
+	rdfs:label "Aphrodite"@en , "Ἀφροδίτη"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Aphrodite> .
+
+gods:2 a foaf:Person ;
+	rdfs:label "Apollo"@en , "Ἀπόλλων"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Apollo> .
+
+gods:3 a foaf:Person ;
+	rdfs:label "Ares"@en , "Ἄρης"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Ares> .
+
+gods:4 a foaf:Person ;
+	rdfs:label "Artemis"@en , "Ἄρτεμις"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Artemis> .
+
+gods:5 a foaf:Person ;
+	rdfs:label "Athena"@en , "Ἀθηνᾶ"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Athena> .
+
+gods:6 a foaf:Person ;
+	rdfs:label "Demeter"@en , "Δημήτηρ"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Demeter> .
+
+gods:7 a foaf:Person ;
+	rdfs:label "Dionysus"@en , "Διόνυσος"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Dionysus> .
+
+gods:8 a foaf:Person ;
+	rdfs:label "Hades"@en , "ᾍδης"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Hades> .
+
+gods:9 a foaf:Person ;
+	rdfs:label "Hephaestus"@en , "Ἥφαιστος"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Hephaestus> .
+
+gods:10 a foaf:Person ;
+	rdfs:label "Hera"@en , "Ἥρα"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Hera> .
+
+gods:11 a foaf:Person ;
+	rdfs:label "Hermes"@en , "Ἑρμῆς"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Hermes> .
+
+gods:12 a foaf:Person ;
+	rdfs:label "Hestia"@en , "Ἑστία"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Hestia> .
+
+gods:13 a foaf:Person ;
+	rdfs:label "Poseidon"@en , "Ποσειδῶν"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Poseidon> .
+
+gods:14 a foaf:Person ;
+	rdfs:label "Zeus"@en , "Ζεύς"@gr ;
+	rdfs:seeAlso <http://en.wikipedia.org/wiki/Zeus> .
