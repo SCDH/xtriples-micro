@@ -125,26 +125,31 @@ This is only a module and should be imported by some calling stylesheet.
             <xsl:choose>
                 <xsl:when
                     test="$part[self::subject and not(@type)] or $part[self::predicate] or $part/@type eq 'uri'">
-                    <xsl:choose>
-                        <xsl:when test="$part/@prefix">
-                            <xsl:variable name="prefix" as="xs:string" select="$part/@prefix"/>
-                            <xsl:sequence
-                                select="xs:anyURI($vocabularies/vocabulary[@prefix eq $prefix]/@uri || $x)"
-                            />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:variable name="uri-parts" as="xs:string+">
-                                <xsl:if test="$part/@prepend">
-                                    <xsl:sequence select="$part/@prepend"/>
-                                </xsl:if>
-                                <xsl:value-of select="$x"/>
-                                <xsl:if test="$part/@append">
-                                    <xsl:sequence select="$part/@append"/>
-                                </xsl:if>
-                            </xsl:variable>
-                            <xsl:sequence select="string-join($uri-parts) => xs:anyURI()"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <!-- using xsl:value-of to concatenate multiple values to a single string -->
+                    <xsl:value-of>
+                        <xsl:text>&lt;</xsl:text>
+                        <xsl:choose>
+                            <xsl:when test="$part/@prefix">
+                                <xsl:variable name="prefix" as="xs:string" select="$part/@prefix"/>
+                                <xsl:sequence
+                                    select="xs:anyURI($vocabularies/vocabulary[@prefix eq $prefix]/@uri || $x)"
+                                />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:variable name="uri-parts" as="xs:string+">
+                                    <xsl:if test="$part/@prepend">
+                                        <xsl:sequence select="$part/@prepend"/>
+                                    </xsl:if>
+                                    <xsl:value-of select="$x"/>
+                                    <xsl:if test="$part/@append">
+                                        <xsl:sequence select="$part/@append"/>
+                                    </xsl:if>
+                                </xsl:variable>
+                                <xsl:sequence select="string-join($uri-parts) => xs:anyURI()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:text>&gt;</xsl:text>
+                    </xsl:value-of>
                 </xsl:when>
                 <xsl:when test="$part/@type eq 'literal'">
                     <xsl:value-of>
