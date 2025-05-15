@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xtriples="https://xtriples.lod.academy/"
+    stylesheet="xtriples.xsl">
+
+    <x:scenario label="conf-01.xml on god 1">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-01.xml"/>
+            <x:param name="resource" href="../test/gods/1.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of returned items" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="subject" as="xs:string" test="$x:result[1]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/1&gt;'"/>
+        <x:expect label="predicate" as="xs:string" test="$x:result[2]"
+            select="'&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt;'"/>
+        <x:expect label="object" as="xs:string" test="$x:result[3]"
+            select="'&lt;http://xmlns.com/foaf/0.1/Person&gt;'"/>
+    </x:scenario>
+
+</x:description>
