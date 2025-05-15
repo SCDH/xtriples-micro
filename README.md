@@ -66,7 +66,7 @@ passed in via the stylesheet parameter `config-uri`.
 
 
 ```shell
-target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:test/gods/1.xml config-uri=$(realpath test/gods/configuration.xml)
+target/bin/xslt.sh -xsl:xsl/extract.xsl -s:test/gods/1.xml config-uri=$(realpath test/gods/configuration.xml)
 ```
 
 The output should look like this:
@@ -101,13 +101,13 @@ The cleanest solution is passing the configuration as a base64 encoded
 string using the `config-b64` stylesheet parameter:
 
 ```shell
-target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:$(realpath test/gods/1.xml) config-b64=$(cat test/gods/configuration.xml.b64)
+target/bin/xslt.sh -xsl:xsl/extract.xsl -s:$(realpath test/gods/1.xml) config-b64=$(cat test/gods/configuration.xml.b64)
 ```
 
 Or without an intermediate base64 file:
 
 ```shell
-target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:$(realpath test/gods/1.xml) config-b64=$(base64 -w 0 test/gods/configuration.xml)
+target/bin/xslt.sh -xsl:xsl/extract.xsl -s:$(realpath test/gods/1.xml) config-b64=$(base64 -w 0 test/gods/configuration.xml)
 ```
 
 
@@ -130,7 +130,7 @@ parameter `?config-codepoints=...`, that makes Saxon interpret the
 value as an XPath expression.
 
 ```shell
-target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:$(realpath test/gods/1.xml) ?config-codepoints=$(cat test/gods/configuration.xml.json)
+target/bin/xslt.sh -xsl:xsl/extract.xsl -s:$(realpath test/gods/1.xml) ?config-codepoints=$(cat test/gods/configuration.xml.json)
 ```
 
 You generate such an array of codepoints using the
