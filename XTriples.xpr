@@ -2,7 +2,31 @@
 <project>
     <meta>
         <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
-        <options/>
+        <options>
+            <serialized xml:space="preserve">
+                <serializableOrderedMap>
+                    <entry>
+                        <String>key.xpath.option.pane</String>
+                        <Boolean>true</Boolean>
+                    </entry>
+                    <entry>
+                        <String>xpath.proxy.ns.mappings</String>
+                        <String-array>
+                            <String>xs</String>
+                            <String>http://www.w3.org/2001/XMLSchema</String>
+                            <String>fn</String>
+                            <String>http://www.w3.org/2005/xpath-functions</String>
+                            <String>err</String>
+                            <String>http://www.w3.org/2005/xqt-errors</String>
+                            <String>math</String>
+                            <String>http://www.w3.org/2005/xpath-functions/math</String>
+                            <String>bin</String>
+                            <String>http://expath.org/ns/binary</String>
+                        </String-array>
+                    </entry>
+                </serializableOrderedMap>
+            </serialized>
+        </options>
     </meta>
     <projectTree name="XTriples.xpr">
         <folder path="."/>
