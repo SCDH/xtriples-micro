@@ -5,7 +5,7 @@
                 <element name="vocabularies">
                     <oneOrMore>
                         <element name="vocabulary">
-                            <attribute name="name">
+                            <attribute name="prefix">
                                 <data type="NCName"/>
                             </attribute>
                             <attribute name="uri">
