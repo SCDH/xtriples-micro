@@ -1,14 +1,60 @@
-# XTriples as a Micro Service
+# An XTriples Processor for Micro Services and Local Usage
 
 This is an implementation of [XTriples](https://xtriples.lod.academy/)
-that works outside of the eXist-db.
+that works without an eXist-db.
 
-When deployed in the famous SEED XML Transformer, it gives you a
-lightwight microservice implementation of XTriples, where you can send
-a single XML document to and get RDF triples in return. It can also be
-run locally using an XSLT processor like Saxon and can then be used to
-extract RDF triples from arbitrary collections of XML documents on the
-local disk.
+XTriples? In XTriples, instead of writing specialized programs in
+XSLT, XQuery, Python, etc. for extracting RDF triples from XML
+documents, we write configuration files containing selectors. These
+config files are evaluated by an XTriples processor, which returns RDF
+triples. These configuration files look like this:
+
+```
+<?xml-model uri="https://xtriples.lod.academy/xtriples.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<xtriples>
+    <configuration>
+        <vocabularies>
+            <vocabulary prefix="gods" uri="https://xtriples.lod.academy/examples/gods/"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
+        </vocabularies>
+        <triples>
+            <statement>
+                <subject prefix="gods">/@id</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object prefix="foaf" type="uri">Person</object>
+            </statement>
+            <statement>
+                <subject prefix="gods">/@id</subject>
+                <predicate prefix="rdfs">label</predicate>
+                <object type="literal" lang="en">/name/english</object>
+            </statement>
+            <statement>
+                <subject prefix="gods">/@id</subject>
+                <predicate prefix="rdfs">label</predicate>
+                <object type="literal" lang="gr">/name/greek</object>
+            </statement>
+            <statement>
+                <subject prefix="gods">/@id</subject>
+                <predicate prefix="rdfs">seeAlso</predicate>
+                <object type="uri">/concat("http://en.wikipedia.org/wiki/", $currentResource/name/english)</object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection uri="https://xtriples.lod.academy/examples/gods/all.xml">
+	   ...
+    </collection>
+</xtriples>
+```
+
+While the original XTriples processor runs in a eXist database and
+applies a configuration only on the fixed set of XML files contained
+in it, the implementation at hand also runs outside of a database,
+e.g., on a local set of documents. It can also be deployed on the
+famous SEED XML Transformer, where it gives you a lightweight
+microservice implementation of XTriples, where you can send a single
+XML document to and get RDF triples in return.
 
 ## Getting started
 
@@ -16,7 +62,21 @@ local disk.
 
 TODO
 
-### Running locally
+### Oxygen
+
+This project offers an Oxygen framework, that assists writing XTriples
+configuration files and also provides transformation scenarios for
+applying a configuration to a single or a collection of
+documents. Installation is as simple as using the following
+installation link in the installation dialog found in **Help** ->
+**Install New Addons**:
+
+```
+https://scdh.zivgitlabpages.uni-muenster.de/tei-processing/xtriples-micro/descriptor.xml
+```
+
+
+### Command Line
 
 #### Tooling
 
