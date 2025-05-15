@@ -45,9 +45,8 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
         <xsl:variable name="stmt" select="parent::statement"/>
-        <xsl:message>subject</xsl:message>
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params)">
-            <xsl:message>subject</xsl:message>
+            <xsl:message use-when="system-property('debug') eq 'true'">subject</xsl:message>
             <xsl:apply-templates mode="statement" select="$stmt/predicate">
                 <xsl:with-param name="subject" as="item()" tunnel="true" select="."/>
             </xsl:apply-templates>
@@ -59,8 +58,8 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
         <xsl:variable name="stmt" select="parent::statement"/>
-        <xsl:message>predicate</xsl:message>
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params)">
+            <xsl:message use-when="system-property('debug') eq 'true'">predicate</xsl:message>
             <xsl:apply-templates mode="statement" select="$stmt/object">
                 <xsl:with-param name="predicate" as="item()" tunnel="true" select="."/>
             </xsl:apply-templates>
@@ -74,8 +73,8 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
         <xsl:variable name="context" select="."/>
         <xsl:variable name="stmt" select="parent::statement"/>
-        <xsl:message>object</xsl:message>
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params)">
+            <xsl:message use-when="system-property('debug') eq 'true'">object</xsl:message>
             <xsl:value-of select="$subject"/>
             <xsl:value-of select="$predicate"/>
             <xsl:value-of select="."/>
@@ -91,10 +90,13 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:variable name="xs" as="item()*">
             <xsl:choose>
                 <xsl:when test="substring($part, 1, 1) eq '/'">
-                    <xsl:message>xpath</xsl:message>
+                    <xsl:message use-when="system-property('debug') eq 'true'">xpath</xsl:message>
                     <xsl:choose>
                         <xsl:when test="$part/@resource and doc-available($part/@resource)">
-                            <xsl:message>evaluating in context of external resource</xsl:message>
+                            <xsl:message use-when="system-property('debug') eq 'true'">
+                                <xsl:text>evaluating in context of external resource</xsl:text>
+                                <xsl:value-of select="substring($part, 2)"/>
+                            </xsl:message>
                             <xsl:variable name="resource" as="document-node()"
                                 select="doc($part/@resource)"/>
                             <!-- the external resource must be passed as XPath context
@@ -104,11 +106,10 @@ This is only a module and should be imported by some calling stylesheet.
                                 context-item="$resource" xpath="substring($part, 2)"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:message>
-                                <xsl:text>evaluating xpath: </xsl:text>
+                            <xsl:message use-when="system-property('debug') eq 'true'">
+                                <xsl:text>evaluating on current resource xpath: </xsl:text>
                                 <xsl:value-of select="substring($part, 2)"/>
                             </xsl:message>
-
                             <xsl:evaluate as="item()*" with-params="$xpath-params"
                                 context-item="map:get($xpath-params, xs:QName('currentResource'))"
                                 xpath="substring($part, 2)"/>

@@ -26,11 +26,9 @@ The output format is NTriples
                     test="matches(/xtriples/collection/resource/@uri, '^\{') and matches(/xtriples/collection/resource/@uri, '\}$')">
                     <xsl:variable name="resource-xpath" as="xs:string"
                         select="/xtriples/collection/resource/@uri => replace('^\{', '') => replace('\}$', '')"/>
-                    <xsl:message>
-                        <xsl:message>
-                            <xsl:text>xpath for resource </xsl:text>
-                            <xsl:value-of select="$resource-xpath"/>
-                        </xsl:message>
+                    <xsl:message use-when="system-property('debug') eq 'true'">
+                        <xsl:text>xpath for resource </xsl:text>
+                        <xsl:value-of select="$resource-xpath"/>
                     </xsl:message>
                     <xsl:evaluate as="node()*" context-item="$source" xpath="$resource-xpath"/>
                 </xsl:when>
