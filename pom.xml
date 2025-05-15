@@ -550,7 +550,9 @@
                                             <!-- Include every transformation resource for the SEED XML Transformer
                                                 in an <include>path</include> element! -->
                                             <includes>
-                                                <!--include>xsl/tei/docx/verses.xsl</include-->
+                                                <include>xsl/extract.xsl</include>
+                                                <include>xsl/to-codepoints.xsl</include>
+                                                <include>xsl/to-seed-params.xsl</include>
                                             </includes>
                                             <parameters>
                                                 <parameter>
