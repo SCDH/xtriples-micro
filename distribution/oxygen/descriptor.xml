@@ -1,24 +1,26 @@
 <xt:extensions xmlns:xt="http://www.oxygenxml.com/ns/extension"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://www.oxygenxml.com/ns/extension http://www.oxygenxml.com/ns/extension/extensions.xsd">
-   <xt:extension xmlns:xt="http://www.oxygenxml.com/ns/extension"
-      id="${project.groupId}.${project.artifactId}">
+   <xt:extension xmlns:xt="http://www.oxygenxml.com/ns/extension" id="${framework.id}">
       <xt:location
-         href="${release.url}${project.artifactId}-${project.version}-oxygen-distribution.jar"/>
+         href="${release.url}${project.artifactId}-${project.version}-oxygen-framework.jar"/>
       <xt:version>${project.version}</xt:version>
       <xt:oxy_version>17.0+</xt:oxy_version>
-      <xt:type>plugin</xt:type>
+      <xt:type>framework</xt:type>
       <xt:author>${author}</xt:author>
-      <xt:name>${project.name}</xt:name>
+      <xt:name>XTriples</xt:name>
       <xt:description>
          <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
-               <title>${project.name}</title>
+               <title>XTriples</title>
             </head>
             <body>
                <div>
-                  <p>This plugin distributes the ${project.name} project for processing XML:
-                     ${project.description}</p>
+                  <p>This framework helps editing <a
+                        href="https://xtriples.lod.academy/documentation.html">XTriples
+                        configuration files</a> and provides helpers for extracting XTriples from
+                     local XML documents and for running XTriples on a web services.</p>
+                  <p>${project.description}</p>
                   <p>For more details see <a href="${project.url}">${project.url}</a>.</p>
                </div>
             </body>
