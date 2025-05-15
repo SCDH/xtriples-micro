@@ -55,14 +55,15 @@ target/bin/xslt.sh -?
 There are XSLT stylesheets, that do the work of evaluating an XTriples
 configuration file and applying it to XML documents.
 
-##### `xsl/extract-doc-param.xsl`
+##### `xsl/extract-source-doc.xsl`
 
-[`xsl/extract-doc-param.xsl`](xsl/extract-doc-param.xsl) takes a
-configuration as source document and applies it to an XML document
-referenced by the `source-uri` stylesheet parameter.
+[`xsl/extract-source-doc.xsl`](xsl/extract-source-doc.xsl) extracts
+from an XML document given as source by applying a configuration
+passed in via the stylesheet parameter `config-uri`.
+
 
 ```shell
-target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml source-uri=$(realpath test/gods/1.xml)
+target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:test/gods/1.xml config-uri=$(realpath test/gods/configuration.xml)
 ```
 
 The output should look like this:
@@ -74,15 +75,14 @@ The output should look like this:
 <https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://en.wikipedia.org/wiki/Aphrodite>  .
 ```
 
-##### `xsl/extract-source-doc.xsl`
+##### `xsl/extract-doc-param.xsl`
 
-[`xsl/extract-source-doc.xsl`](xsl/extract-source-doc.xsl) extracts
-from an XML document given as source by applying a configuration
-passed in via the stylesheet parameter `config-uri`.
-
+[`xsl/extract-doc-param.xsl`](xsl/extract-doc-param.xsl) takes a
+configuration as source document and applies it to an XML document
+referenced by the `source-uri` stylesheet parameter.
 
 ```shell
-target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:test/gods/1.xml config-uri=$(realpath test/gods/configuration.xml)
+target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml source-uri=$(realpath test/gods/1.xml)
 ```
 
 The output should look like this:
