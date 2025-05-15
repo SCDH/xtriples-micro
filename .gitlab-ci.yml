@@ -1,0 +1,76 @@
+# based on the template from
+# https://gitlab.com/gitlab-org/gitlab-foss/-/blob/master/lib/gitlab/ci/templates/Maven.gitlab-ci.yml
+
+# image: openjdk:17 # openjdk:* is deprecated! See https://hub.docker.com/_/openjdk
+
+## we use a proxied docker image in order to not run into a pull rate limit
+image: harbor.uni-muenster.de/proxy-docker/library/eclipse-temurin:17-alpine
+
+cache:
+  paths:
+    - ~/.m2/repository
+
+stages:
+  - test
+  - build
+  - deploy
+
+.release_rules:
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^\d+.\d+.\d+/ # describe how your version tags look like!
+
+# Verify merge requests
+test:
+  stage: test
+  tags:
+    - privileged
+  before_script:
+    - apk update
+    - apk add apache-ant
+    - apk add unzip
+  script:
+    - ./mvnw verify
+    - target/bin/test.sh
+
+
+# deploy using ci_settings.xml as maven settings
+# see https://gitlab.com/help/user/packages/maven_repository/index.md#creating-maven-packages-with-gitlab-cicd-using-maven
+push-packages:
+  stage: deploy
+  tags:
+    - privileged
+  before_script:
+    - apk update
+    - apk add apache-ant
+    - apk add unzip
+  script:
+    - ./mvnw -Drevision=$CI_COMMIT_TAG -Dchangelist="" verify
+    - ./mvnw -Drevision=$CI_COMMIT_TAG -Dchangelist="" -Pseed-config package
+    - target/bin/test.sh
+    - ./mvnw -Drevision=$CI_COMMIT_TAG -Dchangelist="" deploy -s ci_settings.xml
+  artifacts:
+    paths:
+      - target
+  rules:
+    - !reference [ .release_rules, rules ]
+
+pages:
+  stage: deploy
+  before_script:
+    - apk update
+    - apk add apache-ant
+    - apk add unzip
+  script:
+    - mkdir -p public
+    - ls -la
+    - unzip target/*-package.zip -d public
+    - cp -v target/*-package.zip public/
+    - cp -v target/descriptor.xml public/
+    - cp -v target/*-oxygen-distribution.jar public/
+  needs:
+    - push-packages
+  artifacts:
+    paths:
+      - public
+  rules:
+    - !reference [ .release_rules, rules ]
