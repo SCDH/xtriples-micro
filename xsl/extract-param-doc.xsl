@@ -9,7 +9,7 @@ The output format is NTriples
 
     <xsl:output method="text"/>
 
-    <xsl:import href="extract.xsl"/>
+    <xsl:import href="xtriples.xsl"/>
 
     <xsl:param name="source-uri" as="xs:string" required="true"/>
 
