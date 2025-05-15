@@ -67,7 +67,7 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template mode="statement" match="object">
+    <xsl:template mode="statement" match="object" as="item()+">
         <xsl:param name="subject" as="item()" tunnel="true"/>
         <xsl:param name="predicate" as="item()" tunnel="true"/>
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
@@ -76,20 +76,18 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:variable name="stmt" select="parent::statement"/>
         <xsl:message>object</xsl:message>
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params)">
-            <xsl:value-of>
-                <xsl:value-of select="$subject"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="$predicate"/>
-                <xsl:text> </xsl:text>
-                <xsl:choose>
-                    <xsl:when test="$context/@type eq 'literal'">
+            <xsl:value-of select="$subject"/>
+            <xsl:value-of select="$predicate"/>
+            <xsl:choose>
+                <xsl:when test="$context/@type eq 'literal'">
+                    <xsl:value-of>
                         <xsl:text>"</xsl:text>
                         <xsl:value-of select="."/>
                         <xsl:text>"</xsl:text>
-                    </xsl:when>
-                </xsl:choose>
-                <xsl:text> .&#xa;</xsl:text>
-            </xsl:value-of>
+                    </xsl:value-of>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:text> .&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:template>
 
