@@ -49,15 +49,18 @@ After running the command above, the wrapper scripts are in
 target/bin/xslt.sh -?
 ```
 
+The following section about the transformations for extracting RDF
+triples with XTriple configurations always provides examples of local
+usage.
 
-#### Extracting RDF Triples
+## Extracting RDF Triples
 
 There are XSLT stylesheets, that do the work of evaluating an XTriples
 configuration file and applying it to XML documents.
 
-##### `xsl/extract-source-doc.xsl`
+### `extract`
 
-[`xsl/extract-source-doc.xsl`](xsl/extract-source-doc.xsl) extracts
+[`xsl/extract.xsl`](xsl/extract.xsl) extracts
 from an XML document given as source by applying a configuration
 passed in via the stylesheet parameter `config-uri`.
 
@@ -78,7 +81,67 @@ The output should look like this:
 If you your result is polluted with debug messages, you can append `2>
 /dev/null` to silence them. They are printed to stderr.
 
-##### `xsl/extract-doc-param.xsl`
+#### Passing the configuration, not a URI
+
+There are situations, where it is simpler to pass the configuration as
+a string to the stylesheet instead of providing a URI. E.g., when the
+stylesheets are deployed on a web service, it would be inconvenient,
+to first put the configuration at some aceissible location, where the
+service can get it from. The stylesheets therefore provide some means
+of passing the configuration directly
+
+Unfortunately, passing the configuration as a XML string to a
+stylesheet parameter does not work due to escaping problems. So we
+need some kind of encoding/decoding mechanism.
+
+
+##### base64 encoded string
+
+The cleanest solution is passing the configuration as a base64 encoded
+string using the `config-b64` stylesheet parameter:
+
+```shell
+target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:$(realpath test/gods/1.xml) config-b64=$(cat test/gods/configuration.xml.b64)
+```
+
+Or without an intermediate base64 file:
+
+```shell
+target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:$(realpath test/gods/1.xml) config-b64=$(base64 -w 0 test/gods/configuration.xml)
+```
+
+
+Probably, you will get an error message `decoding of base64 encoded
+strings not available`, because the because the function
+[`bin:decode-string`](https://www.saxonica.com/documentation12/index.html#!functions/expath-binary/decode-string)
+from the binary extension package is not available on Saxon-HE.
+
+
+
+##### array of codepoints
+
+When decoding base64 encoded files using
+[`bin:decode-string`](https://www.saxonica.com/documentation12/index.html#!functions/expath-binary/decode-string)
+is not an option, because the binary EXPath package is not available,
+then passing the configuration as an array of integers representing
+unicode codepoints is the resort. You can pass such an array to the
+`config-codepoints` stylesheet parameter. Note the `?` in front of the
+parameter `?config-codepoints=...`, that makes Saxon interpret the
+value as an XPath expression.
+
+```shell
+target/bin/xslt.sh -xsl:xsl/extract-source-doc.xsl -s:$(realpath test/gods/1.xml) ?config-codepoints=$(cat test/gods/configuration.xml.json)
+```
+
+You generate such an array of codepoints using the
+`xsl/to-codepoints.xsl` stylesheet:
+
+```
+target/bin/xslt.sh -xsl:xsl/to-codepoints.xsl -it input=$(realpath test/gods/configuration.xml)
+```
+
+
+### `extract-doc-param.xsl`
 
 [`xsl/extract-doc-param.xsl`](xsl/extract-doc-param.xsl) takes a
 configuration as source document and applies it to an XML document
