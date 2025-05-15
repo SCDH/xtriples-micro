@@ -55,19 +55,24 @@ target/bin/xslt.sh -?
 There are XSLT stylesheets, that do the work of evaluating an XTriples
 configuration file and applying it to XML documents.
 
-1. `xsl/extract-doc-param.xsl`: takes a configuration as source
-   document and applies it to an XML document referenced by the
-   `source-uri` stylesheet parameter.
-   ```
-   target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml source-uri=$(realpath test/gods/1.xml)
-   ```
-   The output should look like this:
-   ```
-   <https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person>  .
-   <https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#label> "Aphrodite"@en  .
-   <https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#label> "Ἀφροδίτη"@gr  .
-   <https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://en.wikipedia.org/wiki/Aphrodite>  .
-   ```
+# `xsl/extract-doc-param.xsl`
+
+[`xsl/extract-doc-param.xsl`](xsl/extract-doc-param.xsl) takes a
+configuration as source document and applies it to an XML document
+referenced by the `source-uri` stylesheet parameter.
+
+```
+target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml source-uri=$(realpath test/gods/1.xml)
+```
+
+The output should look like this:
+
+```
+<https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person>  .
+<https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#label> "Aphrodite"@en  .
+<https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#label> "Ἀφροδίτη"@gr  .
+<https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://en.wikipedia.org/wiki/Aphrodite>  .
+```
 
 ## Output: NTriples
 
