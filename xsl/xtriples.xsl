@@ -114,6 +114,9 @@ This is only a module and should be imported by some calling stylesheet.
                         </xsl:choose>
                     </xsl:value-of>
                 </xsl:when>
+                <xsl:when test="$context/@type eq 'uri'">
+                    <xsl:value-of select="."/>
+                </xsl:when>
             </xsl:choose>
             <xsl:text> .&#xa;</xsl:text>
         </xsl:for-each>
