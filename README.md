@@ -75,6 +75,9 @@ The output should look like this:
 <https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://en.wikipedia.org/wiki/Aphrodite>  .
 ```
 
+If you your result is polluted with debug messages, you can append `2>
+/dev/null` to silence them. They are printed to stderr.
+
 ##### `xsl/extract-doc-param.xsl`
 
 [`xsl/extract-doc-param.xsl`](xsl/extract-doc-param.xsl) takes a
