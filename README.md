@@ -74,6 +74,26 @@ The output should look like this:
 <https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://en.wikipedia.org/wiki/Aphrodite>  .
 ```
 
+## State of implementation
+
+BNodes not yet working!
+
+## Specs
+
+This is a full implementation of the [XTriples
+spec](https://xtriples.lod.academy/documentation.html).
+
+In addition to the spec this implementation adds the following
+features:
+
+1. In addition to ISO 639 language identifiers, `object/@lang` can also
+   evaluate XPath expressions, that return such language
+   identifiers. This feature is handy for projects that set up language
+   in their XML documents.
+
+
+
+
 ## Output: NTriples
 
 There's only one output format: NTriples. In a microservice
