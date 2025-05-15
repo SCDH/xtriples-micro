@@ -1,13 +1,13 @@
 # An XTriples Processor for Micro Services and Local Usage
 
-This is an implementation of [XTriples](https://xtriples.lod.academy/)
-that works without an eXist-db.
+This is an implementation of a [XTriples](https://xtriples.lod.academy/)
+processor that works without an eXist-db.
 
 XTriples? In XTriples, instead of writing specialized programs in
 XSLT, XQuery, Python, etc. for extracting RDF triples from XML
 documents, we write configuration files containing selectors. These
 config files are evaluated by an XTriples processor, which returns RDF
-triples. These configuration files look like this:
+triples. Here's an example of such a configuration file:
 
 ```
 <?xml-model uri="https://xtriples.lod.academy/xtriples.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
@@ -48,13 +48,13 @@ triples. These configuration files look like this:
 </xtriples>
 ```
 
-While the original XTriples processor runs in a eXist database and
+While the original XTriples processor requires an eXist database and
 applies a configuration only on the fixed set of XML files contained
-in it, the implementation at hand also runs outside of a database,
-e.g., on a local set of documents. It can also be deployed on the
-famous SEED XML Transformer, where it gives you a lightweight
-microservice implementation of XTriples, where you can send a single
-XML document to and get RDF triples in return.
+in it, the implementation at hand runs outside of a database, e.g., on
+a local set of documents. It can also be deployed on the famous SEED
+XML Transformer. This deployment gives you a lightweight microservice,
+where you can send a single XML document and a config file to and get
+RDF triples in return.
 
 ## Getting started
 
