@@ -18,37 +18,14 @@ The output format is NTriples
 
     <xsl:mode name="eval-xtriples" on-no-match="deep-skip"/>
 
+    <xsl:global-context-item as="document-node(element(xtriples))" use="required"/>
+
     <xsl:template mode="eval-xtriples" match="document-node(element(xtriples))">
-        <!-- evaluate /xtriples/collection/resource TODO: specs are unclear! -->
-        <xsl:variable name="collection" as="node()*">
-            <xsl:choose>
-                <xsl:when
-                    test="matches(/xtriples/collection/resource/@uri, '^\{') and matches(/xtriples/collection/resource/@uri, '\}$')">
-                    <xsl:variable name="resource-xpath" as="xs:string"
-                        select="/xtriples/collection/resource/@uri => replace('^\{', '') => replace('\}$', '')"/>
-                    <xsl:message use-when="system-property('debug') eq 'true'">
-                        <xsl:text>xpath for resource </xsl:text>
-                        <xsl:value-of select="$resource-xpath"/>
-                    </xsl:message>
-                    <xsl:evaluate as="node()*" context-item="$source" xpath="$resource-xpath"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="$source"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="xpath-params" as="map(xs:QName, item()*)" select="
-                map {
-                    xs:QName('currentResource'): $collection,
-                    xs:QName('resourceIndex'): 1
-                }"/>
-        <xsl:apply-templates mode="statement" select="/xtriples/configuration/triples/statement">
-            <xsl:with-param name="vocabularies" as="element(vocabularies)" tunnel="true"
-                select="/xtriples/configuration/vocabularies"/>
-            <!-- generate context variables for the advanced configuration -->
-            <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"
-                select="$xpath-params"/>
-        </xsl:apply-templates>
+        <xsl:call-template name="xtriples:extract">
+            <xsl:with-param name="config" select="."/>
+            <xsl:with-param name="resource" select="$source"/>
+            <xsl:with-param name="resource-index" select="1"/>
+        </xsl:call-template>
     </xsl:template>
 
 </xsl:stylesheet>

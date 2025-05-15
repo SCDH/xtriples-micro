@@ -10,6 +10,45 @@ This is only a module and should be imported by some calling stylesheet.
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:xtriples="https://xtriples.lod.academy/" exclude-result-prefixes="#all" version="3.0">
 
+
+    <xsl:template name="xtriples:extract">
+        <xsl:param name="config" as="document-node(element(xtriples))"/>
+        <xsl:param name="resource" as="document-node()"/>
+        <xsl:param name="resource-index" as="xs:integer"/>
+        <!-- evaluate /xtriples/collection/resource TODO: specs are unclear! -->
+        <xsl:variable name="collection" as="node()*">
+            <xsl:choose>
+                <xsl:when
+                    test="matches($config/xtriples/collection/resource/@uri, '^\{') and matches($config/xtriples/collection/resource/@uri, '\}$')">
+                    <xsl:variable name="resource-xpath" as="xs:string"
+                        select="$config/xtriples/collection/resource/@uri => replace('^\{', '') => replace('\}$', '')"/>
+                    <xsl:message use-when="system-property('debug') eq 'true'">
+                        <xsl:text>xpath for resource </xsl:text>
+                        <xsl:value-of select="$resource-xpath"/>
+                    </xsl:message>
+                    <xsl:evaluate as="node()*" context-item="$resource" xpath="$resource-xpath"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$resource"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- generate context variables for the advanced configuration -->
+        <xsl:variable name="xpath-params" as="map(xs:QName, item()*)" select="
+                map {
+                    xs:QName('currentResource'): $collection,
+                    xs:QName('resourceIndex'): $resource-index
+                }"/>
+        <xsl:apply-templates mode="statement"
+            select="$config/xtriples/configuration/triples/statement">
+            <xsl:with-param name="vocabularies" as="element(vocabularies)" tunnel="true"
+                select="$config/xtriples/configuration/vocabularies"/>
+            <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"
+                select="$xpath-params"/>
+        </xsl:apply-templates>
+    </xsl:template>
+
+
     <xsl:mode name="statement" on-no-match="fail"/>
 
     <!-- We collect all data from subject, predicate, object
