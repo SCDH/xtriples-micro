@@ -84,6 +84,34 @@ This is only a module and should be imported by some calling stylesheet.
                         <xsl:text>"</xsl:text>
                         <xsl:value-of select="."/>
                         <xsl:text>"</xsl:text>
+                        <xsl:choose>
+                            <!--
+                                In contrast to the spec, we also allow XPath expression
+                                in the object/@lang attribute!
+                            -->
+                            <xsl:when test="substring($context/@lang, 1, 1) eq '/'">
+                                <xsl:text>@</xsl:text>
+                                <xsl:choose>
+                                    <xsl:when test="$context/@resource">
+                                        <xsl:variable name="resource"
+                                            select="doc($context/@resource)"/>
+                                        <xsl:evaluate as="xs:string" context-item="$resource"
+                                            with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
+                                            xpath="substring($context/@lang, 2)"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:evaluate as="xs:string"
+                                            context-item="map:get($xpath-params, xs:QName('currentResource'))"
+                                            with-params="$xpath-params"
+                                            xpath="substring($context/@lang, 2)"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:when>
+                            <xsl:when test="$context/@lang">
+                                <xsl:text>@</xsl:text>
+                                <xsl:value-of select="$context/@lang"/>
+                            </xsl:when>
+                        </xsl:choose>
                     </xsl:value-of>
                 </xsl:when>
             </xsl:choose>
