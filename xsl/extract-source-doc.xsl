@@ -4,8 +4,10 @@
 The output format is NTriples
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xtriples="https://xtriples.lod.academy/"
-    xmlns:bin="http://expath.org/ns/binary" exclude-result-prefixes="#all" version="3.0">
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:array="http://www.w3.org/2005/xpath-functions/array"
+    xmlns:xtriples="https://xtriples.lod.academy/" xmlns:bin="http://expath.org/ns/binary"
+    exclude-result-prefixes="#all" version="3.0">
 
     <xsl:output method="text"/>
 
@@ -15,11 +17,17 @@ The output format is NTriples
 
     <xsl:param name="config-b64" as="xs:base64Binary?" select="()"/>
 
+    <xsl:param name="config-codepoints" as="array(xs:integer)?" select="()"/>
+
 
     <xsl:variable name="config" as="document-node()">
         <xsl:choose>
             <xsl:when test="$config-uri">
                 <xsl:sequence select="doc($config-uri)"/>
+            </xsl:when>
+            <xsl:when test="exists($config-codepoints)">
+                <xsl:sequence
+                    select="$config-codepoints => array:flatten() => codepoints-to-string() => parse-xml()"/>
             </xsl:when>
             <xsl:when test="exists($config-b64) and not(function-available('bin:decode-string', 1))">
                 <xsl:message terminate="yes">
