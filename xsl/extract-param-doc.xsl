@@ -26,7 +26,6 @@ The output format is NTriples
             <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true" select="
                     map {
                         xs:QName('currentResource'): $collection,
-                        xs:QName('externalResource'): $collection,
                         xs:QName('resourceIndex'): 1
                     }"/>
         </xsl:apply-templates>

@@ -102,8 +102,13 @@ The output format is NTriples
                     <xsl:choose>
                         <xsl:when test="$part/@resource and doc-available($part/@resource)">
                             <xsl:message>evaluating in context of external resource</xsl:message>
-                            <xsl:evaluate as="item()*" with-params="$xpath-params"
-                                context-item="doc($part/@resource)" xpath="substring($part, 2)"/>
+                            <xsl:variable name="resource" as="document-node()"
+                                select="doc($part/@resource)"/>
+                            <!-- the external resource must be passed as XPath context
+                                and as an advanced configuation variable -->
+                            <xsl:evaluate as="item()*"
+                                with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
+                                context-item="$resource" xpath="substring($part, 2)"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:message>
