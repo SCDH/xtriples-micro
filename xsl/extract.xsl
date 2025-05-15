@@ -4,31 +4,10 @@
 The output format is NTriples
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xtriples="https://xtriples.lod.academy/"
-    exclude-result-prefixes="#all" version="3.0" default-mode="eval-xtriples">
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
+    xmlns:xtriples="https://xtriples.lod.academy/" exclude-result-prefixes="#all" version="3.0">
 
-    <xsl:output method="text"/>
-
-    <xsl:param name="source-uri" as="xs:string" required="true"/>
-
-    <xsl:param name="collection" as="node()" select="doc($source-uri)//god"/>
-
-    
-    <xsl:mode name="eval-xtriples" on-no-match="deep-skip"/>
-
-    <xsl:template mode="eval-xtriples" match="document-node(element(xtriples))">
-        <xsl:apply-templates mode="statement" select="/xtriples/configuration/triples/statement">
-            <xsl:with-param name="vocabularies" as="element(vocabularies)" tunnel="true"
-                select="/xtriples/configuration/vocabularies"/>
-            <!-- generate context variables for the advanced configuration -->
-            <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true" select="
-                    map {
-                        xs:QName('currentResource'): $collection,
-                        xs:QName('externalResource'): $collection,
-                        xs:QName('resourceIndex'): 1
-                    }"/>
-        </xsl:apply-templates>
-    </xsl:template>
 
     <!-- We collect all data from subject, predicate, object
          and tunnel the intermediate result, so we have subject
@@ -47,7 +26,8 @@ The output format is NTriples
                 <!-- @repeat is an XPath expression -->
                 <xsl:variable name="repeat" as="xs:integer">
                     <xsl:evaluate as="xs:integer" with-params="$xpath-params"
-                        context-item="$collection" xpath="substring(@repeat, 2)"/>
+                        context-item="map:get($xpath-params, xs:QName('currentResource'))"
+                        xpath="substring(@repeat, 2)"/>
                 </xsl:variable>
                 <xsl:sequence select="$statements[position() le $repeat]"/>
             </xsl:when>
@@ -127,14 +107,13 @@ The output format is NTriples
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:message>
-                                <xsl:text>evaluating in context of collection </xsl:text>
-                                <xsl:value-of select="$collection/name(), $collection/@id"/>
-                                <xsl:text> xpath: </xsl:text>
+                                <xsl:text>evaluating xpath: </xsl:text>
                                 <xsl:value-of select="substring($part, 2)"/>
                             </xsl:message>
 
                             <xsl:evaluate as="item()*" with-params="$xpath-params"
-                                context-item="$collection" xpath="substring($part, 2)"/>
+                                context-item="map:get($xpath-params, xs:QName('currentResource'))"
+                                xpath="substring($part, 2)"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
