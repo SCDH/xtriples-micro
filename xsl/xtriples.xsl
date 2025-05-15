@@ -78,46 +78,7 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params)">
             <xsl:value-of select="$subject"/>
             <xsl:value-of select="$predicate"/>
-            <xsl:choose>
-                <xsl:when test="$context/@type eq 'literal'">
-                    <xsl:value-of>
-                        <xsl:text>"</xsl:text>
-                        <xsl:value-of select="."/>
-                        <xsl:text>"</xsl:text>
-                        <xsl:choose>
-                            <!--
-                                In contrast to the spec, we also allow XPath expression
-                                in the object/@lang attribute!
-                            -->
-                            <xsl:when test="substring($context/@lang, 1, 1) eq '/'">
-                                <xsl:text>@</xsl:text>
-                                <xsl:choose>
-                                    <xsl:when test="$context/@resource">
-                                        <xsl:variable name="resource"
-                                            select="doc($context/@resource)"/>
-                                        <xsl:evaluate as="xs:string" context-item="$resource"
-                                            with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
-                                            xpath="substring($context/@lang, 2)"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:evaluate as="xs:string"
-                                            context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                                            with-params="$xpath-params"
-                                            xpath="substring($context/@lang, 2)"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:when>
-                            <xsl:when test="$context/@lang">
-                                <xsl:text>@</xsl:text>
-                                <xsl:value-of select="$context/@lang"/>
-                            </xsl:when>
-                        </xsl:choose>
-                    </xsl:value-of>
-                </xsl:when>
-                <xsl:when test="$context/@type eq 'uri'">
-                    <xsl:value-of select="."/>
-                </xsl:when>
-            </xsl:choose>
+            <xsl:value-of select="."/>
             <xsl:text> .&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:template>
@@ -186,7 +147,38 @@ This is only a module and should be imported by some calling stylesheet.
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$part/@type eq 'literal'">
-                    <xsl:value-of select="$x"/>
+                    <xsl:value-of>
+                        <xsl:text>"</xsl:text>
+                        <xsl:value-of select="$x"/>
+                        <xsl:text>"</xsl:text>
+                        <xsl:choose>
+                            <!--
+                                In contrast to the spec, we also allow XPath expression
+                                in the object/@lang attribute!
+                            -->
+                            <xsl:when test="substring($part/@lang, 1, 1) eq '/'">
+                                <xsl:text>@</xsl:text>
+                                <xsl:choose>
+                                    <xsl:when test="$part/@resource">
+                                        <xsl:variable name="resource" select="doc($part/@resource)"/>
+                                        <xsl:evaluate as="xs:string" context-item="$resource"
+                                            with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
+                                            xpath="substring($part/@lang, 2)"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:evaluate as="xs:string"
+                                            context-item="map:get($xpath-params, xs:QName('currentResource'))"
+                                            with-params="$xpath-params"
+                                            xpath="substring($part/@lang, 2)"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:when>
+                            <xsl:when test="$part/@lang">
+                                <xsl:text>@</xsl:text>
+                                <xsl:value-of select="$part/@lang"/>
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:value-of>
                 </xsl:when>
             </xsl:choose>
         </xsl:for-each>
