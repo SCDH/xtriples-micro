@@ -21,7 +21,6 @@
             </statement>
         </triples>
     </configuration>
-    <collection>
-        <resource uri="https://xtriples.lod.academy/examples/gods/1.xml"/>
+    <collection uri="?select=1.xml">
     </collection>
 </xtriples>
