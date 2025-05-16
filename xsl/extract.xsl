@@ -11,6 +11,8 @@ The output format is NTriples
 
     <xsl:output method="text"/>
 
+    <xsl:global-context-item as="document-node()" use="required"/>
+
     <xsl:import href="xtriples.xsl"/>
 
     <xsl:param name="config-uri" as="xs:string?" select="()"/>
@@ -27,7 +29,8 @@ The output format is NTriples
             </xsl:when>
             <xsl:when test="exists($config-codepoints)">
                 <xsl:sequence
-                    select="$config-codepoints => array:flatten() => codepoints-to-string() => parse-xml()"/>
+                    select="$config-codepoints => array:flatten() => codepoints-to-string() => parse-xml()"
+                />
             </xsl:when>
             <xsl:when test="exists($config-b64) and not(function-available('bin:decode-string', 1))">
                 <xsl:message terminate="yes">
@@ -48,14 +51,21 @@ The output format is NTriples
 
 
 
-    <xsl:mode name="eval-xtriples" on-no-match="deep-skip"/>
+    <xsl:mode on-no-match="deep-skip"/>
 
     <xsl:template match="document-node()">
-        <xsl:call-template name="xtriples:extract">
-            <xsl:with-param name="config" select="$config"/>
-            <xsl:with-param name="resource" select="."/>
-            <xsl:with-param name="resource-index" select="1"/>
-        </xsl:call-template>
+        <!--
+            The extraction has to be applied to each resource unnested from the document.
+            Albeit this stylesheet ignores <collection>, the first resource/@uri is evaluated.
+        -->
+        <xsl:for-each
+            select="xtriples:resources(($config//xtriples/collection[resource/@uri])[1], .)">
+            <xsl:call-template name="xtriples:extract">
+                <xsl:with-param name="config" select="$config"/>
+                <xsl:with-param name="resource" select="."/>
+                <xsl:with-param name="resource-index" select="position()"/>
+            </xsl:call-template>
+        </xsl:for-each>
     </xsl:template>
 
 </xsl:stylesheet>

@@ -27,7 +27,9 @@ The output format is NTriples
                 <xsl:text>extracting from collection </xsl:text>
                 <xsl:value-of select="$collection-uri"/>
             </xsl:message>
-            <xsl:for-each select="$collection-uri => collection()">
+            <xsl:for-each
+                select="($collection-uri => collection()) ! xtriples:resources($collection, .)">
+                <!-- take only @max resources (not documents) -->
                 <xsl:if test="not($collection/@max) or (position() le xs:integer($collection/@max))">
                     <xsl:call-template name="xtriples:extract">
                         <xsl:with-param name="config" select="$config"/>

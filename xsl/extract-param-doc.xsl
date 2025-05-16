@@ -21,11 +21,19 @@ The output format is NTriples
     <xsl:global-context-item as="document-node(element(xtriples))" use="required"/>
 
     <xsl:template mode="eval-xtriples" match="document-node(element(xtriples))">
-        <xsl:call-template name="xtriples:extract">
-            <xsl:with-param name="config" select="."/>
-            <xsl:with-param name="resource" select="$source"/>
-            <xsl:with-param name="resource-index" select="1"/>
-        </xsl:call-template>
+        <xsl:variable name="config" select="."/>
+        <!--
+            The extraction has to be applied to each resource unnested from the document.
+            Albeit this stylesheet ignores <collection>, the first resource/@uri is evaluated.
+        -->
+        <xsl:for-each select="xtriples:resources((/xtriples/collection[resource/@uri])[1], $source)">
+            <xsl:call-template name="xtriples:extract">
+                <xsl:with-param name="config" select="$config"/>
+                <!-- albeit this stylesheet ignores <collection>, the first resource/@uri is evaluated -->
+                <xsl:with-param name="resource" select="."/>
+                <xsl:with-param name="resource-index" select="position()"/>
+            </xsl:call-template>
+        </xsl:for-each>
     </xsl:template>
 
 </xsl:stylesheet>
