@@ -33,7 +33,7 @@ test:
     - target/bin/test.sh
 
 
-# deploy using ci_settings.xml as maven settings
+# deploy using .ci_settings.xml as maven settings
 # see https://gitlab.com/help/user/packages/maven_repository/index.md#creating-maven-packages-with-gitlab-cicd-using-maven
 push-packages:
   stage: deploy
@@ -47,7 +47,7 @@ push-packages:
     - ./mvnw -Drevision=$CI_COMMIT_TAG -Dchangelist="" verify
     - ./mvnw -Drevision=$CI_COMMIT_TAG -Dchangelist="" -Pseed-config package
     - target/bin/test.sh
-    - ./mvnw -Drevision=$CI_COMMIT_TAG -Dchangelist="" deploy -s ci_settings.xml
+    - ./mvnw -Drevision=$CI_COMMIT_TAG -Dchangelist="" deploy -s .ci_settings.xml
   artifacts:
     paths:
       - target
