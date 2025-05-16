@@ -75,6 +75,12 @@ installation link in the installation dialog found in **Help** ->
 https://scdh.zivgitlabpages.uni-muenster.de/tei-processing/xtriples-micro/descriptor.xml
 ```
 
+There are als transformation scenarios in
+[`xtriples.scenarios`](xtriples.scenarios) for extracting triples from
+your currently visited source file edited with any other
+framework. You can [import these
+scenarios](https://www.oxygenxml.com/doc/versions/27.1/ug-editor/topics/import-export-global-scenarios.html)
+to your project.
 
 ### Command Line
 
