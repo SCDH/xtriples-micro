@@ -1,8 +1,10 @@
 # Change Log
 
-## dev
+## 0.2.1
 
+- fix how XPath expressions are evaluated
 - support bnodes
+- systematic testing with examples from original processor
 
 ## 0.2.0
 
