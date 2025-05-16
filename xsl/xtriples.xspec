@@ -18,4 +18,211 @@
             select="'&lt;http://xmlns.com/foaf/0.1/Person&gt;'"/>
     </x:scenario>
 
+    <!-- conf 02..04 are on features that are not supported -->
+
+    <x:scenario label="&lt;statement&gt; FOAF statement for one resource; conf-05.xml on god 1">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-05.xml"/>
+            <x:param name="resource" href="../test/gods/1.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/1&gt;',
+                '&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt;',
+                '&lt;http://xmlns.com/foaf/0.1/Person&gt;'"/>
+    </x:scenario>
+
+    <x:scenario label="&lt;subject&gt; Extracting a subject URI; conf-06.xml on god 1">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-06.xml"/>
+            <x:param name="resource" href="../test/gods/1.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/1&gt;',
+            '&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt;',
+            '&lt;http://xmlns.com/foaf/0.1/Person&gt;'"/>
+    </x:scenario>
+
+    <x:scenario label="&lt;subject&gt; Creating a subject blank node; conf-07.xml on god 1">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-07.xml"/>
+            <x:param name="resource" href="../test/gods/1.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="8"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/1&gt;',
+                '&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt;',
+                '_:bnode-1'"/>
+        <x:expect label="statement" as="xs:string*"
+            test="$x:result[4 lt position() and position() le 7]" select="'_:bnode-1',
+                '&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt;',
+                '&lt;http://xmlns.com/foaf/0.1/Person&gt;'"/>
+    </x:scenario>
+
+    <x:scenario pending="namespaces not yet supported"
+        label="&lt;subject&gt; Including a value from an external XML resource in the subject; conf-08.xml on god 10">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-08.xml"/>
+            <x:param name="resource" href="../test/gods/10.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;http://en.wikipedia.org/wiki/Hera&gt;',
+                '&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;',
+                '&quot;Hera&quot;'"/>
+    </x:scenario>
+
+    <x:scenario
+        label="&lt;subject&gt; Prepend and append values to the subject result; conf-09.xml on god 10">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-09.xml"/>
+            <x:param name="resource" href="../test/gods/10.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;http://en.wikipedia.org/wiki/Hera#Children_and_Zeus&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;',
+            '&quot;A section in the wikipedia article about Hera&quot;@en'"/>
+    </x:scenario>
+
+    <x:scenario label="&lt;object&gt; Creating an object URI; conf-10.xml on god 1">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-10.xml"/>
+            <x:param name="resource" href="../test/gods/1.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/1&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#seeAlso&gt;',
+            '&lt;http://en.wikipedia.org/wiki/Aphrodite&gt;'"/>
+    </x:scenario>
+
+    <x:scenario label="&lt;object&gt; Creating a typed object literal; conf-11.xml on god 14">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-11.xml"/>
+            <x:param name="resource" href="../test/gods/14.xml" select="/god"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/14&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;',
+            '&quot;6&quot;&lt;http://www.w3.org/2001/XMLSchema#integer&gt;'"
+            pending="typed literals not yet supported"/>
+    </x:scenario>
+
+    <x:scenario label="&lt;object&gt; Creating a language tagged literal; conf-12.xml on god 14">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-12.xml"/>
+            <x:param name="resource" href="../test/gods/14.xml" select="/god"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/14&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;',
+            '&quot;Ζεύς&quot;@gr'"/>
+    </x:scenario>
+
+    <x:scenario pending="namespaces not yet supported"
+        label="&lt;condition&gt; Applying a condition to a statement pattern; conf-13.xml on god 14">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-13.xml"/>
+            <x:param name="resource" href="../test/gods/14.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/14&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#seeAlso&gt;',
+            '&lt;http://en.wikipedia.org/wiki/Zeus&gt;'"/>
+    </x:scenario>
+
+    <x:scenario pending="condition not yet supported"
+        label="&lt;condition&gt; Applying a condition to a statement pattern; conf-14.xml on all gods">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-14.xml"/>
+            <x:param name="resource" href="../test/gods/all.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"
+        />
+    </x:scenario>
+
+    <x:scenario
+        label="Using the $currentResource variable in statement patterns; conf-15.xml on god 13">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-15.xml"/>
+            <x:param name="resource" href="../test/gods/13.xml" select="/god"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/13&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;',
+            '&quot;Poseidon (Neptune)&quot;'"/>
+    </x:scenario>
+
+    <x:scenario pending="$repeatIndex not yet implemented"
+        label="Using the $repeadIndex variable in statement patterns; conf-16.xml on god 5">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-16.xml"/>
+            <x:param name="resource" href="../test/gods/13.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)"
+            select="20"/>
+    </x:scenario>
+
+    <x:scenario label="Creating a 1:n statement with an object node set; conf-17.xml on god 2">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-17.xml"/>
+            <x:param name="resource" href="../test/gods/2.xml" select="/god"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)"
+            select="40"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/2&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;',
+            '&quot;Apollo&quot;@en'"/>
+    </x:scenario>
+
+    <x:scenario pending="must be tested on other stylesheet"
+        label="Creating a n:1 statement with a subject node sets; conf-18.xml on all gods">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-18.xml"/>
+            <x:param name="resource" href="../test/gods/all.xml" select="//god"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)"
+            select="16"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/2&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#seeAlso&gt;',
+            '&lt;http://en.wikipedia.org/wiki/Snake&gt;'"/>
+    </x:scenario>
+
+    <x:scenario pending="bug"
+        label="Creating n:m statements in a single statement pattern; conf-19.xml on god 3">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-19.xml"/>
+            <x:param name="resource" href="../test/gods/3.xml" select="/god"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)"
+            select="48"/>
+        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+            select="'&lt;https://xtriples.lod.academy/examples/gods/2&gt;',
+            '&lt;http://www.w3.org/2000/01/rdf-schema#seeAlso&gt;',
+            '&lt;http://en.wikipedia.org/wiki/Snake&gt;'"/>
+    </x:scenario>
+
 </x:description>
