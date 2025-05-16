@@ -74,7 +74,7 @@ This is only a module and should be imported by some calling stylesheet.
                 <xsl:variable name="repeat" as="xs:integer">
                     <xsl:evaluate as="xs:integer" with-params="$xpath-params"
                         context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                        xpath="substring(@repeat, 2)"/>
+                        xpath="concat('$currentResource', @repeat)"/>
                 </xsl:variable>
                 <xsl:sequence select="$statements[position() le $repeat]"/>
             </xsl:when>
@@ -139,7 +139,7 @@ This is only a module and should be imported by some calling stylesheet.
                         <xsl:when test="$part/@resource and doc-available($part/@resource)">
                             <xsl:message use-when="system-property('debug') eq 'true'">
                                 <xsl:text>evaluating in context of external resource</xsl:text>
-                                <xsl:value-of select="substring($part, 2)"/>
+                                <xsl:value-of select="string($part)"/>
                             </xsl:message>
                             <xsl:variable name="resource" as="document-node()"
                                 select="doc($part/@resource)"/>
@@ -147,16 +147,16 @@ This is only a module and should be imported by some calling stylesheet.
                                 and as an advanced configuation variable -->
                             <xsl:evaluate as="item()*"
                                 with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
-                                context-item="$resource" xpath="substring($part, 2)"/>
+                                context-item="$resource" xpath="concat('$externalResource', $part)"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:message use-when="system-property('debug') eq 'true'">
                                 <xsl:text>evaluating on current resource xpath: </xsl:text>
-                                <xsl:value-of select="substring($part, 2)"/>
+                                <xsl:value-of select="string($part)"/>
                             </xsl:message>
                             <xsl:evaluate as="item()*" with-params="$xpath-params"
                                 context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                                xpath="substring($part, 2)"/>
+                                xpath="concat('$currentResource', $part)"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
@@ -219,13 +219,13 @@ This is only a module and should be imported by some calling stylesheet.
                                         <xsl:variable name="resource" select="doc($part/@resource)"/>
                                         <xsl:evaluate as="xs:string" context-item="$resource"
                                             with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
-                                            xpath="substring($part/@lang, 2)"/>
+                                            xpath="concat('$externalResource', $part/@lang)"/>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:evaluate as="xs:string"
                                             context-item="map:get($xpath-params, xs:QName('currentResource'))"
                                             with-params="$xpath-params"
-                                            xpath="substring($part/@lang, 2)"/>
+                                            xpath="concat('$currentResource', $part/@lang)"/>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:when>
