@@ -42,8 +42,8 @@ triples. Here's an example of such a configuration file:
             </statement>
         </triples>
     </configuration>
-    <collection uri="https://xtriples.lod.academy/examples/gods/all.xml">
-	   ...
+    <collection uri="?select=[0-9]+.xml">
+	   <resource uri="{//god}"/>
     </collection>
 </xtriples>
 ```
@@ -124,7 +124,7 @@ usage.
 There are XSLT stylesheets, that do the work of evaluating an XTriples
 configuration file and applying it to XML documents.
 
-### `extract`
+### `extract.xsl`
 
 [`xsl/extract.xsl`](xsl/extract.xsl) extracts
 from an XML document given as source by applying a configuration
@@ -147,64 +147,29 @@ The output should look like this:
 If you your result is polluted with debug messages, you can append `2>
 /dev/null` to silence them. They are printed to stderr.
 
-#### Passing the configuration, not a URI
+This is the only transformation that makes sense deploying on a micro
+service. See [seed](seed.md).
 
-There are situations, where it is simpler to pass the configuration as
-a string to the stylesheet instead of providing a URI. E.g., when the
-stylesheets are deployed on a web service, it would be inconvenient,
-to first put the configuration at some aceissible location, where the
-service can get it from. The stylesheets therefore provide some means
-of passing the configuration directly
+### `extract-collection.xsl`
 
-Unfortunately, passing the configuration as a XML string to a
-stylesheet parameter does not work due to escaping problems. So we
-need some kind of encoding/decoding mechanism.
+[`xsl/extract-doc-param.xsl`](xsl/extract-doc-param.xsl) takes a
+configuration as source document and applies it to the collecton of
+XML documents given in `/xtriples/collection/@uri`, which is
+interpreted as a Saxon collection URI. See section [Implementation of
+the Specs](#implementation-of-the-specs) for details.
 
-
-##### base64 encoded string
-
-The cleanest solution is passing the configuration as a base64 encoded
-string using the `config-b64` stylesheet parameter:
-
-```shell
-target/bin/xslt.sh -xsl:xsl/extract.xsl -s:$(realpath test/gods/1.xml) config-b64=$(cat test/gods/configuration.xml.b64)
-```
-
-Or without an intermediate base64 file:
-
-```shell
-target/bin/xslt.sh -xsl:xsl/extract.xsl -s:$(realpath test/gods/1.xml) config-b64=$(base64 -w 0 test/gods/configuration.xml)
-```
-
-
-Probably, you will get an error message `decoding of base64 encoded
-strings not available`, because the because the function
-[`bin:decode-string`](https://www.saxonica.com/documentation12/index.html#!functions/expath-binary/decode-string)
-from the binary extension package is not available on Saxon-HE.
-
-
-
-##### array of codepoints
-
-When decoding base64 encoded files using
-[`bin:decode-string`](https://www.saxonica.com/documentation12/index.html#!functions/expath-binary/decode-string)
-is not an option, because the binary EXPath package is not available,
-then passing the configuration as an array of integers representing
-unicode codepoints is the resort. You can pass such an array to the
-`config-codepoints` stylesheet parameter. Note the `?` in front of the
-parameter `?config-codepoints=...`, that makes Saxon interpret the
-value as an XPath expression.
-
-```shell
-target/bin/xslt.sh -xsl:xsl/extract.xsl -s:$(realpath test/gods/1.xml) ?config-codepoints=$(cat test/gods/configuration.xml.json)
-```
-
-You generate such an array of codepoints using the
-`xsl/to-codepoints.xsl` stylesheet:
+Example:
 
 ```
-target/bin/xslt.sh -xsl:xsl/to-codepoints.xsl -it input=$(realpath test/gods/configuration.xml)
+target/bin/xslt.sh -xsl:xsl/extract-collection.xsl -s:test/gods/configuration.xml
 ```
+
+This will extract triples from all the God files in
+[`test/gods`](test/gods) due to the collection URI `<collection
+uri="?select=[0-9]+.xml">`. It is a relative URI (current directory
+`.`), and the [`select` query
+string](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/collection-directories)
+is interpreted by the Saxon processor.
 
 
 ### `extract-doc-param.xsl`
@@ -217,26 +182,18 @@ referenced by the `source-uri` stylesheet parameter.
 target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml source-uri=$(realpath test/gods/1.xml)
 ```
 
-The output should look like this:
-
-```ntriples
-<https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person>  .
-<https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#label> "Aphrodite"@en  .
-<https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#label> "Ἀφροδίτη"@gr  .
-<https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://en.wikipedia.org/wiki/Aphrodite>  .
-```
-
 
 ## State of implementation
 
-BNodes not yet working!
+- BNodes not yet working!
+- `<condition>` not yet supported.
 
-## Specs
+## Implementation of the Specs
 
 This is a full implementation of the [XTriples
 spec](https://xtriples.lod.academy/documentation.html).
 
-In addition to the spec this implementation adds the following
+In addition to the specs this implementation adds the following
 features:
 
 1. In addition to ISO 639 language identifiers, `object/@lang` can also
@@ -244,8 +201,33 @@ features:
    identifiers. This feature is handy for projects that set up language
    in their XML documents.
 
+In contrast to the specs `/xtriples/collection/@uri` is ignored, when
+a single XML source document is passed to the processor. When using
+`xsl/extract-collection.xsl` it is evaluated as a [Saxon collection
+URI](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/collection-uris). It
+can thus be a
 
+- [directory
+  URI](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/collection-directories)
+  with select pattern for finding files (relative URIs are resolved
+  against the evaluated configuration file), or
+- [zip-collection](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/ZIP-collections)
+  (zip, jar, docx) which will automatically be unpacked and
+  crawled, or a
+- [collection
+  catalog](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/collection-catalogs)
+  listing files to crawl or
+- your own collection type provided you have written your own
+  [collection
+  finder](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/user-collections).
 
+Literal resource crawling, where the XML source is provided inside
+resource tags, is not supported.
+
+`/xtriples/collection/resource/@uri` is evaluated on every document
+(resource) that is being processed, even if the extraction is from a
+single XML source. The result becomes the context root when evaluating
+the XPath expressions in subject, predicate, object, etc. tags.
 
 ## Output: NTriples
 

@@ -13,30 +13,12 @@ This is only a module and should be imported by some calling stylesheet.
 
     <xsl:template name="xtriples:extract">
         <xsl:param name="config" as="document-node(element(xtriples))"/>
-        <xsl:param name="resource" as="document-node()"/>
+        <xsl:param name="resource" as="node()"/>
         <xsl:param name="resource-index" as="xs:integer"/>
-        <!-- evaluate /xtriples/collection/resource TODO: specs are unclear! -->
-        <xsl:variable name="collection" as="node()*">
-            <xsl:choose>
-                <xsl:when
-                    test="matches($config/xtriples/collection/resource/@uri, '^\{') and matches($config/xtriples/collection/resource/@uri, '\}$')">
-                    <xsl:variable name="resource-xpath" as="xs:string"
-                        select="$config/xtriples/collection/resource/@uri => replace('^\{', '') => replace('\}$', '')"/>
-                    <xsl:message use-when="system-property('debug') eq 'true'">
-                        <xsl:text>xpath for resource </xsl:text>
-                        <xsl:value-of select="$resource-xpath"/>
-                    </xsl:message>
-                    <xsl:evaluate as="node()*" context-item="$resource" xpath="$resource-xpath"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="$resource"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
         <!-- generate context variables for the advanced configuration -->
         <xsl:variable name="xpath-params" as="map(xs:QName, item()*)" select="
                 map {
-                    xs:QName('currentResource'): $collection,
+                    xs:QName('currentResource'): $resource,
                     xs:QName('resourceIndex'): $resource-index
                 }"/>
         <xsl:apply-templates mode="statement"
@@ -47,6 +29,27 @@ This is only a module and should be imported by some calling stylesheet.
                 select="$xpath-params"/>
         </xsl:apply-templates>
     </xsl:template>
+
+    <xsl:function name="xtriples:resources">
+        <!-- evaluate /xtriples/collection/resource -->
+        <xsl:param name="collection" as="element(collection)?"/>
+        <xsl:param name="document" as="document-node()"/>
+        <xsl:choose>
+            <xsl:when
+                test="matches($collection/resource/@uri, '^\{') and matches($collection/resource/@uri, '\}$')">
+                <xsl:variable name="resource-xpath" as="xs:string"
+                    select="$collection/resource/@uri => replace('^\{', '') => replace('\}$', '')"/>
+                <xsl:message use-when="system-property('debug') eq 'true'">
+                    <xsl:text>xpath for resource </xsl:text>
+                    <xsl:value-of select="$resource-xpath"/>
+                </xsl:message>
+                <xsl:evaluate as="node()*" context-item="$document" xpath="$resource-xpath"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$document"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
 
     <xsl:mode name="statement" on-no-match="fail"/>

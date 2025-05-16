@@ -6,7 +6,7 @@
     <x:scenario label="conf-01.xml on god 1">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-01.xml"/>
-            <x:param name="resource" href="../test/gods/1.xml"/>
+            <x:param name="resource" href="../test/gods/1.xml" select="//god"/>
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="count of returned items" as="xs:integer" test="count($x:result)" select="4"/>

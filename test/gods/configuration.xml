@@ -31,7 +31,7 @@
             </statement>
         </triples>
     </configuration>
-    <collection uri="https://xtriples.lod.academy/examples/gods/all.xml">
+    <collection uri="?select=[0-9]+.xml">
         <resource uri="{//god}"/>
     </collection>
 </xtriples>
