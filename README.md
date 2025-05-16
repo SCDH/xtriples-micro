@@ -182,6 +182,16 @@ referenced by the `source-uri` stylesheet parameter.
 target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml source-uri=$(realpath test/gods/1.xml)
 ```
 
+## Writing configurations
+
+1. The content of `<subject>`, `<predicate>`, `<object>` and
+   `<condition>` is evaluated as an XPath expression, if and only if
+   the content starts with a Slash. The Slash is removed from the
+   XPath. So `//@id` does not return the `id` attributes in arbitrary
+   depth, but at the level of the resource, since it is evaluated as
+   `/@id`.
+1. Using BNodes may be a bit tricky. See [these hints](bnodes.md).
+
 
 ## State of implementation
 
