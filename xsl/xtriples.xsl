@@ -110,7 +110,7 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template mode="statement" match="object" as="item()+">
+    <xsl:template mode="statement" match="object">
         <xsl:param name="subject" as="item()" tunnel="true"/>
         <xsl:param name="predicate" as="item()" tunnel="true"/>
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
@@ -196,6 +196,12 @@ This is only a module and should be imported by some calling stylesheet.
                         <xsl:text>&gt;</xsl:text>
                     </xsl:value-of>
                 </xsl:when>
+                <xsl:when test="$part/@type eq 'bnode'">
+                    <xsl:value-of>
+                        <xsl:text>_:</xsl:text>
+                        <xsl:value-of select="$x"/>
+                    </xsl:value-of>
+                </xsl:when>
                 <xsl:when test="$part/@type eq 'literal'">
                     <xsl:value-of>
                         <xsl:text>"</xsl:text>
@@ -230,6 +236,12 @@ This is only a module and should be imported by some calling stylesheet.
                         </xsl:choose>
                     </xsl:value-of>
                 </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message terminate="yes">
+                        <xsl:text>cannot determine node type: </xsl:text>
+                        <xsl:value-of select="$part"/>
+                    </xsl:message>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
     </xsl:function>
