@@ -185,7 +185,6 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
 
 ## State of implementation
 
-- BNodes not yet working!
 - `<condition>` not yet supported.
 
 ## Implementation of the Specs

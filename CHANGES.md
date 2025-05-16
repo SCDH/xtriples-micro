@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+- support bnodes
+
 ## 0.2.0
 
 - implements evaluation of `<collection>` in
