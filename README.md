@@ -186,19 +186,19 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
 
 1. The content of `<subject>`, `<predicate>`, `<object>` and
    `<condition>` is evaluated as an **XPath** expression, if and only
-   if the content starts with a **Slash**. The Slash is removed from
-   the XPath. So `/@id` does not look for an `id` attribute at root,
-   but in the context of the resource, since it is evaluated as `@id`.
+   if the content starts with a **slash** `/`. Before the expression
+   is evaluated, it is prepended with `$currentResource` (or
+   `$externalResource` respectively). E.g., `/@id` is evaluated as
+   `$currentResource/@id`.
 1. Keep the difference of **document** vs.  **resource** in mind: Each
    document may contain multiple resources if
    `/xtriples/collection/resource/@uri` is used to unnest resources
    from a document. The variable `$currentResource` and
    `$resourceIndex` provide access to the resource and its index.
-1. The resource is the context, in which XPath expressions of
-   subjects, predicates and objects are evaluated.
 1. This resource context is transparent to the underlying
    document. Thus, accessing parts of the document outside of the
-   context subtree is possible.
+   context subtree is possible:
+   `$currentResource/ancestor::TEI/teiHeader`.
 1. Using **BNodes** may be a bit tricky. See [these hints](bnodes.md).
 
 
