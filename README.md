@@ -229,14 +229,15 @@ The output should look like this:
 
 ## State of implementation
 
-BNodes not yet working!
+- BNodes not yet working!
+- `<condition>` not yet supported.
 
-## Specs
+## Implementation of the Specs
 
 This is a full implementation of the [XTriples
 spec](https://xtriples.lod.academy/documentation.html).
 
-In addition to the spec this implementation adds the following
+In addition to the specs this implementation adds the following
 features:
 
 1. In addition to ISO 639 language identifiers, `object/@lang` can also
@@ -244,8 +245,31 @@ features:
    identifiers. This feature is handy for projects that set up language
    in their XML documents.
 
+In contrast to the specs `/xtriples/collection/@uri` is ignored, when
+a single XML source document is passed to the processor. When using
+`xsl/extract-collection.xsl` it is evaluated as a [Saxon collection
+URI](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/collection-uris). It
+can thus be a
 
+- [directory URI](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/collection-directories)
+  with select pattern for finding files, or
+- [zip-collection](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/ZIP-collections)
+  (zip, jar, docx) which will automatically be unpacked and
+  crawled, or a
+- [collection
+  catalog](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/collection-catalogs)
+  listing files to crawl or
+- your own collection type provided you have written your own
+  [collection
+  finder](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/user-collections).
 
+Literal resource crawling, where the XML source is provided inside
+resource tags, is not supported.
+
+`/xtriples/collection/resource/@uri` is evaluated on every document
+(resource) that is being processed, even if the extraction is from a
+single XML source. The result becomes the context root when evaluating
+the XPath expressions in subject, predicate, object, etc. tags.
 
 ## Output: NTriples
 
