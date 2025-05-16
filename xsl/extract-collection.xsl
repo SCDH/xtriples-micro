@@ -31,11 +31,14 @@ The output format is NTriples
                 select="($collection-uri => collection()) ! xtriples:resources($collection, .)">
                 <!-- take only @max resources (not documents) -->
                 <xsl:if test="not($collection/@max) or (position() le xs:integer($collection/@max))">
-                    <xsl:call-template name="xtriples:extract">
-                        <xsl:with-param name="config" select="$config"/>
-                        <xsl:with-param name="resource" select="."/>
-                        <xsl:with-param name="resource-index" select="position()"/>
-                    </xsl:call-template>
+                    <xsl:variable name="statements" as="xs:string*">
+                        <xsl:call-template name="xtriples:extract">
+                            <xsl:with-param name="config" select="$config"/>
+                            <xsl:with-param name="resource" select="."/>
+                            <xsl:with-param name="resource-index" select="position()"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:value-of select="xtriples:serialize($statements)"/>
                 </xsl:if>
             </xsl:for-each>
         </xsl:for-each>

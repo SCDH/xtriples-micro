@@ -10,6 +10,8 @@ This is only a module and should be imported by some calling stylesheet.
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:xtriples="https://xtriples.lod.academy/" exclude-result-prefixes="#all" version="3.0">
 
+    <xsl:variable name="xtriples:fullstop" as="xs:string" select="'.'"/>
+
 
     <xsl:template name="xtriples:extract">
         <xsl:param name="config" as="document-node(element(xtriples))"/>
@@ -120,7 +122,7 @@ This is only a module and should be imported by some calling stylesheet.
             <xsl:value-of select="$subject"/>
             <xsl:value-of select="$predicate"/>
             <xsl:value-of select="."/>
-            <xsl:text> .&#xa;</xsl:text>
+            <xsl:value-of select="$xtriples:fullstop"/>
         </xsl:for-each>
     </xsl:template>
 
@@ -229,6 +231,17 @@ This is only a module and should be imported by some calling stylesheet.
                     </xsl:value-of>
                 </xsl:when>
             </xsl:choose>
+        </xsl:for-each>
+    </xsl:function>
+
+    <xsl:function name="xtriples:serialize">
+        <xsl:param name="sentence-parts" as="item()*"/>
+        <xsl:for-each select="$sentence-parts">
+            <xsl:value-of select="."/>
+            <xsl:text>&#x20;</xsl:text>
+            <xsl:if test=". eq $xtriples:fullstop">
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:if>
         </xsl:for-each>
     </xsl:function>
 
