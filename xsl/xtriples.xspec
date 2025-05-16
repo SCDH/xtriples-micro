@@ -210,7 +210,7 @@
             '&lt;http://en.wikipedia.org/wiki/Snake&gt;'"/>
     </x:scenario>
 
-    <x:scenario pending="bug"
+    <x:scenario
         label="Creating n:m statements in a single statement pattern; conf-19.xml on god 3">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-19.xml"/>
@@ -218,11 +218,11 @@
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)"
-            select="48"/>
+            select="36"/>
         <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
-            select="'&lt;https://xtriples.lod.academy/examples/gods/2&gt;',
+            select="'&lt;https://xtriples.lod.academy/examples/gods/Ἄρης&gt;',
             '&lt;http://www.w3.org/2000/01/rdf-schema#seeAlso&gt;',
-            '&lt;http://en.wikipedia.org/wiki/Snake&gt;'"/>
+            '&lt;http://en.wikipedia.org/wiki/helmet&gt;'"/>
     </x:scenario>
 
 </x:description>
