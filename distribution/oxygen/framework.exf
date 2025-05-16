@@ -28,7 +28,7 @@ from the contextual menu.
   </classpath>
 
   <xmlCatalogs>
-    <addEntry path="${framework}/resources"/>
+    <addEntry path="${framework}/catalog.xml"/>
   </xmlCatalogs>
 
   <transformationScenarios>

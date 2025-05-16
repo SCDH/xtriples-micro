@@ -71,6 +71,10 @@
          <outputDirectory>/</outputDirectory>
       </file>
       <file>
+         <source>catalog.xml</source>
+         <outputDirectory>/</outputDirectory>
+      </file>
+      <file>
          <source>${project.basedir}/distribution/oxygen/framework.exf</source>
          <destName>${framework.id}.exf</destName>
          <outputDirectory>/</outputDirectory>
