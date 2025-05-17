@@ -171,11 +171,11 @@
             '&quot;Poseidon (Neptune)&quot;'"/>
     </x:scenario>
 
-    <x:scenario pending="$repeatIndex not yet implemented"
-        label="Using the $repeadIndex variable in statement patterns; conf-16.xml on god 5">
+    <x:scenario
+        label="Using the $repeatIndex variable in statement patterns; conf-16.xml on god 5">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-16.xml"/>
-            <x:param name="resource" href="../test/gods/13.xml"/>
+            <x:param name="resource" href="../test/gods/5.xml" select="/god"/>
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)"

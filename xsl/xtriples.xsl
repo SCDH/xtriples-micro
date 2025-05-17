@@ -148,8 +148,12 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:variable name="stmt" select="parent::statement"/>
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params, $namespaces)">
             <xsl:message use-when="system-property('debug') eq 'true'">subject</xsl:message>
+            <xsl:variable name="repeat-index" as="xs:integer" select="position()"/>
+            <xsl:variable name="params" as="map(xs:QName, item()*)"
+                select="map:put($xpath-params, xs:QName('repeatIndex'), $repeat-index)"/>
             <xsl:apply-templates mode="statement" select="$stmt/predicate">
                 <xsl:with-param name="subject" as="item()" tunnel="true" select="."/>
+                <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true" select="$params"/>
             </xsl:apply-templates>
         </xsl:for-each>
     </xsl:template>
