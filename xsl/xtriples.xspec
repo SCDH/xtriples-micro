@@ -225,4 +225,21 @@
             '&lt;http://en.wikipedia.org/wiki/helmet&gt;'"/>
     </x:scenario>
 
+
+    <x:scenario label="namespaces: XPath with namespace prefixes: config-01.xml">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/config-01.xml"/>
+            <x:param name="resource" href="../test/eitel.tei.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of returned items" as="xs:integer" test="count($x:result)" select="4"/>
+        <x:expect label="subject" as="xs:string" test="$x:result[1]"
+            select="'&lt;https://scdh.ulbms.de/examples/eitel&gt;'"/>
+        <x:expect label="predicate" as="xs:string" test="$x:result[2]"
+            select="'&lt;http://purl.org/dc/terms/title&gt;'"/>
+        <x:expect label="object" as="xs:string" test="$x:result[3]"
+            select="'&quot;Es ist alles eitel&quot;'"/>
+    </x:scenario>
+
+
 </x:description>

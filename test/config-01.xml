@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model uri="https://xtriples.lod.academy/xtriples.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<xtriples>
+    <configuration>
+        <vocabularies>
+            <vocabulary prefix="ex" uri="https://scdh.ulbms.de/examples/"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="dc" uri="http://purl.org/dc/terms/"/>
+            <vocabulary prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
+            <vocabulary prefix="t" uri="http://www.tei-c.org/ns/1.0"/>
+        </vocabularies>
+        <triples>
+            <statement>
+                <subject prefix="ex">eitel</subject>
+                <predicate prefix="dc">title</predicate>
+                <object type="literal">//(t:teiHeader/t:fileDesc/t:titleStmt/t:title)[1]</object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection/>
+</xtriples>
