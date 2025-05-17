@@ -115,9 +115,6 @@ After running the command above, the wrapper scripts are in
 target/bin/xslt.sh -?
 ```
 
-The following section about the transformations for extracting RDF
-triples with XTriple configurations always provides examples of local
-usage.
 
 ## Extracting RDF Triples
 
@@ -145,7 +142,8 @@ The output should look like this:
 ```
 
 If you your result is polluted with debug messages, you can append `2>
-/dev/null` to silence them. They are printed to stderr.
+/dev/null` to silence them or use Saxon's `-o:` option to send the
+output to a file. They are printed to stderr.
 
 This is the only transformation that makes sense deploying on a micro
 service. See [seed](seed.md).
@@ -265,3 +263,27 @@ architecture, converting to other formats is done in a converter
 service. NTriples is the RDF serialization of choice, because the
 response bodies of multiple request can simply be concatenated into
 one graph.
+
+## Development
+
+Run tests with
+
+```
+target/bin/test.sh
+```
+
+or
+
+```
+source target/bin/classpath.sh # only once needed per shell session
+ant -Dcatalog=test/catalog.xml test
+```
+
+## License
+
+This is distributed under the MIT license.
+
+The tests cases directly in `test/gods/` where taken from the
+[original eXist-db
+implementation](https://github.com/digicademy/xtriples/tree/master),
+which is licensed under the terms of the MIT license.
