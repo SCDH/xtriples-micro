@@ -199,6 +199,17 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
    document. Thus, accessing parts of the document outside of the
    context subtree is possible:
    `$currentResource/ancestor::TEI/teiHeader`.
+1. The XPath evaluation uses **namespaces** made up from the
+   prefix-to-URI mapping from the `<vocabularies>` section of the
+   configuration file. Thus:
+   - If you want to extract RDF from non-namespace XML sources, do not
+     use the empty string prefix in the vocabularies, since that would
+     bind the default namespace for XPath evaluation to this
+     vocabulary URI.
+   - If you are using namespaces in the XML source document and do not
+     want to prefix the path expressions in the XPath selectors, then
+     use the empty prefix in the vocabularies, to bind the default
+     namespace for XPath evaluation to the according namespace URI.
 1. Using **BNodes** may be a bit tricky. See [these hints](bnodes.md).
 
 
