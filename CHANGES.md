@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+- make `<condition>` work
+
 ## 0.3.1
 
 - make default namespace work, and there by extending the reference

@@ -209,10 +209,9 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
      [below](#implementation-of-the-specs)!
 1. Using **BNodes** may be a bit tricky. See [these hints](bnodes.md).
 
-
 ## State of implementation
 
-- `<condition>` not yet supported.
+- `$repeatIndex` not yet supported.
 
 ## Implementation of the Specs
 
