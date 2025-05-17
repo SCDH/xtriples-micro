@@ -3,6 +3,8 @@
 ## dev
 
 - make `<condition>` work
+- make `@repeat` on `<statement>` work and provide `$repeatIndex`
+  variable
 
 ## 0.3.1
 
