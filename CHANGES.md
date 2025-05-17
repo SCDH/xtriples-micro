@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.3.1
+
+- make default namespace work, and there by extending the reference
+  implementation, see [README](readme.md#implementation-of-the-specs).
+
 ## 0.3.0
 
 - support namespaces
