@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model uri="https://xtriples.lod.academy/xtriples.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<!-- test case for TEI as default namespace -->
 <xtriples>
     <configuration>
         <vocabularies>
@@ -18,5 +19,56 @@
             </statement>
         </triples>
     </configuration>
-    <collection/>
+    <collection>
+        <resource>
+            <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="de">
+                <teiHeader>
+                    <fileDesc>
+                        <titleStmt>
+                            <title>Es ist alles eitel</title>
+                            <author>Andreas Gryphius</author>
+                        </titleStmt>
+                        <publicationStmt>
+                            <p>Publication Information</p>
+                        </publicationStmt>
+                        <sourceDesc>
+                            <p>Taken from <ptr
+                                    target="https://de.wikipedia.org/wiki/Es_ist_alles_eitel"/></p>
+                        </sourceDesc>
+                    </fileDesc>
+                </teiHeader>
+                <text>
+                    <body>
+                        <lg>
+                            <lg>
+                                <l>Du sihst/ wohin du sihst nur Eitelkeit auff Erden.</l>
+                                <l>Was dieser heute baut/ reist jener morgen ein:</l>
+                                <l>Wo itzund Städte stehn/ wird eine Wiesen seyn/</l>
+                                <l>Auff der ein Schäfers-Kind wird spielen mit den Herden.</l>
+                            </lg>
+
+                            <lg>
+                                <l>Was itzund prächtig blüht/ sol bald zutretten werden.</l>
+                                <l>Was itzt so pocht vnd trotzt ist morgen Asch vnd Bein/</l>
+                                <l>Nichts ist/ das ewig sey/ kein Ertz/ kein Marmorstein.</l>
+                                <l>Itzt lacht das Glück vns an/ bald donnern die Beschwerden.</l>
+                            </lg>
+
+                            <lg>
+                                <l>Der hohen Thaten Ruhm muß wie ein Traum vergehn.</l>
+                                <l>Soll denn das Spiel der Zeit/ der leichte Mensch bestehn?</l>
+                                <l>Ach! was ist alles diß/ was wir vor köstlich achten/</l>
+                            </lg>
+
+                            <lg>
+                                <l>Als schlechte Nichtigkeit/ als Schatten/ Staub vnd Wind;</l>
+                                <l>Als eine Wiesen-Blum/ die man nicht wider find’t.</l>
+                                <l>Noch wil was ewig ist/ kein einig Mensch betrachten!</l>
+                            </lg>
+                        </lg>
+                    </body>
+                </text>
+            </TEI>
+        </resource>
+    </collection>
 </xtriples>
