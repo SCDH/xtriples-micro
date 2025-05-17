@@ -115,9 +115,6 @@ After running the command above, the wrapper scripts are in
 target/bin/xslt.sh -?
 ```
 
-The following section about the transformations for extracting RDF
-triples with XTriple configurations always provides examples of local
-usage.
 
 ## Extracting RDF Triples
 
@@ -145,7 +142,8 @@ The output should look like this:
 ```
 
 If you your result is polluted with debug messages, you can append `2>
-/dev/null` to silence them. They are printed to stderr.
+/dev/null` to silence them or use Saxon's `-o:` option to send the
+output to a file. They are printed to stderr.
 
 This is the only transformation that makes sense deploying on a micro
 service. See [seed](seed.md).
@@ -199,6 +197,18 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
    document. Thus, accessing parts of the document outside of the
    context subtree is possible:
    `$currentResource/ancestor::TEI/teiHeader`.
+1. The XPath evaluation uses **namespaces** made up from the
+   prefix-to-URI mapping from the `<vocabularies>` section of the
+   configuration file. Thus:
+   - If you want to extract RDF from non-namespace XML sources, do not
+     use the empty string prefix in the vocabularies, since that would
+     bind the default namespace for XPath evaluation to this
+     vocabulary URI.
+   - If you are using namespaces in the XML source document, you
+     always have to prefix your XPath path expressions with a
+     namespace bound to the corresponding vocabulary URI / namespace
+     name. Using the default namespace in the XPath expressions is
+     currently not supported.
 1. Using **BNodes** may be a bit tricky. See [these hints](bnodes.md).
 
 
@@ -254,3 +264,27 @@ architecture, converting to other formats is done in a converter
 service. NTriples is the RDF serialization of choice, because the
 response bodies of multiple request can simply be concatenated into
 one graph.
+
+## Development
+
+Run tests with
+
+```
+target/bin/test.sh
+```
+
+or
+
+```
+source target/bin/classpath.sh # only once needed per shell session
+ant -Dcatalog=test/catalog.xml test
+```
+
+## License
+
+This is distributed under the MIT license.
+
+The tests cases directly in `test/gods/` where taken from the
+[original eXist-db
+implementation](https://github.com/digicademy/xtriples/tree/master),
+which is licensed under the terms of the MIT license.

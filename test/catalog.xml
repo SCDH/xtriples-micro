@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
+    <!-- external resources used in tests -->
+    <uri name="http://dbpedia.org/data/Hera.rdf" uri="gods/external/Hera.rdf"/>
+    <uri name="http://dbpedia.org/data/Zeus.rdf" uri="gods/external/Zeus.rdf"/>
+
+</catalog>

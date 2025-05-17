@@ -43,7 +43,7 @@
 
         <!-- Tool Versions -->
         <ph.schematron.version>5.6.4</ph.schematron.version>
-        <saxon.version>10.9</saxon.version>
+        <saxon.version>12.5</saxon.version>
         <xmlresolver.version>4.5.1</xmlresolver.version>
         <oxygen.version>24.1.0.0</oxygen.version>
         <jing.version>20091111</jing.version>
