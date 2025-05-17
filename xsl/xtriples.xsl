@@ -30,7 +30,7 @@ This is only a module and should be imported by some calling stylesheet.
                 select="$config/xtriples/configuration/vocabularies"/>
             <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"
                 select="$xpath-params"/>
-            <xsl:with-param name="namespaces" as="element(namespaces)"
+            <xsl:with-param name="namespaces" as="element()"
                 select="xtriples:namespaces($config/xtriples)" tunnel="true"/>
         </xsl:apply-templates>
     </xsl:template>
@@ -57,19 +57,45 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:choose>
     </xsl:function>
 
-    <xsl:function name="xtriples:namespaces" as="element(namespaces)">
+    <xsl:function name="xtriples:namespaces" as="element()">
         <xsl:param name="config" as="element(xtriples)"/>
-        <xsl:element name="namespaces" namespace="">
-            <xsl:for-each select="$config/configuration/vocabularies/vocabulary">
-                <xsl:namespace name="{@prefix}" select="@uri"/>
-                <xsl:message use-when="system-property('debug') eq 'true'">
-                    <xsl:text>add namespace declaration </xsl:text>
-                    <xsl:value-of select="@prefix"/>
-                    <xsl:text>=</xsl:text>
-                    <xsl:value-of select="@uri"/>
-                </xsl:message>
-            </xsl:for-each>
-        </xsl:element>
+        <xsl:choose>
+            <xsl:when test="
+                    every $v in $config/configuration/vocabularies/vocabulary
+                        satisfies $v/@prefix and $v/@prefix ne ''">
+                <xsl:element name="namespaces" namespace="">
+                    <xsl:for-each select="$config/configuration/vocabularies/vocabulary">
+                        <xsl:namespace name="{@prefix}" select="@uri"/>
+                        <xsl:message use-when="system-property('debug') eq 'true'">
+                            <xsl:text>add namespace declaration </xsl:text>
+                            <xsl:value-of select="@prefix"/>
+                            <xsl:text>=</xsl:text>
+                            <xsl:value-of select="@uri"/>
+                        </xsl:message>
+                    </xsl:for-each>
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="default" as="element(vocabulary)*"
+                    select="$config/configuration/vocabularies/vocabulary[not(@prefix) or @prefix eq '']"/>
+                <namespaces xmlns="{$default[1]/@uri}">
+                    <xsl:message>
+                        <xsl:text>default namespace: </xsl:text>
+                        <xsl:value-of select="$default[1]/@uri"/>
+                    </xsl:message>
+                    <xsl:for-each
+                        select="$config/configuration/vocabularies/vocabulary except $default">
+                        <xsl:namespace name="{@prefix}" select="@uri"/>
+                        <xsl:message use-when="system-property('debug') eq 'true'">
+                            <xsl:text>add namespace declaration </xsl:text>
+                            <xsl:value-of select="@prefix"/>
+                            <xsl:text>=</xsl:text>
+                            <xsl:value-of select="@uri"/>
+                        </xsl:message>
+                    </xsl:for-each>
+                </namespaces>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
 
 
@@ -80,7 +106,7 @@ This is only a module and should be imported by some calling stylesheet.
          and predicate when we reach the object. -->
     <xsl:template mode="statement" match="statement">
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
-        <xsl:param name="namespaces" as="element(namespaces)" tunnel="true"/>
+        <xsl:param name="namespaces" as="element()" tunnel="true"/>
         <xsl:variable name="statements" as="xs:string*">
             <xsl:apply-templates mode="statement" select="subject"/>
         </xsl:variable>
@@ -109,7 +135,7 @@ This is only a module and should be imported by some calling stylesheet.
     <xsl:template mode="statement" match="subject">
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
-        <xsl:param name="namespaces" as="element(namespaces)" tunnel="true"/>
+        <xsl:param name="namespaces" as="element()" tunnel="true"/>
         <xsl:variable name="stmt" select="parent::statement"/>
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params, $namespaces)">
             <xsl:message use-when="system-property('debug') eq 'true'">subject</xsl:message>
@@ -123,7 +149,7 @@ This is only a module and should be imported by some calling stylesheet.
     <xsl:template mode="statement" match="predicate">
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
-        <xsl:param name="namespaces" as="element(namespaces)" tunnel="true"/>
+        <xsl:param name="namespaces" as="element()" tunnel="true"/>
         <xsl:variable name="stmt" select="parent::statement"/>
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params, $namespaces)">
             <xsl:message use-when="system-property('debug') eq 'true'">predicate</xsl:message>
@@ -138,7 +164,7 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="predicate" as="item()" tunnel="true"/>
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
-        <xsl:param name="namespaces" as="element(namespaces)" tunnel="true"/>
+        <xsl:param name="namespaces" as="element()" tunnel="true"/>
         <xsl:variable name="context" select="."/>
         <xsl:variable name="stmt" select="parent::statement"/>
         <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params, $namespaces)">
@@ -155,7 +181,7 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="part" as="element()"/>
         <xsl:param name="vocabularies" as="element(vocabularies)"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)"/>
-        <xsl:param name="namespaces" as="element(namespaces)"/>
+        <xsl:param name="namespaces" as="element()"/>
         <xsl:variable name="xs" as="item()*">
             <xsl:choose>
                 <xsl:when test="substring($part, 1, 1) eq '/'">
