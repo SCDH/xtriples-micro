@@ -63,7 +63,7 @@
                 '&lt;http://xmlns.com/foaf/0.1/Person&gt;'"/>
     </x:scenario>
 
-    <x:scenario pending="namespaces not yet supported"
+    <x:scenario
         label="&lt;subject&gt; Including a value from an external XML resource in the subject; conf-08.xml on god 10">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-08.xml"/>
@@ -131,11 +131,12 @@
             '&quot;Ζεύς&quot;@gr'"/>
     </x:scenario>
 
-    <x:scenario pending="namespaces not yet supported"
+    <x:scenario
         label="&lt;condition&gt; Applying a condition to a statement pattern; conf-13.xml on god 14">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-13.xml"/>
-            <x:param name="resource" href="../test/gods/14.xml"/>
+            <!-- CHANGE: added select to make test work -->
+            <x:param name="resource" href="../test/gods/14.xml" select="/god"/>
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"/>

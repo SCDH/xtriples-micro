@@ -8,7 +8,8 @@ This is only a module and should be imported by some calling stylesheet.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
-    xmlns:xtriples="https://xtriples.lod.academy/" exclude-result-prefixes="#all" version="3.0">
+    xmlns:xtriples="https://xtriples.lod.academy/" xmlns:err="http://www.w3.org/2005/xqt-errors"
+    exclude-result-prefixes="#all" version="3.0">
 
     <xsl:variable name="xtriples:fullstop" as="xs:string" select="'.'"/>
 
@@ -29,6 +30,8 @@ This is only a module and should be imported by some calling stylesheet.
                 select="$config/xtriples/configuration/vocabularies"/>
             <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"
                 select="$xpath-params"/>
+            <xsl:with-param name="namespaces" as="element(namespaces)"
+                select="xtriples:namespaces($config/xtriples)" tunnel="true"/>
         </xsl:apply-templates>
     </xsl:template>
 
@@ -45,12 +48,28 @@ This is only a module and should be imported by some calling stylesheet.
                     <xsl:text>xpath for resource </xsl:text>
                     <xsl:value-of select="$resource-xpath"/>
                 </xsl:message>
-                <xsl:evaluate as="node()*" context-item="$document" xpath="$resource-xpath"/>
+                <xsl:evaluate as="node()*" context-item="$document" xpath="$resource-xpath"
+                    namespace-context="xtriples:namespaces($collection/ancestor::xtriples)"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$document"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="xtriples:namespaces" as="element(namespaces)">
+        <xsl:param name="config" as="element(xtriples)"/>
+        <xsl:element name="namespaces" namespace="">
+            <xsl:for-each select="$config/configuration/vocabularies/vocabulary">
+                <xsl:namespace name="{@prefix}" select="@uri"/>
+                <xsl:message use-when="system-property('debug') eq 'true'">
+                    <xsl:text>add namespace declaration </xsl:text>
+                    <xsl:value-of select="@prefix"/>
+                    <xsl:text>=</xsl:text>
+                    <xsl:value-of select="@uri"/>
+                </xsl:message>
+            </xsl:for-each>
+        </xsl:element>
     </xsl:function>
 
 
@@ -61,6 +80,7 @@ This is only a module and should be imported by some calling stylesheet.
          and predicate when we reach the object. -->
     <xsl:template mode="statement" match="statement">
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
+        <xsl:param name="namespaces" as="element(namespaces)" tunnel="true"/>
         <xsl:variable name="statements" as="xs:string*">
             <xsl:apply-templates mode="statement" select="subject"/>
         </xsl:variable>
@@ -74,7 +94,8 @@ This is only a module and should be imported by some calling stylesheet.
                 <xsl:variable name="repeat" as="xs:integer">
                     <xsl:evaluate as="xs:integer" with-params="$xpath-params"
                         context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                        xpath="concat('$currentResource', @repeat)"/>
+                        xpath="concat('$currentResource', @repeat)" namespace-context="$namespaces"
+                    />
                 </xsl:variable>
                 <xsl:sequence select="$statements[position() le $repeat]"/>
             </xsl:when>
@@ -88,8 +109,9 @@ This is only a module and should be imported by some calling stylesheet.
     <xsl:template mode="statement" match="subject">
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
+        <xsl:param name="namespaces" as="element(namespaces)" tunnel="true"/>
         <xsl:variable name="stmt" select="parent::statement"/>
-        <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params)">
+        <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params, $namespaces)">
             <xsl:message use-when="system-property('debug') eq 'true'">subject</xsl:message>
             <xsl:apply-templates mode="statement" select="$stmt/predicate">
                 <xsl:with-param name="subject" as="item()" tunnel="true" select="."/>
@@ -101,8 +123,9 @@ This is only a module and should be imported by some calling stylesheet.
     <xsl:template mode="statement" match="predicate">
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
+        <xsl:param name="namespaces" as="element(namespaces)" tunnel="true"/>
         <xsl:variable name="stmt" select="parent::statement"/>
-        <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params)">
+        <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params, $namespaces)">
             <xsl:message use-when="system-property('debug') eq 'true'">predicate</xsl:message>
             <xsl:apply-templates mode="statement" select="$stmt/object">
                 <xsl:with-param name="predicate" as="item()" tunnel="true" select="."/>
@@ -115,9 +138,10 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="predicate" as="item()" tunnel="true"/>
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
+        <xsl:param name="namespaces" as="element(namespaces)" tunnel="true"/>
         <xsl:variable name="context" select="."/>
         <xsl:variable name="stmt" select="parent::statement"/>
-        <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params)">
+        <xsl:for-each select="xtriples:part-to-rdf(., $vocabularies, $xpath-params, $namespaces)">
             <xsl:message use-when="system-property('debug') eq 'true'">object</xsl:message>
             <xsl:value-of select="$subject"/>
             <xsl:value-of select="$predicate"/>
@@ -131,23 +155,43 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="part" as="element()"/>
         <xsl:param name="vocabularies" as="element(vocabularies)"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)"/>
+        <xsl:param name="namespaces" as="element(namespaces)"/>
         <xsl:variable name="xs" as="item()*">
             <xsl:choose>
                 <xsl:when test="substring($part, 1, 1) eq '/'">
                     <xsl:message use-when="system-property('debug') eq 'true'">xpath</xsl:message>
                     <xsl:choose>
-                        <xsl:when test="$part/@resource and doc-available($part/@resource)">
+                        <xsl:when test="$part/@resource">
                             <xsl:message use-when="system-property('debug') eq 'true'">
                                 <xsl:text>evaluating in context of external resource</xsl:text>
                                 <xsl:value-of select="string($part)"/>
                             </xsl:message>
-                            <xsl:variable name="resource" as="document-node()"
-                                select="doc($part/@resource)"/>
-                            <!-- the external resource must be passed as XPath context
+                            <xsl:variable name="resource-uri" as="xs:anyURI"
+                                select="resolve-uri($part/@resource, base-uri(map:get($xpath-params, xs:QName('currentResource'))))"/>
+                            <xsl:try>
+                                <xsl:variable name="resource" as="document-node()"
+                                    select="doc($resource-uri)"/>
+                                <xsl:variable name="params" as="map(xs:QName, item()*)"
+                                    select="map:put($xpath-params, xs:QName('externalResource'), $resource)"/>
+                                <!-- the external resource must be passed as XPath context
                                 and as an advanced configuation variable -->
-                            <xsl:evaluate as="item()*"
-                                with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
-                                context-item="$resource" xpath="concat('$externalResource', $part)"/>
+                                <xsl:evaluate as="item()*" with-params="$params"
+                                    context-item="$resource"
+                                    xpath="concat('$externalResource', $part)"
+                                    namespace-context="$namespaces"/>
+                                <xsl:catch>
+                                    <xsl:message terminate="yes">
+                                        <xsl:text>Evaluation in the context of external resource </xsl:text>
+                                        <xsl:value-of select="$part/@resource"/>
+                                        <xsl:text> failed. Absolute resource URI: </xsl:text>
+                                        <xsl:value-of select="$resource-uri"/>
+                                        <xsl:text>&#xa;ERROR: </xsl:text>
+                                        <xsl:value-of select="$err:code"/>
+                                        <xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$err:description"/>
+                                    </xsl:message>
+                                </xsl:catch>
+                            </xsl:try>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:message use-when="system-property('debug') eq 'true'">
@@ -156,7 +200,8 @@ This is only a module and should be imported by some calling stylesheet.
                             </xsl:message>
                             <xsl:evaluate as="item()*" with-params="$xpath-params"
                                 context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                                xpath="concat('$currentResource', $part)"/>
+                                xpath="concat('$currentResource', $part)"
+                                namespace-context="$namespaces"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
@@ -219,13 +264,15 @@ This is only a module and should be imported by some calling stylesheet.
                                         <xsl:variable name="resource" select="doc($part/@resource)"/>
                                         <xsl:evaluate as="xs:string" context-item="$resource"
                                             with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
-                                            xpath="concat('$externalResource', $part/@lang)"/>
+                                            xpath="concat('$externalResource', $part/@lang)"
+                                            namespace-context="$namespaces"/>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:evaluate as="xs:string"
                                             context-item="map:get($xpath-params, xs:QName('currentResource'))"
                                             with-params="$xpath-params"
-                                            xpath="concat('$currentResource', $part/@lang)"/>
+                                            xpath="concat('$currentResource', $part/@lang)"
+                                            namespace-context="$namespaces"/>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:when>
