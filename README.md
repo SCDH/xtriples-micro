@@ -204,11 +204,9 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
      use the empty string prefix in the vocabularies, since that would
      bind the default namespace for XPath evaluation to this
      vocabulary URI.
-   - If you are using namespaces in the XML source document, you
-     always have to prefix your XPath path expressions with a
-     namespace bound to the corresponding vocabulary URI / namespace
-     name. Using the default namespace in the XPath expressions is
-     currently not supported.
+   - Be careful about using the default namespace, since it is not
+     compatible with the reference implementation. See
+     [below](#implementation-of-the-specs)!
 1. Using **BNodes** may be a bit tricky. See [these hints](bnodes.md).
 
 
@@ -228,6 +226,17 @@ features:
    evaluate XPath expressions, that return such language
    identifiers. This feature is handy for projects that set up language
    in their XML documents.
+1. By leaving away `@prefix` for a `<vocabulary>` or setting it to the
+   empty string, the default namespace when evaluating XPath
+   expressions binds to this vocabulary URI. Thus, when setting
+   `<vocabulary uri="http://www.tei-c.org/ns/1.0"/>`, you can write
+   XPaths like this: `<object
+   type="literal">//(teiHeader/fileDesc/titleStmt/title)[1]</object>`
+   without prefixing the element names. See
+   [`test/config-02.xml`](test/config-02.xml`) for a self contained
+   test case. Evaluating it on the [reference
+   implementation](https://xtriples.lod.academy/index.html) fails,
+   while the implementation at hand processes it correctly.
 
 In contrast to the specs `/xtriples/collection/@uri` is ignored, when
 a single XML source document is passed to the processor. When using
