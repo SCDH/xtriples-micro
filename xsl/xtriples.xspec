@@ -171,15 +171,20 @@
             '&quot;Poseidon (Neptune)&quot;'"/>
     </x:scenario>
 
-    <x:scenario pending="$repeatIndex not yet implemented"
-        label="Using the $repeadIndex variable in statement patterns; conf-16.xml on god 5">
+    <x:scenario label="Using the $repeadIndex variable in statement patterns; conf-16.xml on god 13">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-16.xml"/>
-            <x:param name="resource" href="../test/gods/13.xml"/>
+            <x:param name="resource" href="../test/gods/13.xml" select="/god"/>
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)"
             select="20"/>
+        <x:expect label="attributes selected by index" test="matches($x:result[3], 'sea')"/>
+        <x:expect label="attributes selected by index" test="matches($x:result[7], 'rivers')"/>
+        <x:expect label="attributes selected by index" test="matches($x:result[11], 'floods')"/>
+        <x:expect label="attributes selected by index" test="matches($x:result[15], 'droughts')"/>
+        <x:expect label="attributes selected by index" test="matches($x:result[19], 'earthquakes')"
+        />
     </x:scenario>
 
     <x:scenario label="Creating a 1:n statement with an object node set; conf-17.xml on god 2">
@@ -264,6 +269,22 @@
         </x:call>
         <x:expect label="count of returned items" as="xs:integer" test="count($x:result)" select="0"
         />
+    </x:scenario>
+
+    <x:scenario label="@repeat: config-04.xml">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/config-04.xml"/>
+            <x:param name="resource" href="../test/eitel.tei.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of returned items" as="xs:integer" test="count($x:result)"
+            select="40"/>
+        <x:expect label="repeat not present in subject" as="xs:string" test="$x:result[1]"
+            select="'&lt;https://scdh.ulbms.de/examples/${repeatIndex}&gt;'"/>
+        <x:expect label="repeat not present in subject" as="xs:string" test="$x:result[2]"
+            select="'&lt;http://purl.org/dc/terms/title-1&gt;'"/>
+        <x:expect label="repeat not present in subject" as="xs:string" test="$x:result[7]"
+            select="'&quot;Es ist alles eitel 2.0&quot;'"/>
     </x:scenario>
 
 </x:description>
