@@ -64,6 +64,12 @@ This is only a module and should be imported by some calling stylesheet.
                     every $v in $config/configuration/vocabularies/vocabulary
                         satisfies $v/@prefix and $v/@prefix ne ''">
                 <xsl:element name="namespaces" namespace="">
+                    <!-- add some namespaces known by default -->
+                    <xsl:if
+                        test="not($config/configuration/vocabularies/vocabulary[@prefix = 'xs'])">
+                        <xsl:namespace name="xs" select="'http://www.w3.org/2001/XMLSchema'"/>
+                    </xsl:if>
+                    <!-- add namespaces from vocabularies -->
                     <xsl:for-each select="$config/configuration/vocabularies/vocabulary">
                         <xsl:namespace name="{@prefix}" select="@uri"/>
                         <xsl:message use-when="system-property('debug') eq 'true'">
@@ -88,6 +94,12 @@ This is only a module and should be imported by some calling stylesheet.
                         <xsl:text>default namespace: </xsl:text>
                         <xsl:value-of select="$default[1]/@uri"/>
                     </xsl:message>
+                    <!-- add some namespaces known by default -->
+                    <xsl:if
+                        test="not($config/configuration/vocabularies/vocabulary[@prefix = 'xs'])">
+                        <xsl:namespace name="xs" select="'http://www.w3.org/2001/XMLSchema'"/>
+                    </xsl:if>
+                    <!-- add namespaces from vocabularies -->
                     <xsl:for-each
                         select="$config/configuration/vocabularies/vocabulary except $default">
                         <xsl:namespace name="{@prefix}" select="@uri"/>
