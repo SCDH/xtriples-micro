@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.3.0
+
+- support namespaces
+
 ## 0.2.1
 
 - fix how XPath expressions are evaluated

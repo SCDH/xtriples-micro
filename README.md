@@ -204,10 +204,11 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
      use the empty string prefix in the vocabularies, since that would
      bind the default namespace for XPath evaluation to this
      vocabulary URI.
-   - If you are using namespaces in the XML source document and do not
-     want to prefix the path expressions in the XPath selectors, then
-     use the empty prefix in the vocabularies, to bind the default
-     namespace for XPath evaluation to the according namespace URI.
+   - If you are using namespaces in the XML source document, you
+     always have to prefix your XPath path expressions with a
+     namespace bound to the corresponding vocabulary URI / namespace
+     name. Using the default namespace in the XPath expressions is
+     currently not supported.
 1. Using **BNodes** may be a bit tricky. See [these hints](bnodes.md).
 
 
