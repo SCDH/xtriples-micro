@@ -128,30 +128,61 @@ This is only a module and should be imported by some calling stylesheet.
             <xsl:text>namespaces: </xsl:text>
             <xsl:value-of select="serialize($namespaces)"/>
         </xsl:message>
-        <xsl:variable name="statements" as="xs:string*">
-            <xsl:apply-templates mode="statement" select="subject"/>
-        </xsl:variable>
-        <!-- amount of statements for output is determined by @repeat -->
-        <xsl:choose>
-            <xsl:when test="not(@repeat)">
-                <xsl:sequence select="$statements"/>
-            </xsl:when>
-            <xsl:when test="substring(@repeat, 1, 1) eq '/'">
-                <!-- @repeat is an XPath expression -->
-                <xsl:variable name="repeat" as="xs:integer">
-                    <xsl:evaluate as="xs:integer" with-params="$xpath-params"
+        <xsl:variable name="condition" as="xs:boolean">
+            <xsl:choose>
+                <xsl:when test="not(condition)">
+                    <xsl:sequence select="true()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- we wrap the XPath in xs:boolean( ... ) -->
+                    <xsl:evaluate as="xs:boolean"
                         context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                        xpath="concat('$currentResource', @repeat)" namespace-context="$namespaces"
-                    />
-                </xsl:variable>
-                <xsl:sequence select="$statements[position() le $repeat]"/>
+                        with-params="$xpath-params" xpath="concat('$currentResource', condition)"
+                        namespace-context="$namespaces"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="$condition">
+            <xsl:variable name="statements" as="xs:string*">
+                <xsl:apply-templates mode="statement" select="subject"/>
+            </xsl:variable>
+            <!-- amount of statements for output is determined by @repeat -->
+            <xsl:choose>
+                <xsl:when test="not(@repeat)">
+                    <xsl:sequence select="$statements"/>
+                </xsl:when>
+                <xsl:when test="substring(@repeat, 1, 1) eq '/'">
+                    <!-- @repeat is an XPath expression -->
+                    <xsl:variable name="repeat" as="xs:integer">
+                        <xsl:evaluate as="xs:integer" with-params="$xpath-params"
+                            context-item="map:get($xpath-params, xs:QName('currentResource'))"
+                            xpath="concat('$currentResource', @repeat)"
+                            namespace-context="$namespaces"/>
+                    </xsl:variable>
+                    <xsl:sequence select="$statements[position() le $repeat]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="repeat" as="xs:integer" select="xs:integer(@repeat)"/>
+                    <xsl:sequence select="$statements[position() le $repeat]"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:function name="xtriples:all-true" as="xs:boolean">
+        <xsl:param name="values" as="xs:boolean*"/>
+        <xsl:choose>
+            <xsl:when test="empty($values)">
+                <xsl:sequence select="false()"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="repeat" as="xs:integer" select="xs:integer(@repeat)"/>
-                <xsl:sequence select="$statements[position() le $repeat]"/>
+                <xsl:sequence select="
+                        fold-left(($values), true(), function ($acc, $x) {
+                            $acc and $x
+                        })"/>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
+    </xsl:function>
 
     <xsl:template mode="statement" match="subject">
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>

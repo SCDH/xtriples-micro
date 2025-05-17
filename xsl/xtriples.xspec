@@ -132,7 +132,7 @@
     </x:scenario>
 
     <x:scenario
-        label="&lt;condition&gt; Applying a condition to a statement pattern; conf-13.xml on god 14">
+        label="&lt;object&gt; Including a value from an external resource in the object; conf-13.xml on god 14">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-13.xml"/>
             <!-- CHANGE: added select to make test work -->
@@ -146,11 +146,11 @@
             '&lt;http://en.wikipedia.org/wiki/Zeus&gt;'"/>
     </x:scenario>
 
-    <x:scenario pending="condition not yet supported"
+    <x:scenario pending="multiple resources: must be tested with an other stylesheet"
         label="&lt;condition&gt; Applying a condition to a statement pattern; conf-14.xml on all gods">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-14.xml"/>
-            <x:param name="resource" href="../test/gods/all.xml"/>
+            <x:param name="resource" href="../test/gods/all.xml" select="//god"/>
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"
@@ -256,5 +256,14 @@
             select="'&quot;Es ist alles eitel&quot;'"/>
     </x:scenario>
 
+    <x:scenario label="&lt;condition&gt; Evaluate condition: config-03.xml">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/config-03.xml"/>
+            <x:param name="resource" href="../test/eitel.tei.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of returned items" as="xs:integer" test="count($x:result)" select="0"
+        />
+    </x:scenario>
 
 </x:description>
