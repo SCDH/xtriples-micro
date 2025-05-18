@@ -156,7 +156,7 @@
         />
     </x:scenario>
 
-    <x:scenario pending="Is the default type of objects 'literal'?"
+    <x:scenario
         label="Using the $currentResource variable in statement patterns; conf-15.xml on god 13">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-15.xml"/>

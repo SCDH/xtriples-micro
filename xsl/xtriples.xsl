@@ -328,7 +328,7 @@ This is only a module and should be imported by some calling stylesheet.
                         <xsl:value-of select="$x"/>
                     </xsl:value-of>
                 </xsl:when>
-                <xsl:when test="$part/@type eq 'literal'">
+                <xsl:when test="$part/@type eq 'literal' or $part/self::object[not(@type)]">
                     <xsl:value-of>
                         <xsl:text>"</xsl:text>
                         <xsl:value-of select="$x"/>
