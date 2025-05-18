@@ -21,5 +21,6 @@
     <uri name="https://xtriples.lod.academy/examples/gods/13.xml" uri="gods/13.xml"/>
     <uri name="https://xtriples.lod.academy/examples/gods/14.xml" uri="gods/14.xml"/>
     <uri name="https://xtriples.lod.academy/examples/gods/all.xml" uri="gods/all.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/index.xml" uri="gods/index.xml"/>
 
 </catalog>
