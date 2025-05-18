@@ -5,6 +5,8 @@
 - make `<condition>` work
 - make `@repeat` on `<statement>` work and provide `$repeatIndex`
   variable
+- support `@datatype` attribute on `<object>`
+- fix handling of boolean condition in `<statement>`
 
 ## 0.3.1
 
