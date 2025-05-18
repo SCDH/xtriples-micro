@@ -134,7 +134,7 @@ This is only a module and should be imported by some calling stylesheet.
                     <!-- we wrap the XPath in xs:boolean( ... ) -->
                     <xsl:evaluate as="xs:boolean"
                         context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                        with-params="$xpath-params" xpath="concat('$currentResource', condition)"
+                        with-params="$xpath-params" xpath="concat('xs:boolean($currentResource', condition, ')')"
                         namespace-context="$namespaces"/>
                 </xsl:otherwise>
             </xsl:choose>

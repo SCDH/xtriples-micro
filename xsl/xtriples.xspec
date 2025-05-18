@@ -145,14 +145,36 @@
             '&lt;http://en.wikipedia.org/wiki/Zeus&gt;'"/>
     </x:scenario>
 
-    <x:scenario pending="multiple resources: must be tested with an other stylesheet"
-        label="&lt;condition&gt; Applying a condition to a statement pattern; conf-14.xml on all gods">
+    <x:scenario
+        label="&lt;condition&gt; Applying a condition to a statement pattern; conf-14.xml one of all gods: 1">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-14.xml"/>
-            <x:param name="resource" href="../test/gods/all.xml" select="//god"/>
+            <x:param name="resource" href="../test/gods/all.xml" select="//god[1]"/>
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"
+        />
+    </x:scenario>
+
+    <x:scenario
+        label="&lt;condition&gt; Applying a condition to a statement pattern; conf-14.xml one of all gods: 2">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-14.xml"/>
+            <x:param name="resource" href="../test/gods/all.xml" select="//god[2]"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="4"
+        />
+    </x:scenario>
+
+    <x:scenario
+        label="&lt;condition&gt; Applying a condition to a statement pattern; conf-14.xml one of all gods: 8 - condition fails">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-14.xml"/>
+            <x:param name="resource" href="../test/gods/all.xml" select="//god[8]"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)" select="0"
         />
     </x:scenario>
 
@@ -200,16 +222,17 @@
             '&quot;Apollo&quot;@en'"/>
     </x:scenario>
 
-    <x:scenario pending="must be tested on other stylesheet"
-        label="Creating a n:1 statement with a subject node sets; conf-18.xml on all gods">
+    <x:scenario
+        label="Creating a n:1 statement with a subject node sets; conf-18.xml on one of all gods">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-18.xml"/>
-            <x:param name="resource" href="../test/gods/all.xml" select="//god"/>
+            <!-- select only one god in order to match the type of $resource! -->
+            <x:param name="resource" href="../test/gods/all.xml" select="//god[1]"/>
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="count of sentence parts" as="xs:integer" test="count($x:result)"
             select="16"/>
-        <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
+        <x:expect label="first statement" as="xs:string*" test="$x:result[position() le 3]"
             select="'&lt;https://xtriples.lod.academy/examples/gods/2&gt;',
             '&lt;http://www.w3.org/2000/01/rdf-schema#seeAlso&gt;',
             '&lt;http://en.wikipedia.org/wiki/Snake&gt;'"/>
