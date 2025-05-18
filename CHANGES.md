@@ -7,6 +7,12 @@
   variable
 - support `@datatype` attribute on `<object>`
 - fix handling of boolean condition in `<statement>`
+- `<collection>`
+  - support XPATH based resource crawling with resources all in one
+    single file; this needs stylesheet parameter
+    `is-collection-uri=false`
+  - support link based resource crawling
+  - support literal resource crawling
 
 ## 0.3.1
 
