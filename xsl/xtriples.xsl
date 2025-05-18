@@ -11,6 +11,8 @@ This is only a module and should be imported by some calling stylesheet.
     xmlns:xtriples="https://xtriples.lod.academy/" xmlns:err="http://www.w3.org/2005/xqt-errors"
     exclude-result-prefixes="#all" version="3.0">
 
+    <xsl:import href="vocabularies.xsl"/>
+
     <xsl:variable name="xtriples:fullstop" as="xs:string" select="'.'"/>
 
 
@@ -35,64 +37,6 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:function name="xtriples:namespaces" as="node()">
-        <xsl:param name="config" as="element(xtriples)"/>
-        <xsl:choose>
-            <xsl:when test="
-                    every $v in $config/configuration/vocabularies/vocabulary
-                        satisfies $v/@prefix and $v/@prefix ne ''">
-                <xsl:element name="namespaces" namespace="">
-                    <!-- add some namespaces known by default -->
-                    <xsl:if
-                        test="not($config/configuration/vocabularies/vocabulary[@prefix = 'xs'])">
-                        <xsl:namespace name="xs" select="'http://www.w3.org/2001/XMLSchema'"/>
-                    </xsl:if>
-                    <!-- add namespaces from vocabularies -->
-                    <xsl:for-each select="$config/configuration/vocabularies/vocabulary">
-                        <xsl:namespace name="{@prefix}" select="@uri"/>
-                        <xsl:message use-when="system-property('debug') eq 'true'">
-                            <xsl:text>add namespace declaration </xsl:text>
-                            <xsl:value-of select="@prefix"/>
-                            <xsl:text>=</xsl:text>
-                            <xsl:value-of select="@uri"/>
-                        </xsl:message>
-                    </xsl:for-each>
-                </xsl:element>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:variable name="default" as="element(vocabulary)*"
-                    select="$config/configuration/vocabularies/vocabulary[not(@prefix) or @prefix eq '']"/>
-                <xsl:if test="$default[position() gt 1]">
-                    <xsl:message>
-                        <xsl:text>Configuration error: multiple vocabularies with the default prefix!</xsl:text>
-                    </xsl:message>
-                </xsl:if>
-                <xsl:element name="namespaces" namespace="{$default[1]/@uri}">
-                    <xsl:message use-when="system-property('debug') eq 'true'">
-                        <xsl:text>default namespace: </xsl:text>
-                        <xsl:value-of select="$default[1]/@uri"/>
-                    </xsl:message>
-                    <!-- add some namespaces known by default -->
-                    <xsl:if
-                        test="not($config/configuration/vocabularies/vocabulary[@prefix = 'xs'])">
-                        <xsl:namespace name="xs" select="'http://www.w3.org/2001/XMLSchema'"/>
-                    </xsl:if>
-                    <!-- add namespaces from vocabularies -->
-                    <xsl:for-each
-                        select="$config/configuration/vocabularies/vocabulary except $default">
-                        <xsl:namespace name="{@prefix}" select="@uri"/>
-                        <xsl:message use-when="system-property('debug') eq 'true'">
-                            <xsl:text>add namespace declaration </xsl:text>
-                            <xsl:value-of select="@prefix"/>
-                            <xsl:text>=</xsl:text>
-                            <xsl:value-of select="@uri"/>
-                        </xsl:message>
-                    </xsl:for-each>
-                </xsl:element>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-
 
     <xsl:mode name="statement" on-no-match="fail"/>
 
@@ -112,7 +56,8 @@ This is only a module and should be imported by some calling stylesheet.
                     <!-- we wrap the XPath in xs:boolean( ... ) -->
                     <xsl:evaluate as="xs:boolean"
                         context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                        with-params="$xpath-params" xpath="concat('xs:boolean($currentResource', condition, ')')"
+                        with-params="$xpath-params"
+                        xpath="concat('xs:boolean($currentResource', condition, ')')"
                         namespace-context="$namespaces"/>
                 </xsl:otherwise>
             </xsl:choose>
