@@ -361,6 +361,11 @@ This is only a module and should be imported by some calling stylesheet.
                                 <xsl:text>@</xsl:text>
                                 <xsl:value-of select="$part/@lang"/>
                             </xsl:when>
+                            <xsl:when test="$part/@datatype">
+                                <xsl:text>^^&lt;http://www.w3.org/2001/XMLSchema#</xsl:text>
+                                <xsl:value-of select="$part/@datatype"/>
+                                <xsl:text>&gt;</xsl:text>
+                            </xsl:when>
                         </xsl:choose>
                     </xsl:value-of>
                 </xsl:when>

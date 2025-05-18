@@ -114,8 +114,7 @@
         <x:expect label="statement" as="xs:string*" test="$x:result[position() le 3]"
             select="'&lt;https://xtriples.lod.academy/examples/gods/14&gt;',
             '&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;',
-            '&quot;6&quot;&lt;http://www.w3.org/2001/XMLSchema#integer&gt;'"
-            pending="typed literals not yet supported"/>
+            '&quot;6&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;'"/>
     </x:scenario>
 
     <x:scenario label="&lt;object&gt; Creating a language tagged literal; conf-12.xml on god 14">
