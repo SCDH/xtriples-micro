@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This XSLT is the workhorse of this XTriples implementation.
-
-The output format is NTriples.
-
-This is only a module and should be imported by some calling stylesheet.
--->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
-    xmlns:xtriples="https://xtriples.lod.academy/" xmlns:err="http://www.w3.org/2005/xqt-errors"
-    exclude-result-prefixes="#all" version="3.0">
+    xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" xmlns:xtriples="https://xtriples.lod.academy/"
+    xmlns:err="http://www.w3.org/2005/xqt-errors" exclude-result-prefixes="#all" version="3.0">
+    <xd:doc scope="stylesheet">
+        <xd:desc>
+            <xd:p><xd:b>Created on:</xd:b> May 16, 2025</xd:p>
+            <xd:p><xd:b>Author:</xd:b> Christian Lück</xd:p>
+            <xd:p>This stylesheet is the workhorse of the XTriples processor. It is not intended to
+                be used directly, but provides named templates and functions for other
+                stylesheets.</xd:p>
+        </xd:desc>
+    </xd:doc>
 
+
+    <xd:doc>
+        <xd:desc>
+            <xd:p>The sentence mark of a statement in the NTriples output format.</xd:p>
+        </xd:desc>
+    </xd:doc>
     <xsl:variable name="xtriples:fullstop" as="xs:string" select="'.'"/>
 
 
+    <xd:doc>
+        <xd:desc>
+            <xd:p>Main entry point for extracting RDF triples on a <xd:b>single</xd:b> resouce. This
+                applies the configuration in <xd:pre>xtriples/configuration</xd:pre>, i.e., the
+                statement selectors on the resource given as <xd:pre>resource</xd:pre>
+                parameter.</xd:p>
+        </xd:desc>
+        <xd:param name="config"/>
+        <xd:param name="resource"/>
+        <xd:param name="resource-index"/>
+    </xd:doc>
     <xsl:template name="xtriples:extract">
         <xsl:param name="config" as="document-node(element(xtriples))"/>
         <xsl:param name="resource" as="node()"/>
@@ -35,6 +55,13 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:apply-templates>
     </xsl:template>
 
+    <xd:doc>
+        <xd:desc>
+            <xd:p/>
+        </xd:desc>
+        <xd:param name="collection"/>
+        <xd:param name="document"/>
+    </xd:doc>
     <xsl:function name="xtriples:resources">
         <!-- evaluate /xtriples/collection/resource -->
         <xsl:param name="collection" as="element(collection)?"/>
@@ -57,6 +84,16 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:choose>
     </xsl:function>
 
+    <xd:doc>
+        <xd:desc>
+            <xd:p>Returns an element with namespace nodes made up from the
+                <xd:pre>vocabularies</xd:pre> section of the configuration. This element can be
+                passed as namespace context to <xd:pre>xsl:evaluate/@namespace-context</xd:pre> to
+                make evaluation of XPath expressions namespace sensitive.</xd:p>
+        </xd:desc>
+        <xd:param name="config"/>
+        <xd:return/>
+    </xd:doc>
     <xsl:function name="xtriples:namespaces" as="node()">
         <xsl:param name="config" as="element(xtriples)"/>
         <xsl:choose>
@@ -116,11 +153,27 @@ This is only a module and should be imported by some calling stylesheet.
     </xsl:function>
 
 
+    <xd:doc scope="component">
+        <xd:desc>
+            <xd:p>The <xd:pre>statement</xd:pre> mode does the work of extracting triples.</xd:p>
+            <xd:p><xd:b>Implementation</xd:b> We collect all data from subject, predicate, object
+                and tunnel the intermediate result, so we have subject and predicate when we reach
+                the object. Data is passed up the evaluation tree as tunnel parameters.</xd:p>
+        </xd:desc>
+        <xd:param name="xpath-params"/>
+        <xd:param name="namespaces"/>
+    </xd:doc>
     <xsl:mode name="statement" on-no-match="fail"/>
 
-    <!-- We collect all data from subject, predicate, object
-         and tunnel the intermediate result, so we have subject
-         and predicate when we reach the object. -->
+    <xd:doc scope="component">
+        <xd:desc>
+            <xd:p>In the <xd:pre>statement</xd:pre> context, the <xd:pre>condition</xd:pre> has to
+                be evaluated. If it is matched, we pass on to the <xd:pre>subject</xd:pre>, repeatly
+                if <xd:pre>@repeat</xd:pre> is used.</xd:p>
+        </xd:desc>
+        <xd:param name="xpath-params"/>
+        <xd:param name="namespaces"/>
+    </xd:doc>
     <xsl:template mode="statement" match="statement" as="xs:string*">
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
         <xsl:param name="namespaces" as="node()" tunnel="true"/>
@@ -172,21 +225,15 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:if>
     </xsl:template>
 
-    <xsl:function name="xtriples:all-true" as="xs:boolean">
-        <xsl:param name="values" as="xs:boolean*"/>
-        <xsl:choose>
-            <xsl:when test="empty($values)">
-                <xsl:sequence select="false()"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="
-                        fold-left(($values), true(), function ($acc, $x) {
-                            $acc and $x
-                        })"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-
+    <xd:doc>
+        <xd:desc>
+            <xd:p>In a <xd:pre>subject</xd:pre> context, we evaluate the given subject value and for
+                every found subject node we pass over to <xd:pre>predicate</xd:pre>.</xd:p>
+        </xd:desc>
+        <xd:param name="vocabularies"/>
+        <xd:param name="xpath-params"/>
+        <xd:param name="namespaces"/>
+    </xd:doc>
     <xsl:template mode="statement" match="subject">
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
@@ -201,6 +248,15 @@ This is only a module and should be imported by some calling stylesheet.
     </xsl:template>
 
 
+    <xd:doc>
+        <xd:desc>
+            <xd:p>In a <xd:pre>predicate</xd:pre> context, we evaluate the value and for every found
+                node we pass on to <xd:pre>object</xd:pre>.</xd:p>
+        </xd:desc>
+        <xd:param name="vocabularies"/>
+        <xd:param name="xpath-params"/>
+        <xd:param name="namespaces"/>
+    </xd:doc>
     <xsl:template mode="statement" match="predicate">
         <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
@@ -214,6 +270,17 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:for-each>
     </xsl:template>
 
+    <xd:doc>
+        <xd:desc>
+            <xd:p>In an <xd:pre>object</xd:pre> context, we evaluate the object value and for each
+                found node we return the triple of SPO and a ful stop.</xd:p>
+        </xd:desc>
+        <xd:param name="subject"/>
+        <xd:param name="predicate"/>
+        <xd:param name="vocabularies"/>
+        <xd:param name="xpath-params"/>
+        <xd:param name="namespaces"/>
+    </xd:doc>
     <xsl:template mode="statement" match="object">
         <xsl:param name="subject" as="item()" tunnel="true"/>
         <xsl:param name="predicate" as="item()" tunnel="true"/>
@@ -232,6 +299,17 @@ This is only a module and should be imported by some calling stylesheet.
     </xsl:template>
 
 
+    <xd:doc>
+        <xd:desc>
+            <xd:p>This function does the job of evaluating the value of subjects, predicates and
+                objects. Such a sentence part must be passed in as the <xd:pre>part</xd:pre>
+                parameter.</xd:p>
+        </xd:desc>
+        <xd:param name="part"/>
+        <xd:param name="vocabularies"/>
+        <xd:param name="xpath-params"/>
+        <xd:param name="namespaces"/>
+    </xd:doc>
     <xsl:function name="xtriples:part-to-rdf">
         <xsl:param name="part" as="element()"/>
         <xsl:param name="vocabularies" as="element(vocabularies)"/>
@@ -374,6 +452,13 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:for-each>
     </xsl:function>
 
+    <xd:doc>
+        <xd:desc>
+            <xd:p>Serialize a sequence of SPOs returned by mode <xd:pre>statement</xd:pre> as
+                NTriples.</xd:p>
+        </xd:desc>
+        <xd:param name="sentence-parts"/>
+    </xd:doc>
     <xsl:function name="xtriples:serialize">
         <xsl:param name="sentence-parts" as="item()*"/>
         <xsl:for-each select="$sentence-parts">
@@ -383,6 +468,29 @@ This is only a module and should be imported by some calling stylesheet.
                 <xsl:text>&#xa;</xsl:text>
             </xsl:if>
         </xsl:for-each>
+    </xsl:function>
+
+    <xd:doc>
+        <xd:desc>
+            <xd:p>Returns true, if and only if all boolean values in the input sequence are
+                true.</xd:p>
+        </xd:desc>
+        <xd:param name="values"/>
+        <xd:return/>
+    </xd:doc>
+    <xsl:function name="xtriples:all-true" as="xs:boolean">
+        <xsl:param name="values" as="xs:boolean*"/>
+        <xsl:choose>
+            <xsl:when test="empty($values)">
+                <xsl:sequence select="false()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="
+                        fold-left(($values), true(), function ($acc, $x) {
+                            $acc and $x
+                        })"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
 
 </xsl:stylesheet>
