@@ -5,4 +5,22 @@
     <uri name="http://dbpedia.org/data/Hera.rdf" uri="gods/external/Hera.rdf"/>
     <uri name="http://dbpedia.org/data/Zeus.rdf" uri="gods/external/Zeus.rdf"/>
 
+    <!-- collection and document IDs used in tests -->
+    <uri name="https://xtriples.lod.academy/examples/gods/1.xml" uri="gods/1.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/2.xml" uri="gods/2.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/3.xml" uri="gods/3.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/4.xml" uri="gods/4.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/5.xml" uri="gods/5.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/6.xml" uri="gods/6.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/7.xml" uri="gods/7.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/8.xml" uri="gods/8.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/9.xml" uri="gods/9.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/10.xml" uri="gods/10.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/11.xml" uri="gods/11.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/12.xml" uri="gods/12.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/13.xml" uri="gods/13.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/14.xml" uri="gods/14.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/all.xml" uri="gods/all.xml"/>
+    <uri name="https://xtriples.lod.academy/examples/gods/index.xml" uri="gods/index.xml"/>
+
 </catalog>

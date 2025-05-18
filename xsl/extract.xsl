@@ -14,6 +14,7 @@ The output format is NTriples
     <xsl:global-context-item as="document-node()" use="required"/>
 
     <xsl:import href="xtriples.xsl"/>
+    <xsl:import href="collection.xsl"/>
 
     <xsl:param name="config-uri" as="xs:string?" select="()"/>
 
@@ -59,8 +60,7 @@ The output format is NTriples
             Albeit this stylesheet ignores <collection>, the first resource/@uri is evaluated.
         -->
         <xsl:variable name="statements" as="xs:string*">
-            <xsl:for-each
-                select="xtriples:resources(($config//xtriples/collection[resource/@uri])[1], .)">
+            <xsl:for-each select="xtriples:resources($config/xtriples, .)">
                 <xsl:call-template name="xtriples:extract">
                     <xsl:with-param name="config" select="$config"/>
                     <xsl:with-param name="resource" select="."/>

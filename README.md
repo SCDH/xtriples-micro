@@ -109,10 +109,16 @@ This will download Saxon-HE etc. and generate wrapper files, that set
 up the classpath for using them.
 
 After running the command above, the wrapper scripts are in
-`target/bin/`. Here's a wrapper to Saxon-HE:
+`target/bin/`. E.g., there are a wrappers around
+[Saxon-HE](https://www.saxonica.com/documentation12/index.html#!using-xsl/commandline)
+and [Jena RIOT](https://jena.apache.org/documentation/io/):
 
 ```
 target/bin/xslt.sh -?
+```
+
+```
+target/bin/riot.sh -h
 ```
 
 
@@ -144,6 +150,30 @@ The output should look like this:
 If you your result is polluted with debug messages, you can append `2>
 /dev/null` to silence them or use Saxon's `-o:` option to send the
 output to a file. They are printed to stderr.
+
+If you want an other format, pipe the result to Jena RIOT like so:
+
+```
+target/bin/xslt.sh -xsl:xsl/extract.xsl -s:test/gods/1.xml config-uri=$(realpath test/gods/configuration.xml) | target/bin/riot.sh --out rdf/xml
+```
+
+Here's the result:
+
+```xml
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:j.0="http://xmlns.com/foaf/0.1/" > 
+  <rdf:Description rdf:about="https://xtriples.lod.academy/examples/gods/1">
+    <rdfs:seeAlso rdf:resource="http://en.wikipedia.org/wiki/Aphrodite"/>
+    <rdfs:label xml:lang="gr">Ἀφροδίτη</rdfs:label>
+    <rdfs:label xml:lang="en">Aphrodite</rdfs:label>
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+  </rdf:Description>
+</rdf:RDF>
+```
+
+
 
 This is the only transformation that makes sense deploying on a micro
 service. See [seed](seed.md).
@@ -216,13 +246,15 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
 This is a full implementation of the [XTriples
 spec](https://xtriples.lod.academy/documentation.html).
 
-In addition to the specs this implementation adds the following
+### Additional Features
+
+In addition to the specs, this implementation adds the following
 features:
 
-1. In addition to ISO 639 language identifiers, `object/@lang` can also
-   evaluate XPath expressions, that return such language
-   identifiers. This feature is handy for projects that set up language
-   in their XML documents.
+1. In addition to static ISO 639 language identifiers, `object/@lang`
+   can also be XPath expressions, that return such language
+   identifiers. This feature is handy for projects that set up
+   language in their XML documents.
 1. By leaving away `@prefix` for a `<vocabulary>` or setting it to the
    empty string, the default namespace when evaluating XPath
    expressions binds to this vocabulary URI. Thus, when setting
@@ -235,9 +267,19 @@ features:
    implementation](https://xtriples.lod.academy/index.html) fails,
    while the implementation at hand processes it correctly.
 
-In contrast to the specs `/xtriples/collection/@uri` is ignored, when
-a single XML source document is passed to the processor. When using
-`xsl/extract-collection.xsl` it is evaluated as a [Saxon collection
+### Collections
+
+Due to not running inside an eXist database, the evaluation of the
+`<collection>` section of the configuration differs from the reference
+implementation. However, you can get full compatibility mode (see end
+of this section).
+
+In contrast to the specs, **`/xtriples/collection/@uri`** is ignored,
+when a single XML source document is passed to the processor, i.e.,
+when using `xsl/extract.xsl` or `xsl/extract-param-dox.xsl`.
+
+When using `xsl/extract-collection.xsl`, it is evaluated as a [Saxon
+collection
 URI](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/collection-uris). It
 can thus be a
 
@@ -255,13 +297,24 @@ can thus be a
   [collection
   finder](https://www.saxonica.com/documentation12/index.html#!sourcedocs/collections/user-collections).
 
-Literal resource crawling, where the XML source is provided inside
-resource tags, is not supported.
+*Link based resource crawling* and *literal resource crawling* are
+supported exactly as in the reference implementation. In both modes,
+there is no `@uri` attribute present for the collection.
 
-`/xtriples/collection/resource/@uri` is evaluated on every document
-(resource) that is being processed, even if the extraction is from a
-single XML source. The result becomes the context root when evaluating
-the XPath expressions in subject, predicate, object, etc. tags.
+You can get full compatibility by setting the `is-collection-uri`
+stylesheet parameter to `false`. This way, all the `@uri` attribute of
+each `<collection>` is not read as a Saxon collection URI, but as a
+single document URI. Using this attribute, *XPath based resource
+crawling with resources spread over multiple files* is also supported.
+
+You can evaluate the examples in `test/gods` with
+`is-collection-uri=false` and by using the XML catalog in
+`test/catalog.xml`, which maps lod academy URIs to local files:
+
+```
+target/bin/xslt.sh -xsl:xsl/extract-collection.xsl -s:test/gods/conf-NN.xml -catalog:test/catalog.xml is-collection-uri=false
+```
+
 
 ## Output: NTriples
 
