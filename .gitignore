@@ -5,3 +5,6 @@ target
 saxon.*.xml
 saxon.xml
 xspec
+xsl/**/*.html
+xsl/**/img
+xsl/**/docHtml.css
