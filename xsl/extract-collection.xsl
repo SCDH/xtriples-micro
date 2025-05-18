@@ -10,6 +10,7 @@ The output format is NTriples
     <xsl:output method="text"/>
 
     <xsl:import href="xtriples.xsl"/>
+    <xsl:import href="collection.xsl"/>
 
 
     <xsl:global-context-item as="document-node(element(xtriples))" use="required"/>

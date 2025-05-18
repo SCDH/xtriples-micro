@@ -14,6 +14,7 @@ The output format is NTriples
     <xsl:global-context-item as="document-node()" use="required"/>
 
     <xsl:import href="xtriples.xsl"/>
+    <xsl:import href="collection.xsl"/>
 
     <xsl:param name="config-uri" as="xs:string?" select="()"/>
 

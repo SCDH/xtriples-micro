@@ -35,28 +35,6 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:function name="xtriples:resources">
-        <!-- evaluate /xtriples/collection/resource -->
-        <xsl:param name="collection" as="element(collection)?"/>
-        <xsl:param name="document" as="document-node()"/>
-        <xsl:choose>
-            <xsl:when
-                test="matches($collection/resource/@uri, '^\{') and matches($collection/resource/@uri, '\}$')">
-                <xsl:variable name="resource-xpath" as="xs:string"
-                    select="$collection/resource/@uri => replace('^\{', '') => replace('\}$', '')"/>
-                <xsl:message use-when="system-property('debug') eq 'true'">
-                    <xsl:text>xpath for resource </xsl:text>
-                    <xsl:value-of select="$resource-xpath"/>
-                </xsl:message>
-                <xsl:evaluate as="node()*" context-item="$document" xpath="$resource-xpath"
-                    namespace-context="xtriples:namespaces($collection/ancestor::xtriples)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$document"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-
     <xsl:function name="xtriples:namespaces" as="node()">
         <xsl:param name="config" as="element(xtriples)"/>
         <xsl:choose>
