@@ -4,7 +4,7 @@
     run-as="external" stylesheet="collection.xsl">
 
     <x:scenario
-        label="XPATH based resource crawling with resources all in one single file, conf-01.xml."
+        label="XPATH based resource crawling with resources all in one single file, conf-01.xml; as collection."
         catch="true">
         <x:call function="xtriples:resources">
             <x:param name="config" href="../test/gods/conf-01.xml" select="/xtriples"/>
@@ -14,7 +14,7 @@
     </x:scenario>
 
     <x:scenario
-        label="XPATH based resource crawling with resources all in one single file, conf-01.xml.">
+        label="XPATH based resource crawling with resources all in one single file, conf-01.xml; as file.">
         <x:param name="is-collection-uri" select="false()"/>
         <x:call function="xtriples:resources">
             <x:param name="config" href="../test/gods/conf-01.xml" select="/xtriples"/>
@@ -23,7 +23,7 @@
     </x:scenario>
 
     <x:scenario
-        label="XPATH based resource crawling with resources spread over multiple files is not supported, conf-02.xml"
+        label="XPATH based resource crawling with resources spread over multiple files is not supported with collection URI, conf-02.xml"
         catch="yes">
         <x:call function="xtriples:resources">
             <x:param name="config" href="../test/gods/conf-02.xml" select="/xtriples"/>
@@ -33,6 +33,19 @@
             select="QName('http://www.w3.org/2005/xqt-errors', 'XTMM9000')"/>
         <x:expect label="error description"
             test="matches($x:result?err?description, '^Processing terminated by xsl:message')"/>
+    </x:scenario>
+
+    <x:scenario
+        label="XPATH based resource crawling with resources spread over multiple files with single file collection, conf-02.xml">
+        <x:param name="is-collection-uri" select="false()"/>
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/gods/conf-02.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="count of resources" as="xs:integer" test="count($x:result)" select="14"/>
+        <x:expect label="basenames" as="xs:string*"
+            test="$x:result ! base-uri(.) ! replace(., '(^.*)/([^/]*$)', '$2')"
+            select="('1.xml', '2.xml', '3.xml', '4.xml', '5.xml', '6.xml', '7.xml', '8.xml', '9.xml', '10.xml', '11.xml', '12.xml', '13.xml', '14.xml')"
+        />
     </x:scenario>
 
     <x:scenario

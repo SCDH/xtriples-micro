@@ -81,7 +81,7 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:try>
             <xsl:sequence select="doc($uri)"/>
             <xsl:catch>
-                <xsl:message>
+                <xsl:message terminate="yes">
                     <xsl:text>Failed to parse file </xsl:text>
                     <xsl:value-of select="@uri"/>
                     <xsl:text> (</xsl:text>
@@ -179,10 +179,56 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:for-each>
     </xsl:template>
 
+    <xsl:template mode="collection" match="resource[@uri][not($is-collection-uri)]" priority="5">
+        <xsl:param name="collection" as="document-node()*" tunnel="true"/>
+        <xsl:param name="namespaces" as="node()" tunnel="true"/>
+        <xsl:variable name="resource" as="element(resource)" select="."/>
+        <xsl:variable name="re" as="xs:string" select="'(^[^\{]*)(\{)([^\}]+)(\})(.*$)'"/>
+        <xsl:variable name="resource-xpath" as="xs:string" select="@uri => replace($re, '$3')"/>
+        <xsl:message use-when="system-property('debug') eq 'true'">
+            <xsl:text>XPATH based resource crawling with resources spread over multiple files</xsl:text>
+            <xsl:text> with single file URI in collection! XPath: </xsl:text>
+            <xsl:value-of select="$resource-xpath"/>
+        </xsl:message>
+        <xsl:variable name="xs" as="xs:string*">
+            <xsl:evaluate as="xs:string*" context-item="$collection[1]" xpath="$resource-xpath"
+                namespace-context="$namespaces"/>
+        </xsl:variable>
+        <xsl:for-each select="$xs">
+            <!--
+                first remove the regular expression part from uri,
+                then replace the curly braces with the current string from $xs
+            -->
+            <xsl:variable name="uri"
+                select="replace($resource/@uri, $re, '$1$2$4$5') => replace('\{\}', .)"/>
+            <xsl:message use-when="system-property('debug') eq 'true'">
+                <xsl:text>Making resource from </xsl:text>
+                <xsl:value-of select="$uri"/>
+            </xsl:message>
+            <xsl:try>
+                <xsl:sequence select="doc($uri)"/>
+                <xsl:catch>
+                    <xsl:message terminate="yes">
+                        <xsl:text>XPATH based resource crawling with resources spread over multiple files: </xsl:text>
+                        <xsl:text>Failed to parse file </xsl:text>
+                        <xsl:value-of select="$uri"/>
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="$uri"/>
+                        <xsl:text>): ERROR </xsl:text>
+                        <xsl:value-of select="$err:code"/>
+                        <xsl:text>&#xa;</xsl:text>
+                        <xsl:value-of select="$err:description"/>
+                    </xsl:message>
+                </xsl:catch>
+            </xsl:try>
+        </xsl:for-each>
+    </xsl:template>
+
     <xsl:template mode="collection" match="resource[@uri]">
         <xsl:message terminate="yes">
             <xsl:text>XPATH based resource crawling with resources spread over multiple files</xsl:text>
-            <xsl:text> IS NOT SUPPORTED</xsl:text>
+            <xsl:text> IS NOT SUPPORTED using collections.</xsl:text>
+            <xsl:text>&#xa;Try is-collection-uri=false stylesheet parameter!</xsl:text>
         </xsl:message>
     </xsl:template>
 
