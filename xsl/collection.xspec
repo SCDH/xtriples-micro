@@ -4,12 +4,13 @@
     run-as="external" stylesheet="collection.xsl">
 
     <x:scenario
-        label="XPATH based resource crawling with resources all in one single file, conf-01.xml.">
+        label="XPATH based resource crawling with resources all in one single file, conf-01.xml."
+        catch="true">
         <x:call function="xtriples:resources">
             <x:param name="config" href="../test/gods/conf-01.xml" select="/xtriples"/>
         </x:call>
-        <x:expect label="Must return zero resources, since @uri not a Saxon URI collection!"
-            as="xs:integer" test="count($x:result)" select="0"/>
+        <x:expect label="error code" test="$x:result?err?code"
+            select="QName('http://www.w3.org/2005/xqt-errors', 'FODC0004')"/>
     </x:scenario>
 
     <x:scenario
@@ -18,8 +19,7 @@
         <x:call function="xtriples:resources">
             <x:param name="config" href="../test/gods/conf-01.xml" select="/xtriples"/>
         </x:call>
-        <x:expect label="Must return 13 Gods" as="xs:integer" test="count($x:result)" select="13"
-            pending="some bug!"/>
+        <x:expect label="Must return 13 Gods" as="xs:integer" test="count($x:result)" select="14"/>
     </x:scenario>
 
     <x:scenario

@@ -109,41 +109,40 @@ This is only a module and should be imported by some calling stylesheet.
             <xsl:choose>
                 <xsl:when test="$is-collection-uri and not(resource)">
                     <!-- done. Every document in the collection is a resource -->
-                    <xsl:message>
+                    <xsl:message use-when="system-property('debug') eq 'true'">
                         <xsl:text>extracting from collection </xsl:text>
                         <xsl:value-of select="$collection-uri"/>
                     </xsl:message>
                     <xsl:sequence select="$collection-uri => collection()"/>
                 </xsl:when>
                 <xsl:when test="$is-collection-uri">
-                    <xsl:message>
+                    <xsl:message use-when="system-property('debug') eq 'true'">
                         <xsl:text>unnesting resources from collection </xsl:text>
                         <xsl:value-of select="$collection-uri"/>
                     </xsl:message>
                     <xsl:apply-templates mode="collection" select="resource">
                         <xsl:with-param name="collection" as="document-node()*"
-                            select="$collection-uri => collection()"/>
+                            select="$collection-uri => collection()" tunnel="true"/>
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:when test="not($is-collection-uri) and not(resource)">
                     <!-- done. Document is a resource -->
-                    <xsl:message>
+                    <xsl:message use-when="system-property('debug') eq 'true'">
                         <xsl:text>extracting from document </xsl:text>
                         <xsl:value-of select="$collection-uri"/>
                     </xsl:message>
                     <xsl:sequence select="$collection-uri => doc()"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>
+                    <xsl:message use-when="system-property('debug') eq 'true'">
                         <xsl:text>unnesting resources from document </xsl:text>
                         <xsl:value-of select="$collection-uri"/>
                     </xsl:message>
                     <xsl:apply-templates mode="collection" select="resource">
                         <xsl:with-param name="collection" as="document-node()*"
-                            select="$collection-uri => doc()"/>
+                            select="$collection-uri => doc()" tunnel="true"/>
                     </xsl:apply-templates>
                 </xsl:otherwise>
-
             </xsl:choose>
         </xsl:variable>
         <xsl:choose>
@@ -168,9 +167,9 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="collection" as="document-node()*" tunnel="true"/>
         <xsl:param name="namespaces" as="node()" tunnel="true"/>
         <xsl:variable name="resource-xpath" as="xs:string"
-            select="$collection/resource/@uri => replace('^\{', '') => replace('\}$', '')"/>
+            select="@uri => replace('^\{', '') => replace('\}$', '')"/>
         <xsl:message use-when="system-property('debug') eq 'true'">
-            <xsl:text>xpath for resource </xsl:text>
+            <xsl:text>xpath for unnesting resources </xsl:text>
             <xsl:value-of select="$resource-xpath"/>
         </xsl:message>
         <!-- evaluate resource xpath on each document in the collection -->
