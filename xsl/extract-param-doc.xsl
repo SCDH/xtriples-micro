@@ -28,8 +28,7 @@ The output format is NTriples
             Albeit this stylesheet ignores <collection>, the first resource/@uri is evaluated.
         -->
         <xsl:variable name="statements" as="xs:string*">
-            <xsl:for-each
-                select="xtriples:resources((/xtriples/collection[resource/@uri])[1], $source)">
+            <xsl:for-each select="xtriples:resources(/xtriples, $source)">
                 <xsl:call-template name="xtriples:extract">
                     <xsl:with-param name="config" select="$config"/>
                     <!-- albeit this stylesheet ignores <collection>, the first resource/@uri is evaluated -->

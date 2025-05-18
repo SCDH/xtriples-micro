@@ -20,29 +20,16 @@ The output format is NTriples
     <xsl:template mode="eval-xtriples" match="document-node(element(xtriples))">
         <xsl:variable name="config" select="."/>
         <!-- there may be multiple collection elements -->
-        <xsl:for-each select="/xtriples/collection">
-            <xsl:variable name="collection" as="element(collection)" select="."/>
-            <xsl:variable name="collection-uri" as="xs:anyURI"
-                select="$collection/@uri => resolve-uri(base-uri(.))"/>
-            <xsl:message>
-                <xsl:text>extracting from collection </xsl:text>
-                <xsl:value-of select="$collection-uri"/>
-            </xsl:message>
-            <xsl:for-each
-                select="($collection-uri => collection()) ! xtriples:resources($collection, .)">
-                <!-- take only @max resources (not documents) -->
-                <xsl:if test="not($collection/@max) or (position() le xs:integer($collection/@max))">
-                    <xsl:variable name="statements" as="xs:string*">
-                        <xsl:call-template name="xtriples:extract">
-                            <xsl:with-param name="config" select="$config"/>
-                            <xsl:with-param name="resource" select="."/>
-                            <xsl:with-param name="resource-index" select="position()"/>
-                        </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:value-of select="xtriples:serialize($statements)"/>
-                </xsl:if>
+        <xsl:variable name="statements" as="xs:string*">
+            <xsl:for-each select="xtriples:resources(/xtriples)">
+                <xsl:call-template name="xtriples:extract">
+                    <xsl:with-param name="config" select="$config"/>
+                    <xsl:with-param name="resource" select="."/>
+                    <xsl:with-param name="resource-index" select="position()"/>
+                </xsl:call-template>
             </xsl:for-each>
-        </xsl:for-each>
+        </xsl:variable>
+        <xsl:value-of select="xtriples:serialize($statements)"/>
     </xsl:template>
 
 </xsl:stylesheet>
