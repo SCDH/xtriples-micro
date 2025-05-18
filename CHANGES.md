@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## 0.4.0
 
 - make `<condition>` work
 - make `@repeat` on `<statement>` work and provide `$repeatIndex`
@@ -8,11 +8,12 @@
 - support `@datatype` attribute on `<object>`
 - fix handling of boolean condition in `<statement>`
 - `<collection>`
-  - support XPATH based resource crawling with resources all in one
-    single file; this needs stylesheet parameter
-    `is-collection-uri=false`
   - support link based resource crawling
   - support literal resource crawling
+  - introduce stylesheet parameter `is-collection-uri`
+	- set it to `false` for getting full compatibility collection evaluation
+	- when set to `false`, *XPath based resource crawling with
+      resources spread over multiple files* is supported
 
 ## 0.3.1
 
