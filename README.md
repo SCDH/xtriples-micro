@@ -187,7 +187,8 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml
    if the content starts with a **slash** `/`. Before the expression
    is evaluated, it is prepended with `$currentResource` (or
    `$externalResource` respectively). E.g., `/@id` is evaluated as
-   `$currentResource/@id`.
+   `$currentResource/@id`. In `<condition>` the XPath is constructed
+   like this: `xs:boolean($currentResource CONDITION )`.
 1. Keep the difference of **document** vs.  **resource** in mind: Each
    document may contain multiple resources if
    `/xtriples/collection/resource/@uri` is used to unnest resources
