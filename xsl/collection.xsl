@@ -11,6 +11,9 @@ This is only a module and should be imported by some calling stylesheet.
 
     <xsl:import href="vocabularies.xsl"/>
 
+    <!-- Whether collection/@uri is to be evaluated as a Saxon collection URI. Otherwise read as ordinary XML document. -->
+    <xsl:param name="is-collection-uri" as="xs:boolean" select="true()"/>
+
     <!--
         entry point: Returns a sequence of resources
         for a given config by evaluating the <collection>
@@ -20,7 +23,7 @@ This is only a module and should be imported by some calling stylesheet.
         passed to the XML processor, but the <collection>
         tags in the configuration determine the XML sources.
     -->
-    <xsl:function name="xtriples:resources" as="node()*">
+    <xsl:function name="xtriples:resources" as="node()*" visibility="public">
         <xsl:param name="config" as="element(xtriples)"/>
         <xsl:apply-templates mode="resources" select="$config/collection">
             <xsl:with-param name="namespaces" as="node()" tunnel="true"
@@ -37,7 +40,7 @@ This is only a module and should be imported by some calling stylesheet.
         This is used when the source document is passed to the
         processor.
     -->
-    <xsl:function name="xtriples:resources">
+    <xsl:function name="xtriples:resources" visibility="public">
         <xsl:param name="config" as="element(xtriples)?"/>
         <xsl:param name="document" as="document-node()"/>
         <xsl:variable name="collection" as="element(collection)?"
@@ -94,7 +97,7 @@ This is only a module and should be imported by some calling stylesheet.
 
     <!-- Literal resource crawling with XML resources -->
     <xsl:template mode="resources" match="resource[not(@uri)]">
-        <xsl:copy-of select="node()"/>
+        <xsl:copy-of select="element()"/>
     </xsl:template>
 
     <!-- a collection from a Saxon URI collection -->
@@ -102,22 +105,45 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:variable name="collection" as="element(collection)" select="."/>
         <xsl:variable name="collection-uri" as="xs:anyURI"
             select="$collection/@uri => resolve-uri(base-uri(.))"/>
-        <xsl:message>
-            <xsl:text>extracting from collection </xsl:text>
-            <xsl:value-of select="$collection-uri"/>
-        </xsl:message>
-        <xsl:variable name="resources" as="node()">
+        <xsl:variable name="resources" as="node()*">
             <xsl:choose>
-                <xsl:when test="not(resource)">
+                <xsl:when test="$is-collection-uri and not(resource)">
                     <!-- done. Every document in the collection is a resource -->
+                    <xsl:message>
+                        <xsl:text>extracting from collection </xsl:text>
+                        <xsl:value-of select="$collection-uri"/>
+                    </xsl:message>
                     <xsl:sequence select="$collection-uri => collection()"/>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="$is-collection-uri">
+                    <xsl:message>
+                        <xsl:text>unnesting resources from collection </xsl:text>
+                        <xsl:value-of select="$collection-uri"/>
+                    </xsl:message>
                     <xsl:apply-templates mode="collection" select="resource">
                         <xsl:with-param name="collection" as="document-node()*"
                             select="$collection-uri => collection()"/>
                     </xsl:apply-templates>
+                </xsl:when>
+                <xsl:when test="not($is-collection-uri) and not(resource)">
+                    <!-- done. Document is a resource -->
+                    <xsl:message>
+                        <xsl:text>extracting from document </xsl:text>
+                        <xsl:value-of select="$collection-uri"/>
+                    </xsl:message>
+                    <xsl:sequence select="$collection-uri => doc()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>
+                        <xsl:text>unnesting resources from document </xsl:text>
+                        <xsl:value-of select="$collection-uri"/>
+                    </xsl:message>
+                    <xsl:apply-templates mode="collection" select="resource">
+                        <xsl:with-param name="collection" as="document-node()*"
+                            select="$collection-uri => doc()"/>
+                    </xsl:apply-templates>
                 </xsl:otherwise>
+
             </xsl:choose>
         </xsl:variable>
         <xsl:choose>
