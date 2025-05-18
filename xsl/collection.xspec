@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xtriples="https://xtriples.lod.academy/"
+    run-as="external" stylesheet="collection.xsl">
+
+    <x:scenario
+        label="XPATH based resource crawling with resources all in one single file, conf-01.xml.">
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/gods/conf-01.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="Must return zero resources, since @uri not a Saxon URI collection!"
+            as="xs:integer" test="count($x:result)" select="0"/>
+    </x:scenario>
+
+    <x:scenario
+        label="XPATH based resource crawling with resources all in one single file, conf-01.xml.">
+        <x:param name="is-collection-uri" select="false()"/>
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/gods/conf-01.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="Must return 13 Gods" as="xs:integer" test="count($x:result)" select="13"
+            pending="some bug!"/>
+    </x:scenario>
+
+    <x:scenario
+        label="XPATH based resource crawling with resources spread over multiple files is not supported, conf-02.xml"
+        catch="yes">
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/gods/conf-02.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="error code present" test="not(empty($x:result?err?code))"/>
+        <x:expect label="error code" test="$x:result?err?code"
+            select="QName('http://www.w3.org/2005/xqt-errors', 'XTMM9000')"/>
+        <x:expect label="error description"
+            test="matches($x:result?err?description, '^Processing terminated by xsl:message')"/>
+    </x:scenario>
+
+    <x:scenario
+        label="Link based resource crawling with fixed resources in the configuration file, conf-03.xml">
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/gods/conf-03.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="count of resources" as="xs:integer" test="count($x:result)" select="5"/>
+        <x:expect label="Gods only" test="every $n in $x:result/*/name() satisfies $n eq 'god'"/>
+    </x:scenario>
+
+    <x:scenario label="Literal resource crawling with XML resources, conf-04.xml">
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/gods/conf-04.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="count of resources" as="xs:integer" test="count($x:result)" select="2"/>
+        <x:expect label="resource root element names" as="xs:string*" test="$x:result ! name(.)"
+            select="('god', 'god')"/>
+    </x:scenario>
+
+</x:description>

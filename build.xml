@@ -20,11 +20,18 @@
     <!-- default rule: run all tests -->
     <target name="test">
         <antcall target="test-xsl-xtriples.xsl"/>
+        <antcall target="test-xsl-collection.xsl"/>
     </target>
 
     <target name="test-xsl-xtriples.xsl">
         <antcall target="xspec.xspec" inheritall="false">
             <param name="xspec.xml" location="${basedir}/xsl/xtriples.xspec"/>
+        </antcall>
+    </target>
+
+    <target name="test-xsl-collection.xsl">
+        <antcall target="xspec.xspec" inheritall="false">
+            <param name="xspec.xml" location="${basedir}/xsl/collection.xspec"/>
         </antcall>
     </target>
 
