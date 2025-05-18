@@ -109,10 +109,16 @@ This will download Saxon-HE etc. and generate wrapper files, that set
 up the classpath for using them.
 
 After running the command above, the wrapper scripts are in
-`target/bin/`. Here's a wrapper to Saxon-HE:
+`target/bin/`. E.g., there are a wrappers around
+[Saxon-HE](https://www.saxonica.com/documentation12/index.html#!using-xsl/commandline)
+and [Jena RIOT](https://jena.apache.org/documentation/io/):
 
 ```
 target/bin/xslt.sh -?
+```
+
+```
+target/bin/riot.sh -h
 ```
 
 
@@ -144,6 +150,30 @@ The output should look like this:
 If you your result is polluted with debug messages, you can append `2>
 /dev/null` to silence them or use Saxon's `-o:` option to send the
 output to a file. They are printed to stderr.
+
+If you want an other format, pipe the result to Jena RIOT like so:
+
+```
+target/bin/xslt.sh -xsl:xsl/extract.xsl -s:test/gods/1.xml config-uri=$(realpath test/gods/configuration.xml) | target/bin/riot.sh --out rdf/xml
+```
+
+Here's the result:
+
+```xml
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:j.0="http://xmlns.com/foaf/0.1/" > 
+  <rdf:Description rdf:about="https://xtriples.lod.academy/examples/gods/1">
+    <rdfs:seeAlso rdf:resource="http://en.wikipedia.org/wiki/Aphrodite"/>
+    <rdfs:label xml:lang="gr">Ἀφροδίτη</rdfs:label>
+    <rdfs:label xml:lang="en">Aphrodite</rdfs:label>
+    <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+  </rdf:Description>
+</rdf:RDF>
+```
+
+
 
 This is the only transformation that makes sense deploying on a micro
 service. See [seed](seed.md).
