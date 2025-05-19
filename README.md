@@ -1,7 +1,7 @@
 # An XTriples Processor for Micro Services and Local Usage
 
 This is an implementation of a [XTriples](https://xtriples.lod.academy/)
-processor that works without an eXist-db.
+processor that works without an eXist datebase.
 
 XTriples? In XTriples, instead of writing specialized programs in
 XSLT, XQuery, Python, etc. for extracting RDF triples from XML
@@ -84,8 +84,6 @@ to your project.
 
 ### Command Line
 
-#### Tooling
-
 This project comes with a fully reproducible
 [tooling](https://github.com/scdh/tooling) environment that installs
 all tools needed for running and testing in a sandbox. You only need a
@@ -120,6 +118,12 @@ target/bin/xslt.sh -?
 ```
 target/bin/riot.sh -h
 ```
+
+### XSLT Package
+
+The distribution as a package is best for using the XTriples engine in
+downstream projects or for deployment in CI/CD pipelines. See [package
+howto](package.md)!
 
 
 ## Extracting RDF Triples
