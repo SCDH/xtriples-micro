@@ -14,6 +14,7 @@
 	- set it to `false` for getting full compatibility collection evaluation
 	- when set to `false`, *XPath based resource crawling with
       resources spread over multiple files* is supported
+- fix document type association for oxygen framework
 
 ## 0.3.1
 
