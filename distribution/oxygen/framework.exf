@@ -23,20 +23,16 @@ from the contextual menu.
     <addEntry path="${pdu}/templates"/>
   </documentTemplates>
 
-  <classpath>
-    <addEntry path="${framework}/resources"/>
-  </classpath>
-
   <xmlCatalogs>
-    <addEntry path="${framework}/catalog.xml"/>
+    <addEntry path="${frameworkDir}/catalog.xml"/>
   </xmlCatalogs>
 
   <transformationScenarios>
-    <addScenarios href="${framework}/transformation.scenarios"/>
+    <addScenarios href="${frameworkDir}/transformation.scenarios"/>
   </transformationScenarios>
 
   <validationScenarios>
-    <addScenarios href="${framework}/validation.scenarios"/>
+    <addScenarios href="${frameworkDir}/validation.scenarios"/>
   </validationScenarios>
 
 </script>
