@@ -14,7 +14,7 @@ from the contextual menu.
   <priority>Normal</priority>
 
   <associationRules>
-    <addRule namespace="*" rootElementLocalName="xtriples" fileName="*" publicID="*"
+    <addRule namespace="" rootElementLocalName="xtriples" fileName="*" publicID="*"
       javaRuleClass="" attributeLocalName="*" attributeNamespace="*" attributeValue="*"/>
   </associationRules>
 
