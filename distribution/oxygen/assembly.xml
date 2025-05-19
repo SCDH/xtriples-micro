@@ -63,6 +63,13 @@
             <include>*.scenarios</include>
          </includes>
       </fileSet>
+      <fileSet>
+         <directory>${project.basedir}/distribution/oxygen/templates</directory>
+         <outputDirectory>/templates</outputDirectory>
+         <includes>
+            <include>*.xml</include>
+         </includes>
+      </fileSet>
    </fileSets>
 
    <files>
