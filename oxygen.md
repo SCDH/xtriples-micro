@@ -52,7 +52,7 @@ the file:
 
 ![Oxygen knows which elements and attributs names are allowed in a
 specfic context and offers you completion
-options](ox-content-completion.png)
+options](images/ox-content-completion.png)
 
 ## Evaluating the XTriples Configuration
 
