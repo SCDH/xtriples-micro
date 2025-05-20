@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.4.1
+
+- fixes a bug when processing a `<collection>` with a Saxon URI
+  collection and no unnesting of resources from `resource/@uri`
+
 ## 0.4.0
 
 - make `<condition>` work
