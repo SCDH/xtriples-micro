@@ -168,9 +168,12 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="namespaces" as="node()" tunnel="true"/>
         <xsl:variable name="resource-xpath" as="xs:string"
             select="@uri => replace('^\{', '') => replace('\}$', '')"/>
-        <xsl:message use-when="system-property('debug') eq 'true'">
-            <xsl:text>xpath for unnesting resources </xsl:text>
+        <xsl:message>
+            <xsl:text>applying xpath for unnesting resources </xsl:text>
             <xsl:value-of select="$resource-xpath"/>
+            <xsl:text> on </xsl:text>
+            <xsl:value-of select="count($collection)"/>
+            <xsl:text> documents</xsl:text>
         </xsl:message>
         <!-- evaluate resource xpath on each document in the collection -->
         <xsl:for-each select="$collection">
@@ -234,7 +237,7 @@ This is only a module and should be imported by some calling stylesheet.
 
     <!-- return true for uri="{//god}" or similar -->
     <xsl:function name="xtriples:is-node-extractor" as="xs:boolean">
-        <xsl:param name="uri" as="attribute(uri)"/>
+        <xsl:param name="uri" as="attribute(uri)?"/>
         <xsl:sequence select="matches($uri, '^\{') and matches($uri, '\}$')"/>
     </xsl:function>
 

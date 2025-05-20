@@ -66,4 +66,29 @@
             select="('god', 'god')"/>
     </x:scenario>
 
+    <x:scenario label="Saxon URI Collection only, conf-05.xml">
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/config-05.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="count of resources" as="xs:integer" test="count($x:result)" select="1"/>
+        <x:expect label="resource root element names" as="xs:string*" test="$x:result ! name(/*)"
+            select="('TEI')"/>
+    </x:scenario>
+
+    <x:scenario label="Saxon URI Collection, empty resource without @uri, conf-06.xml">
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/config-06.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="count of resources" as="xs:integer" test="count($x:result)" select="0"/>
+    </x:scenario>
+
+    <x:scenario label="Saxon URI Collection only, with resource selector in @uri, conf-07.xml">
+        <x:call function="xtriples:resources">
+            <x:param name="config" href="../test/config-07.xml" select="/xtriples"/>
+        </x:call>
+        <x:expect label="count of resources" as="xs:integer" test="count($x:result)" select="1"/>
+        <x:expect label="resource root element names" as="xs:string*" test="$x:result ! name(.)"
+            select="('lg')"/>
+    </x:scenario>
+
 </x:description>
