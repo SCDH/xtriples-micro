@@ -13,6 +13,15 @@ The output format is NTriples
 
     <xsl:global-context-item as="document-node()" use="required"/>
 
+    <!-- load additional XSLT function libraries, separated by comma -->
+    <xsl:param name="libraries-csv" as="xs:string" static="true" select="''" required="false"/>
+
+    <!-- load additional XSLT function libraries, as a sequence -->
+    <xsl:param name="libraries" as="xs:anyURI*" static="true"
+        select="tokenize($libraries-csv, '\s*,\s*') ! xs:anyURI(.)" required="false"/>
+
+    <xsl:import _href="{$libraries}" use-when="$libraries"/>
+
     <xsl:import href="xtriples.xsl"/>
     <xsl:import href="collection.xsl"/>
 

@@ -9,9 +9,15 @@ This is only a module and should be imported by some calling stylesheet.
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     xmlns:xtriples="https://xtriples.lod.academy/" xmlns:err="http://www.w3.org/2005/xqt-errors"
-    exclude-result-prefixes="#all" version="3.0">
+    xmlns:saxon="http://saxon.sf.net/" exclude-result-prefixes="#all" version="3.0">
 
     <xsl:import href="vocabularies.xsl"/>
+
+    <!-- used to set the according saxon:option for xsl:evaluate -->
+    <xsl:param name="allow-any-namespace" as="xs:boolean" select="false()"/>
+
+    <xsl:variable name="saxon-options" as="map(xs:string, xs:boolean)"
+        select="map {'allow-any-namespace': $allow-any-namespace}"/>
 
     <xsl:variable name="xtriples:fullstop" as="xs:string" select="'.'"/>
 
@@ -58,7 +64,7 @@ This is only a module and should be imported by some calling stylesheet.
                         context-item="map:get($xpath-params, xs:QName('currentResource'))"
                         with-params="$xpath-params"
                         xpath="concat('xs:boolean($currentResource', condition, ')')"
-                        namespace-context="$namespaces"/>
+                        namespace-context="$namespaces" saxon:options="$saxon-options"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -75,7 +81,7 @@ This is only a module and should be imported by some calling stylesheet.
                                 <xsl:evaluate as="xs:integer" with-params="$xpath-params"
                                     context-item="map:get($xpath-params, xs:QName('currentResource'))"
                                     xpath="concat('$currentResource', @repeat)"
-                                    namespace-context="$namespaces"/>
+                                    namespace-context="$namespaces" saxon:options="$saxon-options"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:sequence select="xs:integer(@repeat)"/>
@@ -182,7 +188,7 @@ This is only a module and should be imported by some calling stylesheet.
                                 <xsl:evaluate as="item()*" with-params="$params"
                                     context-item="$resource"
                                     xpath="concat('$externalResource', $part)"
-                                    namespace-context="$namespaces"/>
+                                    namespace-context="$namespaces" saxon:options="$saxon-options"/>
                                 <xsl:catch>
                                     <xsl:message terminate="yes">
                                         <xsl:text>Evaluation in the context of external resource </xsl:text>
@@ -205,7 +211,7 @@ This is only a module and should be imported by some calling stylesheet.
                             <xsl:evaluate as="item()*" with-params="$xpath-params"
                                 context-item="map:get($xpath-params, xs:QName('currentResource'))"
                                 xpath="concat('$currentResource', $part)"
-                                namespace-context="$namespaces"/>
+                                namespace-context="$namespaces" saxon:options="$saxon-options"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
@@ -269,14 +275,16 @@ This is only a module and should be imported by some calling stylesheet.
                                         <xsl:evaluate as="xs:string" context-item="$resource"
                                             with-params="map:merge($xpath-params, map:entry(xs:QName('externalResource'), $resource))"
                                             xpath="concat('$externalResource', $part/@lang)"
-                                            namespace-context="$namespaces"/>
+                                            namespace-context="$namespaces"
+                                            saxon:options="$saxon-options"/>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:evaluate as="xs:string"
                                             context-item="map:get($xpath-params, xs:QName('currentResource'))"
                                             with-params="$xpath-params"
                                             xpath="concat('$currentResource', $part/@lang)"
-                                            namespace-context="$namespaces"/>
+                                            namespace-context="$namespaces"
+                                            saxon:options="$saxon-options"/>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:when>
