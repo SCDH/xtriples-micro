@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.5.0
+
+- allows to use own functions in XPath expressions in the
+  `<configuration>` section
+
 ## 0.4.1
 
 - fixes a bug when processing a `<collection>` with a Saxon URI

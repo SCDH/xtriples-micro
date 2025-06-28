@@ -163,7 +163,7 @@ Here's the result:
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:j.0="http://xmlns.com/foaf/0.1/" > 
+    xmlns:j.0="http://xmlns.com/foaf/0.1/" >
   <rdf:Description rdf:about="https://xtriples.lod.academy/examples/gods/1">
     <rdfs:seeAlso rdf:resource="http://en.wikipedia.org/wiki/Aphrodite"/>
     <rdfs:label xml:lang="gr">Ἀφροδίτη</rdfs:label>
@@ -262,10 +262,21 @@ features:
    XPaths like this: `<object
    type="literal">//(teiHeader/fileDesc/titleStmt/title)[1]</object>`
    without prefixing the element names. See
-   [`test/config-02.xml`](test/config-02.xml`) for a self contained
+   [`test/config-02.xml`](test/config-02.xml) for a self contained
    test case. Evaluating it on the [reference
    implementation](https://xtriples.lod.academy/index.html) fails,
    while the implementation at hand processes it correctly.
+1. It is possible to use your own functions in the XPath expressionss
+   in the `<configuration>` section: You can load an additional XSLT
+   stylesheet by using the `libraries` (sequence of xs:anyURI) or
+   `libraries-csv` (a string of comma separated URIs) stylesheet
+   parameters. Please notice, that you have to declare your function's
+   visibility non-private and non-hidden, e.g., `@visibility=public`,
+   cf. [XSLT 3.0 TR](https://www.w3.org/TR/xslt-30/#evaluate-static-context).
+   ```shell
+   target/bin/xslt.sh -xsl:xsl/extract-collection.xsl -s:...  libraries-csv=$(realpath my-utils.xsl)
+   ```
+
 
 ### Collections
 
