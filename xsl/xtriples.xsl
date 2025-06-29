@@ -70,7 +70,7 @@ This is only a module and should be imported by some calling stylesheet.
         </xsl:variable>
         <xsl:if test="$condition">
             <xsl:choose>
-                <xsl:when test="xs:integer(@repeat) lt 1"/>
+                <xsl:when test="matches(@repeat, '^[0-9]$') and xs:integer(@repeat) lt 1"/>
                 <xsl:when test="not(@repeat)">
                     <xsl:apply-templates mode="statement" select="subject"/>
                 </xsl:when>
