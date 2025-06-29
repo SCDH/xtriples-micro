@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.5.1
+
+- fix issue #2: testing for number literals in `statement/@repeat`
+  that are lower 1
+
 ## 0.5.0
 
 - allows to use own functions in XPath expressions in the
