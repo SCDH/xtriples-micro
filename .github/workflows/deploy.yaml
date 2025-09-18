@@ -27,10 +27,10 @@ jobs:
       - name: Run XSpec tests
         run: target/bin/test.sh
 
-      - name: Push packages to the package registry, commit tag is the single source of truth for the release version
-        run: ./mvnw -Drevision=${{ github.ref_name }} -Dchangelist="" -Drelease.url=https://github.com/SCDH/xtriples-micro/releases/download/${{ github.ref_name }}/ --batch-mode --update-snapshots deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Push packages to the package registry, commit tag is the single source of truth for the release version
+      #   run: ./mvnw -Drevision=${{ github.ref_name }} -Dchangelist="" -Drelease.url=https://github.com/SCDH/xtriples-micro/releases/download/${{ github.ref_name }}/ --batch-mode --update-snapshots deploy
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: store oxygen plugin descriptor file
         uses: actions/upload-artifact@v4
