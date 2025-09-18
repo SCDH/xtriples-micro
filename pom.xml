@@ -20,7 +20,7 @@
         <license.file>LICENSE</license.file>
 
         <!-- project repository -->
-        <git.instance>zivgitlab.uni-muenster.de</git.instance>
+        <git.instance>github.com</git.instance>
         <distribution.url>https://maven.pkg.github.com/SCDH/xtriples-micro</distribution.url>
         <git.repo.path>/SCDH/xtriples-micro</git.repo.path>
 
