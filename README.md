@@ -1,5 +1,8 @@
 # An XTriples Processor for Micro Services and Local Usage
 
+![release](https://github.com/scdh/xtriples-micro/actions/workflows/deploy.yml/badge.svg)
+![tests](https://github.com/scdh/xtriples-micro/actions/workflows/test.yml/badge.svg)
+
 This is an implementation of a [XTriples](https://xtriples.lod.academy/)
 processor that works without an eXist datebase.
 
@@ -72,7 +75,7 @@ installation link in the installation dialog found in **Help** ->
 **Install New Addons**:
 
 ```
-https://scdh.zivgitlabpages.uni-muenster.de/tei-processing/xtriples-micro/descriptor.xml
+https://scdh.github.io/xtriples-micro/descriptor.xml
 ```
 
 See [details](oxygen.md).
