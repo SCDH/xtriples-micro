@@ -11,7 +11,7 @@
 
     <name>XTriples</name>
     <description>Components for running an XTriples Microservice</description>
-    <url>https://zivgitlab.uni-muenster.de/SCDH/tei-processing/xtriples</url>
+    <url>https://github.com/SCDH/xtriples-micro</url>
 
     <properties>
         <!-- the main author or contributors who gain credits for this project; used in metadata of build artifacts -->
@@ -21,8 +21,8 @@
 
         <!-- project repository -->
         <git.instance>zivgitlab.uni-muenster.de</git.instance>
-        <distribution.url>https://${git.instance}/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven</distribution.url>
-        <git.repo.path>/SCDH/tei-processing/xtriples</git.repo.path>
+        <distribution.url>https://maven.pkg.github.com/SCDH/xtriples-micro</distribution.url>
+        <git.repo.path>/SCDH/xtriples-micro</git.repo.path>
 
         <!-- XSLT resources for generating the configuration for the SEED distribution -->
         <seed-config-xsl.url>${project.basedir}/distribution/seed/seed-config.xsl</seed-config-xsl.url>
