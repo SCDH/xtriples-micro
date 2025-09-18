@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.5.4
+
+Release done on github. No changes
+
 ## 0.5.1
 
 - fix issue #2: testing for number literals in `statement/@repeat`
