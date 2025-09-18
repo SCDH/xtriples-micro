@@ -4,6 +4,9 @@
 *.xcf
 
 # build artifacts
+.classpath
+.settings
+.project
 target
 saxon.*.xml
 saxon.xml
