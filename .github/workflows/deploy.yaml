@@ -45,7 +45,6 @@ jobs:
           tag: ${{ github.ref_name }}
         run: |
           gh release create "$tag" \
-              target/*.jar \
               target/*.tar.gz \
               target/*.zip \
               --repo="$GITHUB_REPOSITORY" \
