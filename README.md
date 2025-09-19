@@ -1,10 +1,12 @@
-# An XTriples Processor for Micro Services and Local Usage
+# `xtriples-micro` – An XTriples Processor for Micro Services and Local Usage
 
-![release](https://github.com/scdh/xtriples-micro/actions/workflows/deploy.yml/badge.svg)
-![tests](https://github.com/scdh/xtriples-micro/actions/workflows/test.yml/badge.svg)
+[![Tests](https://github.com/SCDH/xtriples-micro/actions/workflows/test.yaml/badge.svg)](https://github.com/SCDH/xtriples-micro/actions/workflows/test.yaml)
+[![Create release](https://github.com/SCDH/xtriples-micro/actions/workflows/deploy.yaml/badge.svg)](https://github.com/SCDH/xtriples-micro/actions/workflows/deploy.yaml)
 
-This is an implementation of a [XTriples](https://xtriples.lod.academy/)
-processor that works without an eXist datebase.
+
+`xtriples-micro` is an implementation of a
+[XTriples](https://xtriples.lod.academy/) processor that works without
+an eXist datebase.
 
 XTriples? In XTriples, instead of writing specialized programs in
 XSLT, XQuery, Python, etc. for extracting RDF triples from XML
@@ -81,13 +83,22 @@ https://scdh.github.io/xtriples-micro/descriptor.xml
 See [details](oxygen.md).
 
 
-### Command Line
+### XSLT Package
 
-This project comes with a fully reproducible
-[tooling](https://github.com/scdh/tooling) environment that installs
-all tools needed for running and testing in a sandbox. You only need a
-Java development kit (JDK) installed. On debian-based systems, you can
-install it with `sudo apt install openjdk`.
+For using the XTriples engine in CI/CD pipelines or in downstream
+projects, installation of a released package is the way to go. The
+[Wiki](https://github.com/SCDH/xtriples-micro/wiki/Installation-of-a-Release)
+gives detailed instructions!
+
+### Playing around and Testing
+
+For playing around with XTriples and validating that it is suitable
+technology, you can also clone this repository. It comes with a fully
+reproducible [tooling](https://github.com/scdh/tooling) environment
+that installs all tools needed for running and testing in a
+sandbox. You only need a Java development kit (JDK) installed. On
+debian-based systems, you can install it with `sudo apt install
+openjdk`.
 
 To set up the tooling environment, clone this repository, `cd` into
 your working copy and run:
@@ -117,12 +128,6 @@ target/bin/xslt.sh -?
 ```
 target/bin/riot.sh -h
 ```
-
-### XSLT Package
-
-The distribution as a package is best for using the XTriples engine in
-downstream projects or for deployment in CI/CD pipelines. See [package
-howto](package.md)!
 
 
 ## Extracting RDF Triples
