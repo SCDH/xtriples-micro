@@ -80,7 +80,7 @@ installation link in the installation dialog found in **Help** ->
 https://scdh.github.io/xtriples-micro/descriptor.xml
 ```
 
-See [details](oxygen.md).
+See detailed description in the [Wiki](https://github.com/SCDH/xtriples-micro/wiki/Oxygen-Framework)!
 
 
 ### XSLT Package
@@ -155,7 +155,7 @@ The output should look like this:
 <https://xtriples.lod.academy/examples/gods/1> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://en.wikipedia.org/wiki/Aphrodite>  .
 ```
 
-If you your result is polluted with debug messages, you can append `2>
+If your result is polluted with debug messages, you can append `2>
 /dev/null` to silence them or use Saxon's `-o:` option to send the
 output to a file. They are printed to stderr.
 
@@ -192,7 +192,8 @@ service. See [seed](seed.md).
 configuration as source document and applies it to the collecton of
 XML documents given in `/xtriples/collection/@uri`, which is
 interpreted as a Saxon collection URI. See section [Implementation of
-the Specs](#implementation-of-the-specs) for details.
+the Specs](#implementation-of-the-specs) for details. This is
+compatible to the reference implementation.
 
 Example:
 
