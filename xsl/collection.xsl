@@ -38,11 +38,12 @@ This is only a module and should be imported by some calling stylesheet.
         all in one single file" is evaluated.
 
         This is used when the source document is passed to the
-        processor.
+        processor. Even multiple source documents can be passed
+        in.
     -->
-    <xsl:function name="xtriples:resources" visibility="public">
+    <xsl:function name="xtriples:resources" as="node()*" visibility="public">
         <xsl:param name="config" as="element(xtriples)?"/>
-        <xsl:param name="document" as="document-node()"/>
+        <xsl:param name="document" as="document-node()*"/>
         <xsl:variable name="collection" as="element(collection)?"
             select="($config/collection[@uri])[1]"/>
         <xsl:choose>
@@ -54,8 +55,10 @@ This is only a module and should be imported by some calling stylesheet.
                     <xsl:text>xpath for resource </xsl:text>
                     <xsl:value-of select="$resource-xpath"/>
                 </xsl:message>
-                <xsl:evaluate as="node()*" context-item="$document" xpath="$resource-xpath"
-                    namespace-context="xtriples:namespaces($config)"/>
+                <xsl:for-each select="$document">
+                    <xsl:evaluate as="node()*" context-item="." xpath="$resource-xpath"
+                        namespace-context="xtriples:namespaces($config)"/>
+                </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$document"/>

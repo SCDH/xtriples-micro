@@ -23,7 +23,14 @@ The output format is NTriples
 
     <xsl:param name="source-uri" as="xs:string" required="true"/>
 
-    <xsl:param name="source" as="node()" select="doc($source-uri)"/>
+    <!-- Whether collection/@uri is to be evaluated as a Saxon collection URI. Otherwise read as ordinary XML document. -->
+    <xsl:param name="is-collection-uri" as="xs:boolean" select="false()"/>
+
+    <xsl:param name="source" as="node()*" select="
+            if (not($is-collection-uri)) then
+                doc($source-uri)
+            else
+                collection($source-uri)"/>
 
 
     <xsl:mode name="eval-xtriples" on-no-match="deep-skip"/>
