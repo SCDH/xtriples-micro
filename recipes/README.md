@@ -36,6 +36,14 @@ describing these entities.
 Here's the LINCS class diagram: ![LINCS Class
 Diagram](https://lincsproject.ca/assets/images/application-profile-sources-annotation-(c-LINCS)-2ac3c9df793f833fa710f30aad8c2378.png)
 
+When functions of [`recipes/tei/utils.xsl`](#utils) are available, the
+recipe
+- adds additional `oa:prefix` and `oa:suffix` context to the exact quote
+- turns absolute file paths to relative paths
+
+
+#### Utils
+
 The function library [`recipes/tei/utils.xsl`](tei/utils.xsl)
 adds functions some optional features of the following recipes
 require. Usage:
@@ -43,7 +51,3 @@ require. Usage:
 ```shell
 target/bin/xslt.sh ... libraries=$(realpath recipes/tei/utils.xsl)
 ```
-
-When functions of `recipes/tei/utils.xsl` are available, the recipe
-- adds additional `oa:prefix` and `oa:suffix` context to the exact quote
-- turns absolute file paths to relative paths
