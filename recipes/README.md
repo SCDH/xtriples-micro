@@ -15,14 +15,6 @@ target/bin/xslt.sh \
 
 ## Extracting from TEI-XML
 
-The function library [`recipes/tei/utils.xsl`](recipes/tei/utils.xsl)
-adds function required for some of the following recipes. Usage:
-
-```shell
-target/bin/xslt.sh ... libraries=$(realpath  recipes/tei/utils.xsl)
-```
-
-
 ### Named Entities
 
 #### `recipes/tei/lincs-entities.xml`
@@ -43,6 +35,14 @@ describing these entities.
 
 Here's the LINCS class diagram: ![LINCS Class
 Diagram](https://lincsproject.ca/assets/images/application-profile-sources-annotation-(c-LINCS)-2ac3c9df793f833fa710f30aad8c2378.png)
+
+The function library [`recipes/tei/utils.xsl`](tei/utils.xsl)
+adds functions some optional features of the following recipes
+require. Usage:
+
+```shell
+target/bin/xslt.sh ... libraries=$(realpath recipes/tei/utils.xsl)
+```
 
 When functions of `recipes/tei/utils.xsl` are available, the recipe
 - adds additional `oa:prefix` and `oa:suffix` context to the exact quote
