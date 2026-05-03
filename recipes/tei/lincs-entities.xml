@@ -95,7 +95,7 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/lincs-entities.
                 <object type="uri" prefix="crm">E73_Information_Object</object>
             </statement>
             <statement>
-                <condition>/not(function-lookup(xs:QName('utils:relative-path'), 1))</condition>
+                <condition>/not(exists(function-lookup(xs:QName('utils:relative-path'), 1)))</condition>
                 <subject type="bnode">/concat('target', $resourceIndex)</subject>
                 <predicate prefix="oa">hasSource</predicate>
                 <object type="literal">/base-uri(.)</object>
