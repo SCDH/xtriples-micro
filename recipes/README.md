@@ -17,9 +17,9 @@ target/bin/xslt.sh \
 
 ### Named Entities
 
-#### `recepies/tei/lincs-entities.xml`
+#### `recipes/tei/lincs-entities.xml`
 
-[`tei/lincs-entities.xml`](tei/lincs-entities.xml) extracts [LINCS
+[`recipes/tei/lincs-entities.xml`](tei/lincs-entities.xml) extracts [LINCS
 annotations](https://lincsproject.ca/docs/explore-lod/understand-lincs-data/application-profiles-main/sources-metadatag)
 from from TEI. It generates a structure of RDF statements for every
 named entity encoded with elements `<persName>`, `<placeName>`,
