@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XTriples configuration for extracting LINCS annotations from TEI with linked named entities
+
+See https://lincsproject.ca/docs/explore-lod/understand-lincs-data/application-profiles-main/sources-metadata
+
+This generates n-triples for every named entity encoded
+with elements <persName>, <placeName>, <eventName>,
+<orgName>, or <rs> and linked with @ref.
+
+The value of @ref is used as entity URI. If URIs point
+to a local registry file, use an additional recipe to
+extract triples from it describing these entities.
+
+Because there is always an XPathSelector pointing right
+to the encoding element, it does not have to be refined.
+However, to have an exact quote, a text quote selector
+is also generated. It will have oa:prefix and
+oa:suffix properties, if utils:prefix#1 and
+utils:suffix#1 functions are available.
+
+To make it easy to have a deep link, a fragment selector
+is generated, if the encoding element has an @xml:id.
+
+
+USAGE:
+
+target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/lincs-entities.xml source-uri=my-file
+
+-->
+<?xml-model href="../../schema/xtriples.rng"?>
+<xtriples>
+    <configuration>
+        <vocabularies>
+            <vocabulary prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <vocabulary prefix="oa" uri="http://www.w3.org/ns/oa#"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+            <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
+        </vocabularies>
+        <triples>
+            <statement>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="crm">P67_refers_to</predicate>
+                <object type="uri">/@ref</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="crm">E33_Linguistic_Object</object>
+            </statement>
+            <statement>
+                <subject>/@ref</subject>
+                <predicate prefix="crm">P140i_was_attributed_by</predicate>
+                <object type="bnode">/concat('attributeAssignment', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('attributeAssignment', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="crm">E13_Attribute_Assignment</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('attributeAssignment', $resourceIndex)</subject>
+                <predicate prefix="crm">P3_has_note</predicate>
+                <object type="literal">/normalize-space(.)</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('attributeAssignment', $resourceIndex)</subject>
+                <predicate prefix="crm">P129i_is_subject_of</predicate>
+                <object type="bnode">/concat('annot', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="oa">hasBody</predicate>
+                <object type="uri">/@ref</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="oa">Annotation</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="oa">hasTarget</predicate>
+                <object type="bnode">/concat('target', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('target', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="oa">SpecificResource</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('target', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="crm">E73_Information_Object</object>
+            </statement>
+            <statement>
+                <condition>/not(function-lookup(xs:QName('utils:relative-path'), 1))</condition>
+                <subject type="bnode">/concat('target', $resourceIndex)</subject>
+                <predicate prefix="oa">hasSource</predicate>
+                <object type="literal">/base-uri(.)</object>
+            </statement>
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('utils:relative-path'), 1))</condition>
+                <subject type="bnode">/concat('target', $resourceIndex)</subject>
+                <predicate prefix="oa">hasSource</predicate>
+                <object type="literal">/base-uri(.) => utils:relative-path()</object>
+            </statement>
+            <!-- fragment selector if the element has an ID -->
+            <statement>
+                <condition>/exists(self::*/@xml:id)</condition>
+                <subject type="bnode">/concat('target', $resourceIndex)</subject>
+                <predicate prefix="oa">hasSelector</predicate>
+                <object type="bnode">/concat('fragmentSelector', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::*/@xml:id)</condition>
+                <subject type="bnode">/concat('fragmentSelector', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="oa">FragmentSelector</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::*/@xml:id)</condition>
+                <subject type="bnode">/concat('fragmentSelector', $resourceIndex)</subject>
+                <predicate prefix="rdf">value</predicate>
+                <object type="literal">/self::*/@xml:id</object>
+            </statement>
+            <!-- there's always an XPathSelector pointing exactly to the element -->
+            <statement>
+                <subject type="bnode">/concat('target', $resourceIndex)</subject>
+                <predicate prefix="oa">hasSelector</predicate>
+                <object type="bnode">/concat('xpathSelector', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('xpathSelector', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="oa">XPathSelector</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('xpathSelector', $resourceIndex)</subject>
+                <predicate prefix="rdf">value</predicate>
+                <object type="literal">/path(.)</object>
+            </statement>
+            <!-- text quote selector -->
+            <statement>
+                <subject type="bnode">/concat('target', $resourceIndex)</subject>
+                <predicate prefix="oa">hasSelector</predicate>
+                <object type="bnode">/concat('quote', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('quote', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="oa">TextQuoteSelector</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/concat('quote', $resourceIndex)</subject>
+                <predicate prefix="oa">exact</predicate>
+                <object type="literal">/normalize-space(.)</object>
+            </statement>
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('utils:prefix'), 1))</condition>
+                <subject type="bnode">/concat('quote', $resourceIndex)</subject>
+                <predicate prefix="oa">prefix</predicate>
+                <object type="literal">/utils:prefix(.)</object>
+            </statement>
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('utils:suffix'), 1))</condition>
+                <subject type="bnode">/concat('quote', $resourceIndex)</subject>
+                <predicate prefix="oa">suffix</predicate>
+                <object type="literal">/utils:suffix(.)</object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection uri=".">
+        <resource uri="{//tei:placeName[@ref] | //tei:persName[@ref] | //tei:orgName[@ref] | //tei:eventName[@ref] | //tei:rs[@ref]}"/>
+    </collection>
+</xtriples>
