@@ -3,6 +3,16 @@
 This folder collects XTriples configurations files for redundant tasks
 required in many projects.
 
+Recipes can best be run like so:
+
+```shell
+target/bin/xslt.sh \
+	-xsl:xsl/extract-param-doc.xsl \
+	-s:recipes/tei/lincs-entities.xml \
+	source-uri=/path/to/my-edition-collection.xml \
+	is-collection-uri=true
+```
+
 ## Extracting from TEI-XML
 
 ### Named Entities
@@ -10,8 +20,8 @@ required in many projects.
 - `recepies/tei/lincs-entities.xml`: extracts [LINCS
   annotations](https://lincsproject.ca/docs/explore-lod/understand-lincs-data/application-profiles-main/sources-metadatag)
   from from TEI. This generates n-triples for every named entity
-  encoded with elements <persName>, <placeName>, <eventName>,
-  <orgName>, or <rs> and linked with `@ref`. The value of `@ref` is
+  encoded with elements `<persName>`, `<placeName>`, `<eventName>`,
+  `<orgName>`, or `<rs>` and linked with `@ref`. The value of `@ref` is
   used as entity URI. If URIs point to a local registry file, use an
   additional recipe to extract triples from it describing these
   entities. ![LINCS Class
