@@ -8,8 +8,8 @@ Recipes can best be run like so:
 ```shell
 target/bin/xslt.sh \
 	-xsl:xsl/extract-param-doc.xsl \
-	-s:recipes/tei/lincs-entities.xml \
-	source-uri=/path/to/my-edition-collection.xml \
+	-s:RECIPE.xml \
+	source-uri=/path/to/MY-COLLECTION.xml \
 	is-collection-uri=true
 ```
 
@@ -18,6 +18,15 @@ target/bin/xslt.sh \
 ### Named Entities
 
 #### `recipes/tei/lincs-entities.xml`
+
+```shell
+target/bin/xslt.sh \
+	-xsl:xsl/extract-param-doc.xsl \
+	-s:recipes/tei/lincs-entities.xml \
+	source-uri=/path/to/MY-COLLECTION.xml \
+	is-collection-uri=true \
+	libraries=$(realpath recipes/tei/utils.xsl)
+```
 
 [`recipes/tei/lincs-entities.xml`](tei/lincs-entities.xml) extracts
 [LINCS
