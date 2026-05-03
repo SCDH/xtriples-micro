@@ -3,13 +3,13 @@
 This folder collects XTriples configurations files for redundant tasks
 required in many projects.
 
-Recipes can best be run like so:
+Recipes can best be run like so on a [collection](../README.md#collections):
 
 ```shell
 target/bin/xslt.sh \
 	-xsl:xsl/extract-param-doc.xsl \
 	-s:RECIPE.xml \
-	source-uri=/path/to/MY-COLLECTION.xml \
+	source-uri=MY-COLLECTION \
 	is-collection-uri=true
 ```
 
@@ -23,7 +23,7 @@ target/bin/xslt.sh \
 target/bin/xslt.sh \
 	-xsl:xsl/extract-param-doc.xsl \
 	-s:recipes/tei/lincs-entities.xml \
-	source-uri=/path/to/MY-COLLECTION.xml \
+	source-uri=MY-COLLECTION \
 	is-collection-uri=true \
 	libraries=$(realpath recipes/tei/utils.xsl)
 ```
