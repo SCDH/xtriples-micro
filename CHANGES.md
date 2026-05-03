@@ -1,5 +1,17 @@
 # Change Log
 
+
+## 0.6.0
+
+- `xsl/extract-param-doc.xsl`: evaluate `source-uri` stylesheet
+  parameter as a collection when `is-collection-uri=true`. This allows
+  pass in externally made-up collections.
+- introduce Recipes:
+  - `recepies/tei/lincs-entities.xml`: XTriples configuration for
+    extracting [LINCS
+    annotations](https://lincsproject.ca/docs/explore-lod/understand-lincs-data/application-profiles-main/sources-metadatag)
+    from TEI with linked named entities
+
 ## 0.5.4
 
 Release done on github. No changes

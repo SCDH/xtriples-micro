@@ -219,6 +219,23 @@ referenced by the `source-uri` stylesheet parameter.
 target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml source-uri=$(realpath test/gods/1.xml)
 ```
 
+The `is-collection-uri` stylesheet parameter can be used, to indicate,
+that the URI is a collection:
+
+```shell
+target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:test/gods/configuration.xml is-collection-uri=true source-uri=/path/to/edition?select=*.tei.xml;recurse=true
+```
+
+This works with any [type of collection](#collections).
+
+So stylesheet can be used for passing user-defined collections into
+once written extraction recipes.
+
+## Extraction Recipes
+
+The [`recipes`](recipes) folder has XTriple configurations for
+extraction tasks that occur in many projects.
+
 ## Writing configurations
 
 1. The content of `<subject>`, `<predicate>`, `<object>` and
