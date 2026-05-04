@@ -53,11 +53,14 @@ triples. Here's an example of such a configuration file:
 </xtriples>
 ```
 
+To get more impressions, have a look at the extraction
+[recipes](recipes).
+
 While the original XTriples processor requires an eXist database and
 applies a configuration only on the fixed set of XML files contained
 in it, the implementation at hand runs outside of a database, e.g., on
-a local set of documents. It can also be deployed on the famous SEED
-XML Transformer. This deployment gives you a lightweight microservice,
+a local set of documents. It can also be deployed on the famous [SEED
+XML Transformer](https://github.com/scdh/seed-xc). This deployment gives you a lightweight microservice,
 where you can send a single XML document and a config file to and get
 RDF triples in return.
 
