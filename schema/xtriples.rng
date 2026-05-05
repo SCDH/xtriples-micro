@@ -3,18 +3,20 @@
     <start>
         <element name="xtriples">
             <element name="configuration">
-                <element name="vocabularies">
-                    <oneOrMore>
-                        <element name="vocabulary">
-                            <attribute name="prefix">
-                                <data type="NCName"/>
-                            </attribute>
-                            <attribute name="uri">
-                                <data type="anyURI"/>
-                            </attribute>
-                        </element>
-                    </oneOrMore>
-                </element>
+                <oneOrMore>
+                    <element name="vocabularies">
+                        <oneOrMore>
+                            <element name="vocabulary">
+                                <attribute name="prefix">
+                                    <data type="NCName"/>
+                                </attribute>
+                                <attribute name="uri">
+                                    <data type="anyURI"/>
+                                </attribute>
+                            </element>
+                        </oneOrMore>
+                    </element>
+                </oneOrMore>
                 <element name="triples">
                     <oneOrMore>
                         <element name="statement">
