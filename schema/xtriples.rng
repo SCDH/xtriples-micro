@@ -18,6 +18,7 @@
                     <oneOrMore>
                         <element name="statement">
                             <optional>
+                                <attribute name="repeat"/>
                                 <element name="condition">
                                     <text/>
                                 </element>
