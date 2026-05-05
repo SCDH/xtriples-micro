@@ -28,7 +28,7 @@ This is only a module and should be imported by some calling stylesheet.
                 }"/>
         <xsl:apply-templates mode="statement"
             select="$config/xtriples/configuration/triples/statement">
-            <xsl:with-param name="vocabularies" as="element(vocabularies)" tunnel="true"
+            <xsl:with-param name="vocabularies" as="element(vocabularies)+" tunnel="true"
                 select="$config/xtriples/configuration/vocabularies"/>
             <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"
                 select="$xpath-params"/>
@@ -111,7 +111,7 @@ This is only a module and should be imported by some calling stylesheet.
     </xsl:function>
 
     <xsl:template mode="statement" match="subject">
-        <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
+        <xsl:param name="vocabularies" as="element(vocabularies)+" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
         <xsl:param name="namespaces" as="node()" tunnel="true"/>
         <xsl:variable name="stmt" select="parent::statement"/>
@@ -125,7 +125,7 @@ This is only a module and should be imported by some calling stylesheet.
 
 
     <xsl:template mode="statement" match="predicate">
-        <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
+        <xsl:param name="vocabularies" as="element(vocabularies)+" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
         <xsl:param name="namespaces" as="node()" tunnel="true"/>
         <xsl:variable name="stmt" select="parent::statement"/>
@@ -140,7 +140,7 @@ This is only a module and should be imported by some calling stylesheet.
     <xsl:template mode="statement" match="object">
         <xsl:param name="subject" as="item()" tunnel="true"/>
         <xsl:param name="predicate" as="item()" tunnel="true"/>
-        <xsl:param name="vocabularies" as="element(vocabularies)" tunnel="true"/>
+        <xsl:param name="vocabularies" as="element(vocabularies)+" tunnel="true"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
         <xsl:param name="namespaces" as="node()" tunnel="true"/>
         <xsl:variable name="context" select="."/>
@@ -157,7 +157,7 @@ This is only a module and should be imported by some calling stylesheet.
 
     <xsl:function name="xtriples:part-to-rdf">
         <xsl:param name="part" as="element()"/>
-        <xsl:param name="vocabularies" as="element(vocabularies)"/>
+        <xsl:param name="vocabularies" as="element(vocabularies)+"/>
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)"/>
         <xsl:param name="namespaces" as="node()"/>
         <xsl:variable name="xs" as="item()*">
