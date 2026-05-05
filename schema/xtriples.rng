@@ -98,7 +98,10 @@
                     <element name="resource">
                         <optional>
                             <attribute name="uri">
-                                <data type="anyURI"/>
+                                <choice>
+                                    <data type="string"/>
+                                    <data type="anyURI"/>
+                                </choice>
                             </attribute>
                         </optional>
                     </element>
