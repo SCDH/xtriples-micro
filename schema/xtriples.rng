@@ -20,6 +20,8 @@
                         <element name="statement">
                             <optional>
                                 <attribute name="repeat"/>
+                            </optional>
+                            <optional>
                                 <element name="condition">
                                     <text/>
                                 </element>
