@@ -60,6 +60,9 @@ jobs:
       packages: read
     steps:
 
+      - name: checkout
+        uses: actions/checkout@v4
+
       - name: Download descriptor artifact
         uses: actions/download-artifact@v4
         with:
@@ -73,6 +76,9 @@ jobs:
 
       - name: copy descriptor file
         run: cp descriptor.xml public/
+
+      - name: copy RelaxNG schema
+        run: cp schema/xtriples.rng public/
 
       - name: Deploy descriptor file on Github pages
         uses: peaceiris/actions-gh-pages@v4
