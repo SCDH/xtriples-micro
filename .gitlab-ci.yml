@@ -65,6 +65,7 @@ pages:
     - ls -la
     - cp -v target/descriptor.xml public/
     - cp -v target/*-oxygen-framework.zip public/
+    - cp schema/xtriples.rng public/
   needs:
     - push-packages
   artifacts:
