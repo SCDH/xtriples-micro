@@ -47,52 +47,54 @@ This is only a module and should be imported by some calling stylesheet.
         <xsl:param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"/>
         <xsl:param name="namespaces" as="node()" tunnel="true"/>
         <xsl:variable name="context" as="element(statement)" select="."/>
-        <xsl:variable name="condition" as="xs:boolean">
+        <xsl:variable name="repetitions" as="xs:integer">
             <xsl:choose>
-                <xsl:when test="not(condition)">
-                    <xsl:sequence select="true()"/>
+                <xsl:when test="not(@repeat)">
+                    <xsl:sequence select="1"/>
+                </xsl:when>
+                <xsl:when test="matches(@repeat, '^[0-9]+$')">
+                    <xsl:sequence select="xs:integer(@repeat)"/>
+                </xsl:when>
+                <xsl:when test="matches(@repeat, '^\{') and matches(@repeat, '\}$')">
+                    <xsl:variable name="xpath" as="xs:string"
+                        select="substring(@repeat, 2, string-length(@repeat) - 2)"/>
+                    <xsl:evaluate as="xs:integer" with-params="$xpath-params"
+                        context-item="map:get($xpath-params, xs:QName('currentResource'))"
+                        xpath="concat('$currentResource', $xpath)" namespace-context="$namespaces"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <!-- we wrap the XPath in xs:boolean( ... ) -->
-                    <xsl:evaluate as="xs:boolean"
-                        context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                        with-params="$xpath-params"
-                        xpath="concat('xs:boolean($currentResource', condition, ')')"
-                        namespace-context="$namespaces"/>
+                    <xsl:message terminate="yes">
+                        <xsl:text>bad statement/@repeat attribute </xsl:text>
+                        <xsl:value-of select="@repeat"/>
+                    </xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:if test="$condition">
-            <xsl:choose>
-                <xsl:when test="matches(@repeat, '^[0-9]$') and xs:integer(@repeat) lt 1"/>
-                <xsl:when test="not(@repeat)">
-                    <xsl:apply-templates mode="statement" select="subject"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:variable name="repetitions" as="xs:integer">
-                        <xsl:choose>
-                            <xsl:when test="substring(@repeat, 1, 1) eq '/'">
-                                <xsl:evaluate as="xs:integer" with-params="$xpath-params"
-                                    context-item="map:get($xpath-params, xs:QName('currentResource'))"
-                                    xpath="concat('$currentResource', @repeat)"
-                                    namespace-context="$namespaces"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:sequence select="xs:integer(@repeat)"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <xsl:for-each select="1 to $repetitions">
-                        <xsl:apply-templates mode="statement" select="$context/subject">
-                            <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)"
-                                tunnel="true"
-                                select="map:put($xpath-params, xs:QName('repeatIndex'), position())"
-                            />
-                        </xsl:apply-templates>
-                    </xsl:for-each>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
+        <xsl:for-each select="1 to $repetitions">
+            <xsl:variable name="xpath-params-with-repeat-index" as="map(xs:QName, item()*)"
+                select="map:put($xpath-params, xs:QName('repeatIndex'), position())"/>
+            <xsl:variable name="condition" as="xs:boolean">
+                <xsl:choose>
+                    <xsl:when test="not($context/condition)">
+                        <xsl:sequence select="true()"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- we wrap the XPath in xs:boolean( ... ) -->
+                        <xsl:evaluate as="xs:boolean"
+                            context-item="map:get($xpath-params, xs:QName('currentResource'))"
+                            with-params="$xpath-params-with-repeat-index"
+                            xpath="concat('xs:boolean($currentResource', $context/condition, ')')"
+                            namespace-context="$namespaces"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="$condition">
+                <xsl:apply-templates mode="statement" select="$context/subject">
+                    <xsl:with-param name="xpath-params" as="map(xs:QName, item()*)" tunnel="true"
+                        select="$xpath-params-with-repeat-index"/>
+                </xsl:apply-templates>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:function name="xtriples:all-true" as="xs:boolean">

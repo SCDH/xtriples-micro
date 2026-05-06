@@ -192,7 +192,7 @@
             '&quot;Poseidon (Neptune)&quot;'"/>
     </x:scenario>
 
-    <x:scenario label="Using the $repeadIndex variable in statement patterns; conf-16.xml on god 13">
+    <x:scenario label="Using the $repeatIndex variable in statement patterns; conf-16.xml on god 13">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-16.xml"/>
             <x:param name="resource" href="../test/gods/13.xml" select="/god"/>
@@ -250,6 +250,18 @@
             select="'&lt;https://xtriples.lod.academy/examples/gods/Ἄρης&gt;',
             '&lt;http://www.w3.org/2000/01/rdf-schema#seeAlso&gt;',
             '&lt;http://en.wikipedia.org/wiki/helmet&gt;'"/>
+    </x:scenario>
+
+    <x:scenario label="repeat from XPath expression; conf-21 on god 6"
+        pending="compare to reference implementation">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/gods/conf-21.xml"/>
+            <x:param name="resource" href="../test/gods/6.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect
+            label="1 statement, because there is only one attributes element, but 5 attribute elements"
+            as="xs:integer" test="count($x:result)" select="4"/>
     </x:scenario>
 
 
