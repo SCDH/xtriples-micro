@@ -3,10 +3,13 @@
     <start>
         <element name="xtriples">
             <element name="configuration">
+                <ref name="att.xml"/>
                 <oneOrMore>
                     <element name="vocabularies">
+                        <ref name="att.xml"/>
                         <oneOrMore>
                             <element name="vocabulary">
+                                <ref name="att.xml"/>
                                 <attribute name="prefix">
                                     <data type="NCName"/>
                                 </attribute>
@@ -20,6 +23,7 @@
                 <element name="triples">
                     <oneOrMore>
                         <element name="statement">
+                            <ref name="att.xml"/>
                             <optional>
                                 <attribute name="repeat"/>
                             </optional>
@@ -29,6 +33,7 @@
                                 </element>
                             </optional>
                             <element name="subject">
+                                <ref name="att.xml"/>
                                 <optional>
                                     <attribute name="prefix">
                                         <data type="NCName"/>
@@ -49,6 +54,7 @@
                                 <text/>
                             </element>
                             <element name="predicate">
+                                <ref name="att.xml"/>
                                 <attribute name="prefix">
                                     <data type="NCName"/>
                                 </attribute>
@@ -60,6 +66,7 @@
                                 <data type="NCName"/>
                             </element>
                             <element name="object">
+                                <ref name="att.xml"/>
                                 <optional>
                                     <attribute name="datatype">
                                         <data type="NCName"/>
@@ -94,6 +101,7 @@
                 </element>
             </element>
             <element name="collection">
+                <ref name="att.xml"/>
                 <optional>
                     <attribute name="uri">
                         <data type="anyURI"/>
@@ -101,6 +109,7 @@
                 </optional>
                 <oneOrMore>
                     <element name="resource">
+                        <ref name="att.xml"/>
                         <optional>
                             <attribute name="uri">
                                 <choice>
@@ -114,4 +123,15 @@
             </element>
         </element>
     </start>
+    <define name="att.xml">
+        <optional>
+            <attribute ns="http://www.w3.org/XML/1998/namespace" name="id"/>
+        </optional>
+        <optional>
+            <attribute ns="http://www.w3.org/XML/1998/namespace" name="space"/>
+        </optional>
+        <optional>
+            <attribute ns="http://www.w3.org/XML/1998/namespace" name="base"/>
+        </optional>
+    </define>
 </grammar>
