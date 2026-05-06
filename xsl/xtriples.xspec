@@ -252,8 +252,7 @@
             '&lt;http://en.wikipedia.org/wiki/helmet&gt;'"/>
     </x:scenario>
 
-    <x:scenario label="repeat from XPath expression; conf-21 on god 6"
-        pending="compare to reference implementation">
+    <x:scenario label="repeat from XPath expression; conf-21 on god 6">
         <x:call template="xtriples:extract">
             <x:param name="config" href="../test/gods/conf-21.xml"/>
             <x:param name="resource" href="../test/gods/6.xml"/>
