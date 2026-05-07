@@ -8,7 +8,10 @@
     <configuration>
         <vocabularies xml:id="vocabularies">
             <vocabulary prefix="ent" uri="http://edition.com/entities/"/>
+            <vocabulary prefix="prs" uri="http://edition.com/entities/person#"/>
             <vocabulary prefix="plc" uri="http://edition.com/entities/place#"/>
+            <vocabulary prefix="org" uri="http://edition.com/entities/org#"/>
+            <vocabulary prefix="evt" uri="http://edition.com/entities/event#"/>
         </vocabularies>
         <triples>
             <statement>

@@ -28,8 +28,19 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/lincs-entities.
 
 -->
 <?xml-model href="../../schema/xtriples.rng"?>
-<xtriples>
+<xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
     <configuration>
+        <xi:include href="local.xml" xpointer="vocabularies">
+            <xi:fallback>
+                <vocabularies>
+                    <vocabulary prefix="ent" uri="http://edition.com/entities/"/>
+                    <vocabulary prefix="prs" uri="http://edition.com/entities/person#"/>
+                    <vocabulary prefix="plc" uri="http://edition.com/entities/place#"/>
+                    <vocabulary prefix="org" uri="http://edition.com/entities/org#"/>
+                    <vocabulary prefix="evt" uri="http://edition.com/entities/event#"/>
+                </vocabularies>
+            </xi:fallback>
+        </xi:include>
         <vocabularies>
             <vocabulary prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
             <vocabulary prefix="oa" uri="http://www.w3.org/ns/oa#"/>
@@ -40,9 +51,28 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/lincs-entities.
         </vocabularies>
         <triples>
             <statement>
+                <condition>/exists(self::tei:persName) or exists(self::tei:rs[@type = 'person'])</condition>
                 <subject type="bnode">/concat('annot', $resourceIndex)</subject>
                 <predicate prefix="crm">P67_refers_to</predicate>
-                <object type="uri">/@ref</object>
+                <object type="uri" prefix="prs">/replace(@ref, '^[^:]+:', '')</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:placeName) or exists(self::tei:rs[@type = 'place'])</condition>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="crm">P67_refers_to</predicate>
+                <object type="uri" prefix="plc">/replace(@ref, '^[^:]+:', '')</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:orgName) or exists(self::tei:rs[@type = 'org'])</condition>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="crm">P67_refers_to</predicate>
+                <object type="uri" prefix="org">/replace(@ref, '^[^:]+:', '')</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:eventName) or exists(self::tei:rs[@type = 'event'])</condition>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="crm">P67_refers_to</predicate>
+                <object type="uri" prefix="evt">/replace(@ref, '^[^:]+:', '')</object>
             </statement>
             <statement>
                 <subject type="bnode">/concat('annot', $resourceIndex)</subject>
@@ -50,7 +80,26 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/lincs-entities.
                 <object type="uri" prefix="crm">E33_Linguistic_Object</object>
             </statement>
             <statement>
-                <subject>/@ref</subject>
+                <condition>/exists(self::tei:persName) or exists(self::tei:rs[@type = 'person'])</condition>
+                <subject prefix="prs">/replace(@ref, '^[^:]+:', '')</subject>
+                <predicate prefix="crm">P140i_was_attributed_by</predicate>
+                <object type="bnode">/concat('attributeAssignment', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:placeName) or exists(self::tei:rs[@type = 'place'])</condition>
+                <subject prefix="plc">/replace(@ref, '^[^:]+:', '')</subject>
+                <predicate prefix="crm">P140i_was_attributed_by</predicate>
+                <object type="bnode">/concat('attributeAssignment', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:orgName) or exists(self::tei:rs[@type = 'org'])</condition>
+                <subject prefix="org">/replace(@ref, '^[^:]+:', '')</subject>
+                <predicate prefix="crm">P140i_was_attributed_by</predicate>
+                <object type="bnode">/concat('attributeAssignment', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:eventName) or exists(self::tei:rs[@type = 'event'])</condition>
+                <subject prefix="evt">/replace(@ref, '^[^:]+:', '')</subject>
                 <predicate prefix="crm">P140i_was_attributed_by</predicate>
                 <object type="bnode">/concat('attributeAssignment', $resourceIndex)</object>
             </statement>
@@ -70,9 +119,28 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/lincs-entities.
                 <object type="bnode">/concat('annot', $resourceIndex)</object>
             </statement>
             <statement>
+                <condition>/exists(self::tei:persName) or exists(self::tei:rs[@type = 'person'])</condition>
                 <subject type="bnode">/concat('annot', $resourceIndex)</subject>
                 <predicate prefix="oa">hasBody</predicate>
-                <object type="uri">/@ref</object>
+                <object type="uri" prefix="prs">/replace(@ref, '^[^:]+:', '')</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:placeName) or exists(self::tei:rs[@type = 'place'])</condition>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="oa">hasBody</predicate>
+                <object type="uri" prefix="plc">/replace(@ref, '^[^:]+:', '')</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:orgName) or exists(self::tei:rs[@type = 'org'])</condition>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="oa">hasBody</predicate>
+                <object type="uri" prefix="org">/replace(@ref, '^[^:]+:', '')</object>
+            </statement>
+            <statement>
+                <condition>/exists(self::tei:eventName) or exists(self::tei:rs[@type = 'event'])</condition>
+                <subject type="bnode">/concat('annot', $resourceIndex)</subject>
+                <predicate prefix="oa">hasBody</predicate>
+                <object type="uri" prefix="evt">/replace(@ref, '^[^:]+:', '')</object>
             </statement>
             <statement>
                 <subject type="bnode">/concat('annot', $resourceIndex)</subject>
