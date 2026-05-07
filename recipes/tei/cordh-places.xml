@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../schema/xtriples.rng"?>
+<!-- extraction from TEI registry of places into old-school crm datasets
+
+A place entry will make up a crm:E53_place instance
+like in https://docs.cordh.net/modelling/#spatial-coordinate
+
+USAGE:
+target/bin/xslt.sh \
+    -xsl:xsl/extract-param-doc.xsl \
+    -s:recipes/tei/registry-places.xml \
+    -xi \
+    source-uri=EDITION/places.xml
+
+-->
+<xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
+    <configuration>
+        <xi:include href="local.xml" xpointer="vocabularies">
+            <xi:fallback>
+                <vocabularies>
+                    <vocabulary prefix="plc" uri="plc:"/>
+                </vocabularies>
+            </xi:fallback>
+        </xi:include>
+        <vocabularies>
+            <vocabulary prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <vocabulary prefix="oa" uri="http://www.w3.org/ns/oa#"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+            <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
+            <vocabulary prefix="locn" uri="http://www.w3.org/ns/locn#"/>
+            <vocabulary prefix="gsp" uri="http://www.opengis.net/ont/geosparql#"/>
+            <vocabulary prefix="geo" uri="http://www.w3.org/2003/01/geo/wgs84_pos#"/>
+        </vocabularies>
+        <triples>
+            <statement>
+                <xi:include href="local.xml" xpointer="placesubject"/>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="crm">E53_Place</object>
+            </statement>
+            <!-- geo location -->
+            <!--statement repeat="{/count(tei:location/tei:geo)}">
+                <condition>/normalize-space((tei:location/tei:geo)[$repeatIndex]) ne ''</condition>
+                <xi:include href="local.xml" xpointer="placesubject"/>
+                <predicate prefix="crm">P168_place_is_defined_by</predicate>
+                <object type="literal" datatype="gsp:wktLiteral" xml:space="preserve">/concat('POINT (', (tei:location/tei:geo)[$repeatIndex] => replace(',', ''), ')')</object>
+            </statement-->
+            <statement>
+                <condition>/normalize-space(tei:location/tei:geo) ne ''</condition>
+                <xi:include href="local.xml" xpointer="placesubject"/>
+                <predicate prefix="locn">geometry</predicate>
+                <object type="bnode">/concat('geo', $resourceIndex)</object>
+            </statement>
+            <statement>
+                <condition>/normalize-space(tei:location/tei:geo) ne ''</condition>
+                <subject type="bnode">/concat('geo', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="geo">Point</object>
+            </statement>
+            <statement>
+                <condition>/normalize-space(tei:location/tei:geo) ne ''</condition>
+                <subject type="bnode">/concat('geo', $resourceIndex)</subject>
+                <predicate prefix="geo">lat</predicate>
+                <!-- a comma between the coordinate components are a common error -->
+                <object type="literal" datatype="float">/child::tei:location/tei:geo/tokenize(., '\s*[,\s]\s*')[1]</object>
+            </statement>
+            <statement>
+                <condition>/normalize-space(tei:location/tei:geo) ne ''</condition>
+                <subject type="bnode">/concat('geo', $resourceIndex)</subject>
+                <predicate prefix="geo">log</predicate>
+                <object type="literal" datatype="float">/child::tei:location/tei:geo/tokenize(., '\s*[,\s]\s*')[2]</object>
+            </statement>
+            <!-- preferred labels -->
+            <statement repeat="{/count(placeName)}">
+                <xi:include href="local.xml" xpointer="placesubject"/>
+                <predicate prefix="crm"></predicate>
+                <object type=""></object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection uri=".">
+        <resource uri="{ //tei:place[@xml:id][@xml:id ne 'TEMPLATE'] }"/>
+    </collection>
+</xtriples>
