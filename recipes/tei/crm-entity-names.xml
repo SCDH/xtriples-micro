@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XTriples configuration for extracting preferred and other (secondary) identifiers from a TEI registry
+
+USAGE:
+target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/crm-entity-names.xml source-uri=EDITION/places.xml -xi
+
+-->
+<?xml-model href="../../schema/xtriples.rng"?>
+<xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
+    <configuration>
+        <xi:include href="local.xml" xpointer="vocabularies">
+            <xi:fallback>
+                <vocabularies>
+                    <vocabulary prefix="ent" uri="http://example.com/entities/"/>
+                </vocabularies>
+            </xi:fallback>
+        </xi:include>
+        <vocabularies>
+            <vocabulary prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <vocabulary prefix="oa" uri="http://www.w3.org/ns/oa#"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+            <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
+            <vocabulary prefix="owl" uri=" http://www.w3.org/2002/07/owl# "/>
+        </vocabularies>
+        <triples>
+            <!-- preferred identifier -->
+            <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
+                <condition>/$repeatIndex eq 1</condition>
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
+                <predicate prefix="crm">P48_has_preferred_identifier</predicate>
+                <object type="bnode">/concat('preferredIdentifier_', local-name(.), '_', $resourceIndex)</object>
+            </statement>
+            <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
+                <condition>/$repeatIndex eq 1</condition>
+                <subject type="bnode">/concat('preferredIdentifier_', local-name(.), '_', $resourceIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="crm">E42_Identifier</object>
+            </statement>
+            <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
+                <condition>/$repeatIndex eq 1</condition>
+                <subject type="bnode">/concat('preferredIdentifier_', local-name(.), '_', $resourceIndex)</subject>
+                <predicate prefix="rdf">value</predicate>
+                <object type="literal" lang="/*[$repeatIndex]/(ancestor-or-self::*/@xml:lang)[last()]">/*[$repeatIndex]=>normalize-space()</object>
+            </statement>
+
+            <!-- other secondary identifiers -->
+            <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
+                <condition>/$repeatIndex gt 1</condition>
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
+                <predicate prefix="crm">P1_is_identified_by</predicate>
+                <object type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</object>
+            </statement>
+            <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
+                <condition>/$repeatIndex gt 1</condition>
+                <subject type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="crm">E41_Appelation</object>
+            </statement>
+            <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
+                <condition>/$repeatIndex gt 1</condition>
+                <subject type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
+                <predicate prefix="rdf">value</predicate>
+                <object type="literal" lang="/*[$repeatIndex]/(ancestor-or-self::*/@xml:lang)[last()]">/*[$repeatIndex]=>normalize-space()</object>
+            </statement>
+            
+            <!-- sameAs -->
+            <statement repeat="{/count(idno[@xml:base])}">
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
+                <predicate prefix="owl">sameAs</predicate>
+                <object type="uri">/idno[@xml:base][$repeatIndex]/concat(@xml:base, normalize-space(.))</object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection uri=".">
+        <resource uri="{ ( //tei:person | //tei:place | //tei:org | //tei:event )[@xml:id][@xml:id ne 'TEMPLATE'] }"/>
+    </collection>
+</xtriples>

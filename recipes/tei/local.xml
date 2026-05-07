@@ -7,7 +7,8 @@
 <xtriples>
     <configuration>
         <vocabularies xml:id="vocabularies">
-            <vocabulary prefix="plc" uri="http://edition.org/places#"/>
+            <vocabulary prefix="ent" uri="http://edition.com/entities/"/>
+            <vocabulary prefix="plc" uri="http://edition.com/entities/place#"/>
         </vocabularies>
         <triples>
             <statement>
