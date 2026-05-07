@@ -18,13 +18,13 @@ target/bin/xslt.sh \
         <xi:include href="local.xml" xpointer="vocabularies">
             <xi:fallback>
                 <vocabularies>
-                    <vocabulary prefix="plc" uri="plc:"/>
+                    <vocabulary prefix="ent" uri="http://edition.com/entities/"/>
+                    <vocabulary prefix="plc" uri="http://edition.com/entities/place#"/>
                 </vocabularies>
             </xi:fallback>
         </xi:include>
         <vocabularies>
             <vocabulary prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
-            <vocabulary prefix="oa" uri="http://www.w3.org/ns/oa#"/>
             <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
             <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
             <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
@@ -35,20 +35,20 @@ target/bin/xslt.sh \
         </vocabularies>
         <triples>
             <statement>
-                <xi:include href="local.xml" xpointer="placesubject"/>
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
                 <predicate prefix="rdf">type</predicate>
                 <object type="uri" prefix="crm">E53_Place</object>
             </statement>
             <!-- geo location -->
             <!--statement repeat="{/count(tei:location/tei:geo)}">
                 <condition>/normalize-space((tei:location/tei:geo)[$repeatIndex]) ne ''</condition>
-                <xi:include href="local.xml" xpointer="placesubject"/>
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
                 <predicate prefix="crm">P168_place_is_defined_by</predicate>
                 <object type="literal" datatype="gsp:wktLiteral" xml:space="preserve">/concat('POINT (', (tei:location/tei:geo)[$repeatIndex] => replace(',', ''), ')')</object>
             </statement-->
             <statement>
                 <condition>/normalize-space(tei:location/tei:geo) ne ''</condition>
-                <xi:include href="local.xml" xpointer="placesubject"/>
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
                 <predicate prefix="locn">geometry</predicate>
                 <object type="bnode">/concat('geo', $resourceIndex)</object>
             </statement>
@@ -70,12 +70,6 @@ target/bin/xslt.sh \
                 <subject type="bnode">/concat('geo', $resourceIndex)</subject>
                 <predicate prefix="geo">log</predicate>
                 <object type="literal" datatype="float">/child::tei:location/tei:geo/tokenize(., '\s*[,\s]\s*')[2]</object>
-            </statement>
-            <!-- preferred labels -->
-            <statement repeat="{/count(placeName)}">
-                <xi:include href="local.xml" xpointer="placesubject"/>
-                <predicate prefix="crm"></predicate>
-                <object type=""></object>
             </statement>
         </triples>
     </configuration>
