@@ -34,7 +34,7 @@ annotations](https://lincsproject.ca/docs/explore-lod/understand-lincs-data/appl
 from from TEI. It generates a structure of RDF statements for every
 named entity tagged with elements `<persName>`, `<placeName>`,
 `<eventName>`, `<orgName>`, or `<rs>` and linked with `@ref`. The
-statements represent and [Web
+statements represent a CIDOC-CRM-aligned [Web
 Annotation](https://www.w3.org/TR/annotation-model/#selectors) for
 every occurrence of such elements.
 
