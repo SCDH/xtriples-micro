@@ -34,11 +34,6 @@ target/bin/xslt.sh \
             <vocabulary prefix="geo" uri="http://www.w3.org/2003/01/geo/wgs84_pos#"/>
         </vocabularies>
         <triples>
-            <statement>
-                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
-                <predicate prefix="rdf">type</predicate>
-                <object type="uri" prefix="crm">E53_Place</object>
-            </statement>
             <!-- geo location -->
             <!--statement repeat="{/count(tei:location/tei:geo)}">
                 <condition>/normalize-space((tei:location/tei:geo)[$repeatIndex]) ne ''</condition>
