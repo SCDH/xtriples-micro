@@ -58,13 +58,13 @@ target/bin/xslt.sh \
                 <subject type="bnode">/concat('geo', $resourceIndex)</subject>
                 <predicate prefix="geo">lat</predicate>
                 <!-- a comma between the coordinate components are a common error -->
-                <object type="literal" datatype="float">/child::tei:location/tei:geo/tokenize(., '\s*[,\s]\s*')[1]</object>
+                <object type="literal" datatype="double">/child::tei:location/tei:geo/tokenize(., '\s*[,\s]\s*')[1]</object>
             </statement>
             <statement>
                 <condition>/normalize-space(tei:location/tei:geo) ne ''</condition>
                 <subject type="bnode">/concat('geo', $resourceIndex)</subject>
                 <predicate prefix="geo">log</predicate>
-                <object type="literal" datatype="float">/child::tei:location/tei:geo/tokenize(., '\s*[,\s]\s*')[2]</object>
+                <object type="literal" datatype="double">/child::tei:location/tei:geo/tokenize(., '\s*[,\s]\s*')[2]</object>
             </statement>
         </triples>
     </configuration>
