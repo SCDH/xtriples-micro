@@ -12,6 +12,7 @@
             <vocabulary prefix="plc" uri="http://edition.com/entities/place#"/>
             <vocabulary prefix="org" uri="http://edition.com/entities/org#"/>
             <vocabulary prefix="evt" uri="http://edition.com/entities/event#"/>
+            <vocabulary prefix="typ" uri="http://edition.com/entities/type#"/>
         </vocabularies>
         <triples>
             <statement>
