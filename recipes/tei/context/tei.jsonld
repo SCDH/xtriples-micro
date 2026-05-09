@@ -1,0 +1,31 @@
+{
+    "@context": {
+	"@version": 1.1,
+	"tei":     "http://www.tei-c.org/ns/1.0",
+	"sdh":     "https://sdhss.org/ontology/core/",
+
+	"cat": {
+	    "@type": "@vocab",
+	    "@id": "http://www.tei-c.org/ns/1.0type",
+	    "@context": {
+		"@vocab": "http://edition.com/entities/type#"
+	    }
+	},
+	"subcat": {
+	    "@type": "@vocab",
+	    "@id": "http://www.tei-c.org/ns/1.0subtype",
+	    "@context": {
+		"@vocab": "http://edition.com/entities/type#"
+	    }
+	},
+	"description": {
+	    "@type": "@id",
+	    "@id": "http://www.tei-c.org/ns/1.0hasDescription",
+	    "@container": "@set",
+	    "@context": {
+		"@propagate": false,
+		"text": "https://sdhss.org/ontology/core/P21"
+	    }
+	}
+    }
+}

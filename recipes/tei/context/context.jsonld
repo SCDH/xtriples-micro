@@ -1,0 +1,52 @@
+{
+    "@context": {
+	"@version": 1.1,
+	"dc":      "http://purl.org/dc/elements/1.1/",
+        "dcterms": "http://purl.org/dc/terms/",
+        "dctypes": "http://purl.org/dc/dcmitype/",
+        "rdf":     "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "rdfs":    "http://www.w3.org/2000/01/rdf-schema#",
+        "xsd":     "http://www.w3.org/2001/XMLSchema#",
+        "owl":     "http://www.w3.org/2002/07/owl#",
+        "schema":  "https://schema.org/",
+        "crm":     "http://www.cidoc-crm.org/cidoc-crm/",
+        "tei":     "http://www.tei-c.org/ns/1.0",
+	"lrm":     "http://iflastandards.info/ns/lrm/lrmoo/",
+	"sdh":     "https://sdhss.org/ontology/core/",
+	"geo":     "http://www.w3.org/2003/01/geo/wgs84_pos#",
+	"locn":    "http://www.w3.org/ns/locn#",
+	"oa":      "http://www.w3.org/ns/oa#",
+
+	"type":           { "@type": "@id", "@id": "@type" },
+
+	"sameAs":         { "@type": "@id", "@id": "owl:sameAs", "@container": "@set" },
+
+	"preferredName":  { "@id": "crm:P48_has_preferred_identifier", "@context": { "nameId": { "@id": "@id", "@type": "@id" } } },
+	"names":          { "@id": "crm:P1_is_identified_by", "@container": "@set", "@context": { "nameId": { "@id": "@id", "@type": "@id" } } },
+	"name":           { "@id": "sdh:P21" },
+	"language":       { "@id": "crm:P72_has_language" },
+	"Appelation":     { "@type": "@id", "@id": "crm:E41_Appelation" },
+
+	"Place":          { "@type": "@id", "@id": "crm:E53_Place" },
+
+	"geometry":       { "@type": "@id", "@id": "locn:geometry" },
+	"Point":          { "@type": "@id", "@id": "geo:Point" },
+	"latitude":       { "@id": "geo:lat", "@type": "xsd:double" },
+	"longitude":      { "@id": "geo:log", "@type": "xsd:double" },
+
+	"references":     { "@type": "@id", "@id": "crm:P140i_was_attributed_by", "@container": "@set" },
+	"reference":      { "@type": "@id", "@id": "crm:P129i_is_subject_of" },
+	"mentions":       { "@type": "@id", "@id": "crm:P67_refers_to" },
+	"note":           { "@id": "crm:P3_has_note" },
+	"LinguisticObject":    { "@type": "@id", "@id": "crm:E33_Linguistic_Object" },
+	"AttributeAssignment": { "@type": "@id", "@id": "crm:E13_Attribute_Assignment" },
+	"InformationObject":   { "@type": "@id", "@id": "crm:E73_Information_Object" },
+
+	"selector":       { "@type": "@id", "@id": "oa:hasSelector", "@container": "@set" },
+
+	"cat":            { "@type": "@id", "@id": "tei:type" },
+	"subCat":         { "@type": "@id", "@id": "tei:subtype" },
+	"description":    { "@type": "@id", "@id": "tei:desc" }
+
+    }
+}
