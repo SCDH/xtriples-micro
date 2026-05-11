@@ -7,10 +7,16 @@
   parameter as a collection when `is-collection-uri=true`. This allows
   pass in externally made-up collections.
 - introduce Recipes:
-  - `recepies/tei/lincs-entities.xml`: XTriples configuration for
+  - `recipes/tei/lincs-entities.xml`: XTriples configuration for
     extracting [LINCS
     annotations](https://lincsproject.ca/docs/explore-lod/understand-lincs-data/application-profiles-main/sources-metadatag)
     from TEI with linked named entities
+  - `recipes/tei/crm-entities.xml`: XTriples config for extracting
+    entity data from TEI registry files to CIDOC-CRM
+  - `recipes/tei/tei-entities.xml`: XTriples config for extracting
+    entity data from TEI registry files to properties named after TEI
+    components
+  . `recipes/tei/context/*.jsonld`: JSON-LD contexts
 
 ## 0.5.4
 
