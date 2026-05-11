@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.6.1
+
+- makes utils library more robust
+- makes extraction of longitude and latitude from TEI more robust against bad whitespace
 
 ## 0.6.0
 
