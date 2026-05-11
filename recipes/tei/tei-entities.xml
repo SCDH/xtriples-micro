@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XTriples configuration for extracting preferred and other (secondary) identifiers from a TEI registry
+
+USAGE:
+target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/crm-entity-names.xml source-uri=EDITION/places.xml -xi
+
+-->
+<?xml-model href="../../schema/xtriples.rng"?>
+<xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
+    <configuration>
+        <xi:include href="local.xml" xpointer="vocabularies">
+            <xi:fallback>
+                <vocabularies>
+                    <vocabulary prefix="ent" uri="http://edition.com/entities/"/>
+                    <vocabulary prefix="prs" uri="http://edition.com/entities/person#"/>
+                    <vocabulary prefix="plc" uri="http://edition.com/entities/place#"/>
+                    <vocabulary prefix="org" uri="http://edition.com/entities/org#"/>
+                    <vocabulary prefix="evt" uri="http://edition.com/entities/event#"/>
+                    <vocabulary prefix="typ" uri="http://edition.com/entities/type#"/>
+                </vocabularies>
+            </xi:fallback>
+        </xi:include>
+        <vocabularies>
+            <vocabulary prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <vocabulary prefix="lrm" uri="http://iflastandards.info/ns/lrm/lrmoo/"/>
+            <vocabulary prefix="sdh" uri="https://sdhss.org/ontology/core/"/>
+            <vocabulary prefix="oa" uri="http://www.w3.org/ns/oa#"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+            <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
+            <vocabulary prefix="owl" uri=" http://www.w3.org/2002/07/owl# "/>
+        </vocabularies>
+        <triples>
+            <!-- categorization with @type and @subtype -->
+            <statement>
+                <condition>/exists(@type)</condition>
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
+                <predicate prefix="tei">type</predicate>
+                <object type="uri" prefix="typ">/@type</object>
+            </statement>
+            <statement>
+                <condition>/exists(@subtype)</condition>
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
+                <predicate prefix="tei">subtype</predicate>
+                <object type="uri" prefix="typ">/@subtype</object>
+            </statement>
+            
+            <!-- description -->
+            <statement repeat="{/count(*[self::tei:desc or self::tei:note]) }">
+                <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
+                <predicate prefix="tei">hasDescription</predicate>
+                <object type="bnode">/concat('description_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</object>
+            </statement>
+            <statement repeat="{/count(*[self::tei:desc or self::tei:note]) }">
+                <condition>/exists(*[self::tei:desc or self::tei:note][$repeatIndex]/@type)</condition>
+                <subject type="bnode">/concat('description_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
+                <predicate prefix="tei">type</predicate>
+                <object type="uri" prefix="typ">/*[self::tei:desc or self::tei:note][$repeatIndex]/@type</object>
+            </statement>
+            <statement repeat="{/count(*[self::tei:desc or self::tei:note]) }">
+                <condition>/exists(*[self::tei:desc or self::tei:note][$repeatIndex]/@subtype)</condition>
+                <subject type="bnode">/concat('description_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
+                <predicate prefix="tei">subtype</predicate>
+                <object type="uri" prefix="typ">/*[self::tei:desc or self::tei:note][$repeatIndex]/@subtype</object>
+            </statement>
+            <statement repeat="{/count(*[self::tei:desc or self::tei:note]) }">
+                <subject type="bnode">/concat('description_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
+                <predicate prefix="sdh">P21</predicate>
+                <object type="literal">/*[self::tei:desc or self::tei:note][$repeatIndex]=>normalize-space()</object>
+            </statement>
+            <statement repeat="{/count(*[self::tei:desc or self::tei:note]) }">
+                <subject type="bnode">/concat('description_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
+                <predicate prefix="crm">P72_has_language</predicate>
+                <object type="literal">/*[$repeatIndex]/(ancestor-or-self::*/@xml:lang)[last()]</object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection uri=".">
+        <resource uri="{ ( //tei:person | //tei:place | //tei:org | //tei:event )[@xml:id][@xml:id ne 'TEMPLATE'] }"/>
+    </collection>
+</xtriples>

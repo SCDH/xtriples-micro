@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xtriples [
+   <!ATTLIST vocabularies xml:id ID #IMPLIED>
+   <!ATTLIST subject xml:id ID #IMPLIED>
+]>
+<?xml-model href="../../schema/xtriples.rng"?>
+<xtriples>
+    <configuration>
+        <vocabularies xml:id="vocabularies">
+            <vocabulary prefix="ent" uri="http://edition.com/entities/"/>
+            <vocabulary prefix="prs" uri="http://edition.com/entities/person#"/>
+            <vocabulary prefix="plc" uri="http://edition.com/entities/place#"/>
+            <vocabulary prefix="org" uri="http://edition.com/entities/org#"/>
+            <vocabulary prefix="evt" uri="http://edition.com/entities/event#"/>
+            <vocabulary prefix="typ" uri="http://edition.com/entities/type#"/>
+        </vocabularies>
+        <triples>
+            <statement>
+                <subject xml:id="placesubject" prefix="plc">/@xml:id</subject>
+                <predicate prefix="plc">asdf</predicate>
+                <object type="literal">smig</object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection>
+        <resource></resource>
+    </collection>
+</xtriples>
