@@ -18,6 +18,7 @@
             <include>**/*.xsl</include>
             <include>**/*.xq*</include>
             <include>**/*.json</include>
+	    <include>**/*.jsonld</include>
             <include>**/*.js</include>
             <include>**/*.css</include>
             <include>**/*.rng</include>
