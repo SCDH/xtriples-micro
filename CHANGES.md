@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.6.2
+
+same as 0.6.1, but fixes release pipeline
+
 ## 0.6.1
 
 - makes utils library more robust
