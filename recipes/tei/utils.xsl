@@ -30,31 +30,38 @@
     <xsl:function name="utils:prefix" as="xs:string" visibility="public">
         <xsl:param name="context" as="node()"/>
         <xsl:variable name="pre-nodes" as="node()*"
-            select="outermost($context/preceding::node()[ancestor::text])"/>
+            select="outermost($context/(preceding::text() | preceding::*)[ancestor::text])"/>
         <xsl:variable name="pre-text">
             <xsl:apply-templates mode="text" select="$pre-nodes"/>
         </xsl:variable>
         <xsl:variable name="pre-words" as="xs:string*"
             select="$pre-nodes => string-join() => normalize-space() => tokenize()"/>
         <xsl:variable name="limit" as="xs:integer" select="count($pre-words) - $context-length"/>
-        <xsl:sequence select="($pre-words[position() gt $limit]) => string-join(' ')"/>
+        <xsl:sequence
+            select="($pre-words[position() gt $limit]) => string-join(' ') => utils:escape()"/>
     </xsl:function>
 
     <xsl:function name="utils:suffix" as="xs:string" visibility="public">
         <xsl:param name="context" as="node()"/>
         <xsl:variable name="context-nodes" as="node()*"
-            select="outermost($context/following::node()[ancestor::text])"/>
+            select="outermost($context/(following::text() | preceding::*)[ancestor::text])"/>
         <xsl:variable name="context-text">
             <xsl:apply-templates mode="text" select="$context-nodes"/>
         </xsl:variable>
         <xsl:variable name="context-words" as="xs:string*"
             select="$context-nodes => string-join() => normalize-space() => tokenize()"/>
         <xsl:variable name="limit" as="xs:integer" select="$context-length"/>
-        <xsl:sequence select="($context-words[position() le $limit]) => string-join(' ')"/>
+        <xsl:sequence
+            select="($context-words[position() le $limit]) => string-join(' ') => utils:escape()"/>
+    </xsl:function>
+
+    <xsl:function name="utils:escape" as="xs:string">
+        <xsl:param name="content" as="xs:string*"/>
+        <xsl:value-of select="string-join(($content)) => replace('&quot;', '&amp;quot;')"/>
     </xsl:function>
 
 
-    <xsl:mode name="text" on-no-match="shallow-copy"/>
+    <xsl:mode name="text" on-no-match="shallow-skip"/>
 
     <xsl:template mode="text" match="text()">
         <xsl:sequence select="."/>
@@ -67,6 +74,8 @@
     </xsl:template>
 
     <xsl:template mode="text" match="note"/>
+
+    <xsl:template mode="text" match="comment() | processing-instruction() | attribute()"/>
 
 
 
