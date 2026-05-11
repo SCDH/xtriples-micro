@@ -47,6 +47,7 @@ jobs:
           gh release create "$tag" \
               target/*.tar.gz \
               target/*.zip \
+              recipes/tei/context/*.jsonld \
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} ${tag}" \
               --generate-notes
@@ -79,6 +80,9 @@ jobs:
 
       - name: copy RelaxNG schema
         run: cp schema/xtriples.rng public/
+
+      - name: copy recipes
+        run: cp -Rf recipes public/
 
       - name: Deploy descriptor file on Github pages
         uses: peaceiris/actions-gh-pages@v4
