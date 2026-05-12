@@ -111,7 +111,7 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/lincs-entities.
             <statement>
                 <subject type="bnode">/concat('attributeAssignment', $resourceIndex)</subject>
                 <predicate prefix="crm">P3_has_note</predicate>
-                <object type="literal">/normalize-space(.)</object>
+                <object type="literal">/normalize-space(.)=>replace('&quot;', '&amp;quot;')</object>
             </statement>
             <statement>
                 <subject type="bnode">/concat('attributeAssignment', $resourceIndex)</subject>
@@ -223,7 +223,7 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/lincs-entities.
             <statement>
                 <subject type="bnode">/concat('quote', $resourceIndex)</subject>
                 <predicate prefix="oa">exact</predicate>
-                <object type="literal">/normalize-space(.)</object>
+                <object type="literal">/normalize-space(.)=>replace('&quot;', '&amp;quot;')</object>
             </statement>
             <statement>
                 <condition>/exists(function-lookup(xs:QName('utils:prefix'), 1))</condition>
