@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.6.3
+
+escape double quotes in extracted literals
+
 ## 0.6.2
 
 same as 0.6.1, but fixes release pipeline
