@@ -3,8 +3,8 @@
    xsi:schemaLocation="http://www.oxygenxml.com/ns/extension http://www.oxygenxml.com/ns/extension/extensions.xsd">
    <xt:extension xmlns:xt="http://www.oxygenxml.com/ns/extension" id="XTriples">
       <xt:location
-         href="https://github.com/SCDH/xtriples-micro/releases/download/0.6.2/xtriples-0.6.2-oxygen-framework.zip"/>
-      <xt:version>0.6.2</xt:version>
+         href="https://github.com/SCDH/xtriples-micro/releases/download/0.6.3/xtriples-0.6.3-oxygen-framework.zip"/>
+      <xt:version>0.6.3</xt:version>
       <xt:oxy_version>17.0+</xt:oxy_version>
       <xt:type>framework</xt:type>
       <xt:author>Christian Lück</xt:author>
