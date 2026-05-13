@@ -347,7 +347,7 @@
             <x:param name="resource-index" select="1"/>
         </x:call>
         <x:expect label="CR and LF escaped in literal" as="xs:string" test="$x:result[3]"
-            select="'&quot;Title\&#xa;with\&#xd;\&#xa;new lines&quot;'"/>
+            select="'&quot;Title\nwith\r\nnew lines&quot;'"/>
     </x:scenario>
 
 </x:description>

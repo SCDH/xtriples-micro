@@ -312,7 +312,9 @@ This is only a module and should be imported by some calling stylesheet.
 
     <xsl:function name="xtriples:escape-literal" as="xs:string">
         <xsl:param name="unescaped" as="xs:string"/>
-        <xsl:value-of select="$unescaped => replace('\\', '\\\\') => replace('([&#xa;&#xd;])', '\\$1') => replace('&quot;', '\\&quot;')"/>
+        <xsl:value-of
+            select="$unescaped => replace('\\', '\\\\') => replace('&#xa;', '\\n') => replace('&#xd;', '\\r') => replace('&quot;', '\\&quot;')"
+        />
     </xsl:function>
 
     <xsl:function name="xtriples:serialize">
