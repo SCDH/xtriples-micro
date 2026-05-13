@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.7.0
+
+- escape double quotes, LF and CR and backslash in literals as
+  required by the [N-Triples specs, sec. 2.3 RDF
+  Literals](https://www.w3.org/TR/n-triples/#sec-literals). Escaping
+  must already be done by the XTriples processor, i.e. in the XSLT
+  stylesheet. This fixes issue #6.
+- reverts escaping done in 0.6.4 from the recipes 
+
 ## 0.6.3
 
 escape double quotes in extracted literals
