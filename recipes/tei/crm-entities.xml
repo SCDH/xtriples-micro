@@ -62,14 +62,14 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/crm-entity-name
                 <condition>/$repeatIndex eq 1</condition>
                 <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
                 <predicate prefix="crm">P48_has_preferred_identifier</predicate>
-                <object type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)=>replace('&quot;', '&amp;quot;')</object>
+                <object type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</object>
             </statement>
 
             <!-- identifiers from all names -->
             <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
                 <subject prefix="ent">/concat(local-name(.), '#', @xml:id)</subject>
                 <predicate prefix="crm">P1_is_identified_by</predicate>
-                <object type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)=>replace('&quot;', '&amp;quot;')</object>
+                <object type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</object>
             </statement>
             <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
                 <subject type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
@@ -80,7 +80,7 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/crm-entity-name
                 <subject type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
                 <!-- sdh:P21 = sdh:P100_has_value see https://ontome.net/property/1843/namespace/3#identification -->
                 <predicate prefix="sdh">P21</predicate>
-                <object type="literal">/*[$repeatIndex]=>normalize-space()=>replace('&quot;', '&amp;quot;')</object>
+                <object type="literal">/*[$repeatIndex]=>normalize-space()</object>
             </statement>
             <statement repeat="{/count(*[self::tei:name or self::tei:persName or self::tei:placeName or self::tei:orgName or self::tei:eventName]) }">
                 <subject type="bnode">/concat('entityIdentifier_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
