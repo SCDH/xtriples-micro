@@ -67,7 +67,7 @@ target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/crm-entity-name
             <statement repeat="{/count(*[self::tei:desc or self::tei:note]) }">
                 <subject type="bnode">/concat('description_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
                 <predicate prefix="sdh">P21</predicate>
-                <object type="literal">/*[self::tei:desc or self::tei:note][$repeatIndex]=>normalize-space()=>replace('&quot;', '&amp;quot;')</object>
+                <object type="literal">/*[self::tei:desc or self::tei:note][$repeatIndex]=>normalize-space()</object>
             </statement>
             <statement repeat="{/count(*[self::tei:desc or self::tei:note]) }">
                 <subject type="bnode">/concat('description_', local-name(.), '_', $resourceIndex, '_', $repeatIndex)</subject>
