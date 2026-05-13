@@ -330,4 +330,14 @@
             select="'&quot;\&quot;Title\&quot;&quot;'"/>
     </x:scenario>
 
+    <x:scenario label="backslashed in literals are escaped">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/config-01.xml"/>
+            <x:param name="resource" href="../test/backslash.tei.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="backslash escaped in literal" as="xs:string" test="$x:result[3]"
+            select="'&quot;\\Title\\&quot;'"/>
+    </x:scenario>
+
 </x:description>
