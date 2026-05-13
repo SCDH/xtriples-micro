@@ -38,7 +38,7 @@
             select="$pre-nodes => string-join() => normalize-space() => tokenize()"/>
         <xsl:variable name="limit" as="xs:integer" select="count($pre-words) - $context-length"/>
         <xsl:sequence
-            select="($pre-words[position() gt $limit]) => string-join(' ') => utils:escape()"/>
+            select="($pre-words[position() gt $limit]) => string-join(' ')"/>
     </xsl:function>
 
     <xsl:function name="utils:suffix" as="xs:string" visibility="public">
@@ -52,12 +52,7 @@
             select="$context-nodes => string-join() => normalize-space() => tokenize()"/>
         <xsl:variable name="limit" as="xs:integer" select="$context-length"/>
         <xsl:sequence
-            select="($context-words[position() le $limit]) => string-join(' ') => utils:escape()"/>
-    </xsl:function>
-
-    <xsl:function name="utils:escape" as="xs:string">
-        <xsl:param name="content" as="xs:string*"/>
-        <xsl:value-of select="string-join(($content)) => replace('&quot;', '&amp;quot;')"/>
+            select="($context-words[position() le $limit]) => string-join(' ')"/>
     </xsl:function>
 
 
