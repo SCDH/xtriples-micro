@@ -320,4 +320,34 @@
             select="'&quot;Es ist alles eitel 2.0&quot;'"/>
     </x:scenario>
 
+    <x:scenario label="double quotes in literals are escaped">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/config-01.xml"/>
+            <x:param name="resource" href="../test/quote.tei.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="quote escaped in literal" as="xs:string" test="$x:result[3]"
+            select="'&quot;\&quot;Title\&quot;&quot;'"/>
+    </x:scenario>
+
+    <x:scenario label="backslashed in literals are escaped">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/config-01.xml"/>
+            <x:param name="resource" href="../test/backslash.tei.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="backslash escaped in literal" as="xs:string" test="$x:result[3]"
+            select="'&quot;\\Title\\&quot;'"/>
+    </x:scenario>
+
+    <x:scenario label="CR and LF in literals are escaped">
+        <x:call template="xtriples:extract">
+            <x:param name="config" href="../test/config-01.xml"/>
+            <x:param name="resource" href="../test/cr-lf.tei.xml"/>
+            <x:param name="resource-index" select="1"/>
+        </x:call>
+        <x:expect label="CR and LF escaped in literal" as="xs:string" test="$x:result[3]"
+            select="'&quot;Title\nwith\r\nnew lines&quot;'"/>
+    </x:scenario>
+
 </x:description>

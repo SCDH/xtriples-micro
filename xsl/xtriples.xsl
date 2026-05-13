@@ -256,7 +256,13 @@ This is only a module and should be imported by some calling stylesheet.
                 <xsl:when test="$part/@type eq 'literal' or $part/self::object[not(@type)]">
                     <xsl:value-of>
                         <xsl:text>"</xsl:text>
-                        <xsl:value-of select="$x"/>
+                        <!-- try to escape, however, some types cannot be escaped -->
+                        <xsl:try>
+                            <xsl:value-of select="$x => xtriples:escape-literal()"/>
+                            <xsl:catch>
+                                <xsl:value-of select="$x"/>
+                            </xsl:catch>
+                        </xsl:try>
                         <xsl:text>"</xsl:text>
                         <xsl:choose>
                             <!--
@@ -302,6 +308,13 @@ This is only a module and should be imported by some calling stylesheet.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
+    </xsl:function>
+
+    <xsl:function name="xtriples:escape-literal" as="xs:string">
+        <xsl:param name="unescaped" as="xs:string"/>
+        <xsl:value-of
+            select="$unescaped => replace('\\', '\\\\') => replace('&#xa;', '\\n') => replace('&#xd;', '\\r') => replace('&quot;', '\\&quot;')"
+        />
     </xsl:function>
 
     <xsl:function name="xtriples:serialize">
