@@ -2,17 +2,20 @@
 
 ## Customization
 
-The function library [`recipes/tei/utils.xsl`](tei/utils.xsl) adds
-function which some optional features of the following recipes
-require. The library can be replaced by your
-[customization](../README.md#customization). Usage:
+Two strategies for making the recipes customizable are used: 
 
-```shell
-target/bin/xslt.sh ... libraries=$(realpath recipes/tei/utils.xsl)
-```
-
-The recipes also make use of the [*XInclude + XML Catalog*
-customization strategy](../README.md#customization).
+- [XPath Functions in Utility
+  Libraries](#xpath-functions-in-utility-libraries): The function
+  library [`recipes/tei/utils.xsl`](tei/utils.xsl) adds function which
+  some optional features of the following recipes require. The library
+  can be replaced by your
+  [customization](..#customization). Usage:
+  ```shell
+  target/bin/xslt.sh ... libraries=$(realpath recipes/tei/utils.xsl)
+  ```
+- [*XInclude + XML Catalog* customization
+  strategy](..#customization): The recipes include
+  from `local.xml`.
 
 ## Named Entities
 
