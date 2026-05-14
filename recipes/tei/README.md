@@ -1,27 +1,21 @@
-# XTriples Recipes
+# XTriples Recipes for Extracting from TEI-XML
 
-This folder collects XTriples configurations files for redundant tasks
-required in many projects.
+## Customization
 
-Recipes can best be run like so on a [collection](../README.md#collections):
+The function library [`recipes/tei/utils.xsl`](tei/utils.xsl) adds
+function with some optional features of the following recipes
+require. Usage:
 
 ```shell
-target/bin/xslt.sh \
-	-xsl:xsl/extract-param-doc.xsl \
-	-s:RECIPE.xml \
-	source-uri=MY-COLLECTION \
-	is-collection-uri=true
+target/bin/xslt.sh ... libraries=$(realpath recipes/tei/utils.xsl)
 ```
 
-The recipes are [customizable](../#customization) by XIncludes and the
-`utils.xsl` library.
+The recipes also make use of the [*XInclude + XML Catalog*
+customization strategy](..#customization).
 
+## Named Entities
 
-## Extracting from TEI-XML
-
-### Named Entities
-
-#### `recipes/tei/lincs-entities.xml`
+### `recipes/tei/lincs-entities.xml`
 
 ```shell
 target/bin/xslt.sh \
@@ -55,17 +49,8 @@ recipe
 - turns absolute file paths to relative paths
 
 
-#### Utils
 
-The function library [`recipes/tei/utils.xsl`](tei/utils.xsl)
-adds functions some optional features of the following recipes
-require. Usage:
-
-```shell
-target/bin/xslt.sh ... libraries=$(realpath recipes/tei/utils.xsl)
-```
-
-#### `recipes/tei/cordh-places.xml`
+### `recipes/tei/cordh-places.xml`
 
 ```shell
 target/bin/xslt.sh \
@@ -111,3 +96,5 @@ Open Question: Should lat/long be typed as float or as string?
 
 The URI for the place is customizable by our [customization
 pattern](#customization).
+
+
