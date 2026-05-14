@@ -3,15 +3,16 @@
 ## Customization
 
 The function library [`recipes/tei/utils.xsl`](tei/utils.xsl) adds
-function with some optional features of the following recipes
-require. Usage:
+function which some optional features of the following recipes
+require. The library can be replaced by your
+[customization](../README.md#customization). Usage:
 
 ```shell
 target/bin/xslt.sh ... libraries=$(realpath recipes/tei/utils.xsl)
 ```
 
 The recipes also make use of the [*XInclude + XML Catalog*
-customization strategy](..#customization).
+customization strategy](../README.md#customization).
 
 ## Named Entities
 
