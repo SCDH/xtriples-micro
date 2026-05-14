@@ -5,7 +5,7 @@
 Two strategies for making the recipes customizable are used: 
 
 - [XPath Functions in Utility
-  Libraries](../README.md##xpath-functions-in-utility-libraries): The function
+  Libraries](../README.md#customization): The function
   library [`recipes/tei/utils.xsl`](tei/utils.xsl) adds function which
   some optional features of the following recipes require. The library
   can be replaced by your
