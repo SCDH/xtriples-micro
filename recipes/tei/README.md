@@ -9,12 +9,12 @@ Two strategies for making the recipes customizable are used:
   library [`recipes/tei/utils.xsl`](tei/utils.xsl) adds function which
   some optional features of the following recipes require. The library
   can be replaced by your
-  [customization](..#customization). Usage:
+  [customization](../README.md#customization). Usage:
   ```shell
   target/bin/xslt.sh ... libraries=$(realpath recipes/tei/utils.xsl)
   ```
 - [*XInclude + XML Catalog* customization
-  strategy](..#customization): The recipes include
+  strategy](../README.md#customization): The recipes include
   from `local.xml`.
 
 ## Named Entities
