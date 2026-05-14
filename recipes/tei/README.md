@@ -13,6 +13,10 @@ target/bin/xslt.sh \
 	is-collection-uri=true
 ```
 
+The recipes are [customizable](../#customization) by XIncludes and the
+`utils.xsl` library.
+
+
 ## Extracting from TEI-XML
 
 ### Named Entities
@@ -107,7 +111,3 @@ Open Question: Should lat/long be typed as float or as string?
 
 The URI for the place is customizable by our [customization
 pattern](#customization).
-
-## Customization
-
-TODO
