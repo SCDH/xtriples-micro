@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.7.1
+
+- recipe for CRM-based annotations: fixes suffix in generation of
+  text quote selector (issue #8)
+
+
 ## 0.7.0
 
 - escape double quotes, LF and CR and backslash in literals as
