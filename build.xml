@@ -35,4 +35,12 @@
         </antcall>
     </target>
 
+
+    <target name="test-recipes-tei-utils.xsl">
+        <antcall target="xspec.xspec" inheritall="false">
+            <param name="xspec.xml" location="${basedir}/recipes/tei/utils.xspec"/>
+        </antcall>
+    </target>
+
+
 </project>
