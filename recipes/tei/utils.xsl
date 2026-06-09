@@ -37,22 +37,20 @@
         <xsl:variable name="pre-words" as="xs:string*"
             select="$pre-nodes => string-join() => normalize-space() => tokenize()"/>
         <xsl:variable name="limit" as="xs:integer" select="count($pre-words) - $context-length"/>
-        <xsl:sequence
-            select="($pre-words[position() gt $limit]) => string-join(' ')"/>
+        <xsl:sequence select="($pre-words[position() gt $limit]) => string-join(' ')"/>
     </xsl:function>
 
     <xsl:function name="utils:suffix" as="xs:string" visibility="public">
         <xsl:param name="context" as="node()"/>
         <xsl:variable name="context-nodes" as="node()*"
-            select="outermost($context/(following::text() | preceding::*)[ancestor::text])"/>
+            select="outermost($context/(following::text() | following::*)[ancestor::text])"/>
         <xsl:variable name="context-text">
             <xsl:apply-templates mode="text" select="$context-nodes"/>
         </xsl:variable>
         <xsl:variable name="context-words" as="xs:string*"
             select="$context-nodes => string-join() => normalize-space() => tokenize()"/>
         <xsl:variable name="limit" as="xs:integer" select="$context-length"/>
-        <xsl:sequence
-            select="($context-words[position() le $limit]) => string-join(' ')"/>
+        <xsl:sequence select="($context-words[position() le $limit]) => string-join(' ')"/>
     </xsl:function>
 
 
