@@ -1,0 +1,77 @@
+<?xml-model uri="https://xtriples.lod.academy/xtriples.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<!-- XTriples configuration for extracting the citeTree data required for DTS' collection endpoint
+    
+
+USAGE:
+target/bin/xslt.sh \
+    -s:recipes/tei/seed-dts-citation-trees.xml \
+    -xsl:xsl/extract-param-doc.xsl \
+    source-uri=john.xml
+
+-->
+<xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
+    <configuration>
+        <xi:include href="local.xml" xpointer="vocabularies">
+            <xi:fallback>
+                <vocabularies>
+                    <vocabulary prefix="ed" uri="http://edition.com/resources/"/>
+                    <vocabulary prefix="trees" uri="http://edition.com/citationTrees#"/>
+                </vocabularies>
+            </xi:fallback>
+        </xi:include>
+        <vocabularies>
+            <vocabulary prefix="dts" uri="https://w3id.org/dts/api#"/>
+            <vocabulary prefix="seed" uri="https://raw.githubusercontent.com/SCDH/seed-xc/refs/heads/main/dts/src/main/resources/META-INF/resources/semantics/"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+            <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
+            <vocabulary prefix="owl" uri=" http://www.w3.org/2002/07/owl# "/>
+        </vocabularies>
+        <triples>
+            <statement>
+                <subject prefix="ed">/ancestor::tei:TEI/@xml:id</subject>
+                <predicate prefix="dts">citationTrees</predicate>
+                <object type="bnode">/document-uri(/) || '_citationTree_' || $resourceIndex</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/document-uri(/) || '_citationTree_' || $resourceIndex</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="dts">CitationTree</object>
+            </statement>
+            <statement>
+                <condition>/exists(@n)</condition>
+                <subject type="bnode">/document-uri(/) || '_citationTree_' || $resourceIndex</subject>
+                <predicate prefix="dts">identifier</predicate>
+                <object type="uri" prefix="trees">/@n</object>
+            </statement>
+            <statement>
+                <subject type="bnode">/document-uri(/) || '_citationTree_' || $resourceIndex</subject>
+                <predicate prefix="tei">root</predicate>
+                <object type="literal">/local-name(.)</object>
+            </statement>
+            <!-- create statements from recursive citeStructure elements -->
+            <statement repeat="{/count(./descendant::tei:citeStructure)}">
+                <condition>/exists(/descendant::tei:citeStructure[$repeatIndex]/tei:citeStructure)</condition>
+                <subject type="bnode">/document-uri(/) || '_citationTree_' || $resourceIndex || '_' || generate-id(./descendant::tei:citeStructure[$repeatIndex])</subject>
+                <predicate prefix="dts">citeStructure</predicate>
+                <object type="bnode">/descendant::tei:citeStructure[$repeatIndex]/tei:citeStructure ! concat(document-uri(/), '_citationTree_', $resourceIndex, '_',  generate-id(.))</object>
+            </statement>
+            <statement repeat="{/count(./descendant::tei:citeStructure)}">
+                <condition>/exists(/descendant::tei:citeStructure[$repeatIndex]/@unit)</condition>
+                <subject type="bnode">/document-uri(/) || '_citationTree_' || $resourceIndex || '_' || generate-id(./descendant::tei:citeStructure[$repeatIndex])</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="dts">CiteStructure</object>
+            </statement>
+            <statement repeat="{/count(./descendant::tei:citeStructure)}">
+                <condition>/exists(/descendant::tei:citeStructure[$repeatIndex]/@unit)</condition>
+                <subject type="bnode">/document-uri(/) || '_citationTree_' || $resourceIndex || '_' || generate-id(./descendant::tei:citeStructure[$repeatIndex])</subject>
+                <predicate prefix="dts">citeType</predicate>
+                <object type="literal">/descendant::tei:citeStructure[$repeatIndex]/@unit</object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection uri=".">
+        <resource uri="{ //tei:refsDecl }"/>
+    </collection>
+</xtriples>
