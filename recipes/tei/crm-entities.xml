@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- XTriples configuration for extracting preferred and other (secondary) identifiers from a TEI registry
+<!-- XTriples configuration for extracting preferred and other (secondary) CRM identifiers from a TEI registry
 
 USAGE:
 target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/crm-entity-names.xml source-uri=EDITION/places.xml -xi

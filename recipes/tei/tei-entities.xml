@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- XTriples configuration for extracting preferred and other (secondary) identifiers from a TEI registry
+<!-- XTriples configuration for extracting additional information about entities from a TEI registry,
+including:
+
+- categorization encoded by @type and @subtype with a controlled vocabulary is put into the typ: namespace
+
+- descriptions encoded in tei:desc or tei:note go into sdhss:P21 objects with types and literals with CRM
+  language information
 
 USAGE:
 target/bin/xslt.sh -xsl:xsl/extract-param-doc.xsl -s:recipes/tei/crm-entity-names.xml source-uri=EDITION/places.xml -xi
