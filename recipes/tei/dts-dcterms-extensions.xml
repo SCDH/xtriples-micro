@@ -1,0 +1,68 @@
+<?xml-model uri="https://xtriples.lod.academy/xtriples.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<!-- XTriples configuration for extracting DTS' extensions object
+
+This is only a TEMPLATE, but may help you getting started.
+
+
+USAGE:
+target/bin/xslt.sh \
+    -s:recipes/tei/dts-extensions-template.xml \
+    -xsl:xsl/extract-param-doc.xsl \
+    source-uri=../dts-transformations/test/john.xml
+
+-->
+<xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
+    <configuration>
+        <xi:include href="local.xml" xpointer="vocabularies">
+            <xi:fallback>
+                <vocabularies>
+                    <vocabulary prefix="ed" uri="http://edition.com/resources/"/>
+                </vocabularies>
+            </xi:fallback>
+        </xi:include>
+        <vocabularies>
+            <vocabulary prefix="dts" uri="https://w3id.org/dts/api#"/>
+            <vocabulary prefix="dct" uri="http://purl.org/dc/terms/"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+            <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
+            <vocabulary prefix="xml" uri="http://www.w3.org/XML/1998/namespace"/>
+        </vocabularies>
+        <triples>
+
+            <!-- assign metadata object to DTS resource, preferring dts:id#1 over utils:relative-path#1 and over the bare file URI -->
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('dts:resource-uri'), 1))</condition>
+                <subject prefix="ed">/dts:id(/)</subject>
+                <predicate prefix="dts">dublinCore</predicate>
+                <object type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_extensions'</object>
+            </statement>
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('utils:relative-path'), 1)) and not(exists(function-lookup(xs:QName('dts:id'), 1)))</condition>
+                <subject prefix="ed">/utils:relative-path(/)</subject>
+                <predicate prefix="dts">dublinCore</predicate>
+                <object type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_extensions'</object>
+            </statement>
+            <statement>
+                <condition>/not(exists(function-lookup(xs:QName('utils:relative-path'), 1)) or exists(function-lookup(xs:QName('dts:id'), 1)))</condition>
+                <subject prefix="ed">/document-uri(/)</subject>
+                <predicate prefix="dts">dublinCore</predicate>
+                <object type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_extensions'</object>
+            </statement>
+
+            <!-- add the informative statements with bnode-subject /replace(document-uri(/), '\p{P}', '_') || '_extensions'-->
+            
+            <!--statement>
+                <subject type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_extensions'</subject>
+                <predicate prefix="dct">title</predicate>
+                <object type="literal" 
+                    lang="/((descendant::tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title)[1]/ancestor-or-self::*/@xml:lang, 'en')[last()] ! string(.)"
+                    >/(descendant::tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title)[1] => normalize-space()</object>
+            </statement-->
+
+        </triples>
+    </configuration>
+    <collection uri=".">
+    </collection>
+</xtriples>
