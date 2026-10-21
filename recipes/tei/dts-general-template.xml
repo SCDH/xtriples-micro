@@ -1,0 +1,90 @@
+<?xml-model uri="https://xtriples.lod.academy/xtriples.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<!-- XTriples recipe for metadata on SEED DTS' top level collection (id=general).
+
+This is only a template and needs your additions. It currently does not extract anything,
+but generates static triples defined in this recipe.
+
+USAGE:
+
+target/bin/xslt.sh \
+    -s:recipes/tei/dts-general-template.xml \
+    -xsl:xsl/extract-param-doc.xsl \
+    source-uri=does-not-matter.xml
+-->
+<xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
+    <configuration>
+        <xi:include href="local.xml" xpointer="vocabularies">
+            <xi:fallback>
+                <vocabularies>
+                    <vocabulary prefix="ed" uri="http://edition.com/resources/"/>
+                </vocabularies>
+            </xi:fallback>
+        </xi:include>
+        <vocabularies>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="dts" uri="https://w3id.org/dts/api#"/>
+            <vocabulary prefix="dcterms" uri="http://purl.org/dc/terms/"/>
+            <vocabulary prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
+            <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+            <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
+            <vocabulary uri="http://www.tei-c.org/ns/1.0"/>
+        </vocabularies>
+        <triples>
+            <statement>
+                <subject prefix="ed">general</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object prefix="dts" type="uri">Collection</object>
+            </statement>
+            
+            <!-- add some DCTerms metadata on the top level collection -->
+            <statement>
+                <subject prefix="ed">general</subject>
+                <predicate prefix="dts">title</predicate>
+                <object type="literal">MY TITLE</object>
+            </statement>
+            <statement>
+                <subject prefix="ed">general</subject>
+                <predicate prefix="dts">dublinCore</predicate>
+                <object type="bnode">generalDC</object>
+            </statement>
+            <statement>
+                <subject type="bnode">generalDC</subject>
+                <predicate prefix="dcterms">title</predicate>
+                <object type="literal" lang="en">MY TITLE</object>
+            </statement>
+            <statement>
+                <subject type="bnode">generalDC</subject>
+                <predicate prefix="dcterms">language</predicate>
+                <object type="literal">en</object>
+            </statement>
+            <statement>
+                <subject type="bnode">generalDC</subject>
+                <predicate prefix="dcterms">creator</predicate>
+                <object type="literal" lang="en">...</object>
+            </statement>
+            <statement>
+                <subject type="bnode">generalDC</subject>
+                <predicate prefix="dcterms">contributor</predicate>
+                <object type="uri">...</object>
+            </statement>
+            <statement>
+                <subject type="bnode">generalDC</subject>
+                <predicate prefix="dcterms">identifier</predicate>
+                <object type="literal">...</object>
+            </statement>
+            <statement>
+                <subject type="bnode">generalDC</subject>
+                <predicate prefix="dcterms">publisher</predicate>
+                <object type="literal" lang="en">...</object>
+            </statement>
+            <statement>
+                <subject type="bnode">generalDC</subject>
+                <predicate prefix="dcterms">mediator</predicate>
+                <object type="literal" lang="en">...</object>
+            </statement>
+        </triples>
+    </configuration>
+    <collection uri=".">
+    </collection>
+</xtriples>
