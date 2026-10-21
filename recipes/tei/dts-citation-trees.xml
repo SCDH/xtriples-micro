@@ -8,6 +8,9 @@ target/bin/xslt.sh \
     -xsl:xsl/extract-param-doc.xsl \
     source-uri=../dts-transformations/test/john.xml
 
+About the code:
+Using /replace(document-uri(/), '\p{P}', '_') makes bnodes work with any TEI and
+without requiring special functions in the scope.
 -->
 <xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
     <configuration>
@@ -26,12 +29,28 @@ target/bin/xslt.sh \
             <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
         </vocabularies>
         <triples>
+            
+            <!-- assign citation tree to DTS resource, preferring dts:id#1 over utils:relative-path#1 and over the bare file URI -->
             <statement>
-                <subject prefix="ed" ofun="tei:resource-uri">/ancestor::tei:TEI/@xml:id</subject>
+                <condition>/exists(function-lookup(xs:QName('dts:resource-uri'), 1))</condition>
+                <subject prefix="ed">/dts:id(/)</subject>
                 <predicate prefix="dts">citationTrees</predicate>
-                <!-- using /replace(document-uri(/), '\p{P}', '_') makes bnodes work with any TEI -->
                 <object type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_citationTree_' || $resourceIndex</object>
             </statement>
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('utils:relative-path'), 1)) and not(exists(function-lookup(xs:QName('dts:id'), 1)))</condition>
+                <subject prefix="ed">/utils:relative-path(/)</subject>
+                <predicate prefix="dts">citationTrees</predicate>
+                <object type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_citationTree_' || $resourceIndex</object>
+            </statement>
+            <statement>
+                <condition>/not(exists(function-lookup(xs:QName('utils:relative-path'), 1)) or exists(function-lookup(xs:QName('dts:id'), 1)))</condition>
+                <subject prefix="ed">/document-uri(/)</subject>
+                <predicate prefix="dts">citationTrees</predicate>
+                <object type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_citationTree_' || $resourceIndex</object>
+            </statement>
+
+            <!-- about the citation tree -->
             <statement>
                 <subject type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_citationTree_' || $resourceIndex</subject>
                 <predicate prefix="rdf">type</predicate>
@@ -49,6 +68,7 @@ target/bin/xslt.sh \
                 <predicate prefix="dts">citeStructure</predicate>
                 <object type="uri" prefix="trees">/child::tei:citeStructure ! concat(replace(document-uri(/), '\p{P}', '_'), '_citationTree_', $resourceIndex, '_',  generate-id(.))</object>
             </statement>
+            
             <!-- create statements from recursive citeStructure elements -->
             <statement repeat="{/count(./descendant::tei:citeStructure)}">
                 <condition>/exists(/descendant::tei:citeStructure[$repeatIndex]/tei:citeStructure)</condition>
