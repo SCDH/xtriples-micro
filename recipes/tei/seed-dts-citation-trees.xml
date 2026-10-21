@@ -43,6 +43,12 @@ target/bin/xslt.sh \
                 <predicate prefix="dts">identifier</predicate>
                 <object type="uri" prefix="trees">/@n</object>
             </statement>
+            <statement>
+                <condition>/exists(@n)</condition>
+                <subject type="bnode">/replace(document-uri(/), '\p{P}', '_') || '_citationTree_' || $resourceIndex</subject>
+                <predicate prefix="dts">citeStructure</predicate>
+                <object type="uri" prefix="trees">/child::tei:citeStructure ! concat(replace(document-uri(/), '\p{P}', '_'), '_citationTree_', $resourceIndex, '_',  generate-id(.))</object>
+            </statement>
             <!-- create statements from recursive citeStructure elements -->
             <statement repeat="{/count(./descendant::tei:citeStructure)}">
                 <condition>/exists(/descendant::tei:citeStructure[$repeatIndex]/tei:citeStructure)</condition>
