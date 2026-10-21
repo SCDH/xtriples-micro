@@ -1,0 +1,53 @@
+{
+    "@context": [
+	"http://www.w3.org/ns/anno.jsonld",
+	"https://raw.githubusercontent.com/SCDH/xtriples-micro/refs/tags/0.6.2/recipes/tei/context/entities.jsonld",
+	"https://raw.githubusercontent.com/SCDH/xtriples-micro/refs/tags/0.6.2/recipes/tei/context/tei.jsonld",
+	{
+	    "data": "@graph",
+	    "plc": "http://edition.com/entities/place#",
+	    "content": { "@id": "sdh:P21" },
+	    "id":      { "@id": "@id", "@context": { "@vocab": "http://edition.com/entities/place#" } }
+	}
+
+    ],
+
+    "@explicit": true,
+    "@type": "crm:E53_Place",
+    "cat": {
+	"@omitDefault": true
+    },
+    "subcat": {
+	"@omitDefault": true
+    },
+    "sameAs": {},
+    "preferredName": {
+	"@embed": "@always",
+ 	"language": {},
+	"name": {}
+    },
+    "names": {
+	"language": {},
+	"name": {}
+    },
+    "geometry": {
+	"@explicit": false
+    },
+    "description": {
+	"@explicit": false
+    },
+    "references": {
+	"reference": {
+	    "target": {
+		"selector": {
+		    "@type": [ "TextQuoteSelector", "FragmentSelector" ],
+		    "@explicit": false
+		},
+		"source": {
+		    "@explicit": false
+		}
+	    }
+	}
+    }
+
+}
