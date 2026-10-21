@@ -124,3 +124,29 @@ The URI for the place is customizable by our [customization
 pattern](#customization).
 
 
+## DTS
+
+The DTS recipes allow for customizing the URIs of DTS Resources by
+optionally providing unary XPath functions to the XTriples processor:
+
+1. `dts:id($context as node())` is preferred over
+2. `utils:relative-path($context as node())` (implemented in
+   [`recipes/tei/utils.xsl`](tei/utils.xsl)), which is again preferred
+   over
+3. the default, which just uses the absolute file URI. 
+
+## `recipes/tei/dts-basic.xml`
+
+for basic properties like `@type` and `title`
+
+## `recipes/tei/dts-citation-trees.xml`
+
+for citation tree objects like required for the resources in the collection endpoint
+
+## `recipes/tei/dts-dcterms-template.xml`
+
+a template to be extended for making the DCTerms metadata object
+
+## `recipes/tei/dts-seed-path.xml`
+
+for making the `seed:location` objects as required for the SEED DTS collection.json file
