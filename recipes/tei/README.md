@@ -190,5 +190,3 @@ mutually exclusive.
 #### `recipes/tei/dts-collection-flat.xml`
 
 All resources are contained in the top level collection.
-
-This is only a TEMPLATE, and needs your additions.
