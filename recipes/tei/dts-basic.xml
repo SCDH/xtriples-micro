@@ -1,0 +1,79 @@
+<?xml-model uri="https://xtriples.lod.academy/xtriples.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<!-- XTriples configuration for basic DTS collection data
+
+
+USAGE:
+target/bin/xslt.sh \
+    -s:recipes/tei/dts-basic.xml \
+    -xsl:xsl/extract-param-doc.xsl \
+    source-uri=../dts-transformations/test/john.xml
+
+-->
+<xtriples xmlns:xi="http://www.w3.org/2001/XInclude">
+    <configuration>
+        <xi:include href="local.xml" xpointer="vocabularies">
+            <xi:fallback>
+                <vocabularies>
+                    <vocabulary prefix="ed" uri="http://edition.com/resources/"/>
+                </vocabularies>
+            </xi:fallback>
+        </xi:include>
+        <vocabularies>
+            <vocabulary prefix="dts" uri="https://w3id.org/dts/api#"/>
+            <vocabulary prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <vocabulary prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <vocabulary prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+            <vocabulary prefix="utils" uri="http://scdh.uni-muenster.de/xtriples/utils/"/>
+            <vocabulary prefix="xml" uri="http://www.w3.org/XML/1998/namespace"/>
+        </vocabularies>
+        <triples>
+            <!--
+                every statement occurs 3 times with different functions for making the subject URI:
+                preferring dts:id#1 over utils:relative-path#1 and over the bare file URI
+            -->
+            
+            <!-- rdf:type, it's a dts:Resource! -->
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('dts:resource-uri'), 1))</condition>
+                <subject prefix="ed">/dts:id(/)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="dts">Resource</object>
+            </statement>
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('utils:relative-path'), 1)) and not(exists(function-lookup(xs:QName('dts:id'), 1)))</condition>
+                <subject prefix="ed">/utils:relative-path(/)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="dts">Resource</object>
+            </statement>
+            <statement>
+                <condition>/not(exists(function-lookup(xs:QName('utils:relative-path'), 1)) or exists(function-lookup(xs:QName('dts:id'), 1)))</condition>
+                <subject prefix="ed">/document-uri(/)</subject>
+                <predicate prefix="rdf">type</predicate>
+                <object type="uri" prefix="dts">Resource</object>
+            </statement>
+            
+            <!-- dts:title, it's a label without language information -->
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('dts:resource-uri'), 1))</condition>
+                <subject prefix="ed">/dts:id(/)</subject>
+                <predicate prefix="dts">title</predicate>
+                <object type="literal">/(descendant::tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title)[1] => normalize-space()</object>
+            </statement>
+            <statement>
+                <condition>/exists(function-lookup(xs:QName('utils:relative-path'), 1)) and not(exists(function-lookup(xs:QName('dts:id'), 1)))</condition>
+                <subject prefix="ed">/utils:relative-path(/)</subject>
+                <predicate prefix="dts">title</predicate>
+                <object type="literal">/(descendant::tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title)[1] => normalize-space()</object>
+            </statement>
+            <statement>
+                <condition>/not(exists(function-lookup(xs:QName('utils:relative-path'), 1)) or exists(function-lookup(xs:QName('dts:id'), 1)))</condition>
+                <subject prefix="ed">/document-uri(/)</subject>
+                <predicate prefix="dts">title</predicate>
+                <object type="literal">/(descendant::tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title)[1] => normalize-space()</object>
+            </statement>
+
+        </triples>
+    </configuration>
+    <collection uri=".">
+    </collection>
+</xtriples>
