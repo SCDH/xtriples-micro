@@ -67,7 +67,7 @@ registry file, use an additional recipe to extract triples from it
 describing these entities.
 
 Here's the LINCS class diagram: ![LINCS Class
-Diagram](https://lincsproject.ca/assets/images/application-profile-sources-annotation-(c-LINCS)-2ac3c9df793f833fa710f30aad8c2378.png)
+Diagram](https://portal.lincsproject.ca/img/documentation/application-profile-sources-annotation-(c-LINCS).png)
 
 When functions of [`recipes/tei/utils.xsl`](#utils) are available, the
 recipe
