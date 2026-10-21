@@ -7,6 +7,8 @@ This states the DCTerms metadata statements on an extra node, as required by SEE
 real RDF processing technology. This contrast to using JSON-LD @nest on the metadata object
 and where the DTS Resource is the subject of the metadata statements.
 
+Alternative for SEED DTS: dublincore metadata on ../document/$RESOURCE
+
 USAGE:
 target/bin/xslt.sh \
     -s:recipes/tei/dts-dcterms-template.xml \
