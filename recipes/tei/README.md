@@ -133,20 +133,62 @@ optionally providing unary XPath functions to the XTriples processor:
 2. `utils:relative-path($context as node())` (implemented in
    [`recipes/tei/utils.xsl`](tei/utils.xsl)), which is again preferred
    over
-3. the default, which just uses the absolute file URI. 
+3. the default, which just uses the absolute file URI.
 
-## `recipes/tei/dts-basic.xml`
+The recipes help generating the
+[collection.json](https://github.com/SCDH/seed-xc/blob/main/doc/dts-records.md#collectionjson)
+file required for [SEED
+DTS](https://github.com/SCDH/seed-xc/tree/main/dts). Note, that in
+contrast to DTS Resources which are targeted by the following recipes,
+DTS collections are not represented by TEI-XML files.
 
-for basic properties like `@type` and `title`
+### Recipes for Resources
 
-## `recipes/tei/dts-citation-trees.xml`
+The following recipes for information on DTS Resources are
+modular. Probably, you will need all of them and have to concatenated
+the results.
 
-for citation tree objects like required for the resources in the collection endpoint
+#### `recipes/tei/dts-basic.xml`
 
-## `recipes/tei/dts-dcterms-template.xml`
+for [basic
+properties](https://dtsapi.org/specifications/versions/v1.0/#scheme-for-collection-api-responses)
+like `@type` and `title`
 
-a template to be extended for making the DCTerms metadata object
+#### `recipes/tei/dts-citation-trees.xml`
 
-## `recipes/tei/dts-seed-path.xml`
+for [citation tree objects](https://dtsapi.org/specifications/versions/v1.0/#scheme-for-collection-api-responses) like required for the resources in the collection endpoint
 
-for making the `seed:location` objects as required for the SEED DTS collection.json file
+#### `recipes/tei/dts-dcterms-template.xml`
+
+for making the [DCTerms metadata](https://dtsapi.org/specifications/versions/v1.0/#scheme-for-collection-api-responses) object
+
+This is only a TEMPLATE, but may help you getting started.
+
+#### `recipes/tei/dts-seed-path.xml`
+
+for making the `seed:location` objects as required for the SEED DTS
+[collection.json](https://github.com/SCDH/seed-xc/blob/main/doc/dts-records.md#collectionjson)
+file
+
+#### `recipes/tei/dts-extensions-template.xml`
+
+for making the [extensions](https://dtsapi.org/specifications/versions/v1.0/#scheme-for-collection-api-responses) object
+
+This is only a TEMPLATE, but may help you getting started.
+
+### Recipes for the Top Level Collection
+
+#### `recipes/tei/dts-general-template.xml`
+
+This is only a TEMPLATE and needs your additions.
+
+### Recipes for Collection Structures
+
+The following recipes for structuring DTS Collections are rather
+mutually exclusive.
+
+#### `recipes/tei/dts-collection-flat.xml`
+
+All resources are contained in the top level collection.
+
+This is only a TEMPLATE, and needs your additions.
