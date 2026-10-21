@@ -17,6 +17,27 @@ Two strategies for making the recipes customizable are used:
   strategy](../../customization.md#customization): The recipes include
   from `local.xml`.
 
+## JSON-LD
+
+You can make nicely shaped JSON files from extracted RDF triples by
+[JSON-LD
+framing](https://www.w3.org/TR/json-ld11-framing/#framing). There are
+JSON-LD frames in the `frames` folder.
+
+- `frames/map.jsonld`: make a JSON file for representing an edition on
+  a geographic map (OSM etc.), by framing triples extracted from a
+  places file and from liked places throughout the edition which go
+  into a concordance of place mentions, and a link set for jumping
+  into the edition. See extraction recipes for [named
+  entities](#named-entities) below!
+
+Suitable [JSON-LD
+context](https://www.w3.org/TR/json-ld11/#the-context) files are
+located in the `context` folder. They are also made available via
+gitlab pages.
+
+# Recipes
+
 ## Named Entities
 
 ### `recipes/tei/lincs-entities.xml`
