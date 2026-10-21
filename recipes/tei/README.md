@@ -25,16 +25,17 @@ framing](https://www.w3.org/TR/json-ld11-framing/#framing). There are
 JSON-LD frames in the `frames` folder.
 
 - `frames/map.jsonld`: make a JSON file for representing an edition on
-  a geographic map (OSM etc.), by framing triples extracted from a
-  places file and from liked places throughout the edition which go
-  into a concordance of place mentions, and a link set for jumping
-  into the edition. See extraction recipes for [named
+  a geographic map (OSM etc.). This is shapes triples extracted from a
+  places file and from linked places throughout the edition which go
+  into a concordance of place mentions, and into a set of links for
+  jumping into the edition. See extraction recipes for [named
   entities](#named-entities) below!
 
 Suitable [JSON-LD
 context](https://www.w3.org/TR/json-ld11/#the-context) files are
 located in the `context` folder. They are also made available via
-gitlab pages.
+gitlab pages. See also: [suitable
+tools](../README.md#shaping-json-ld).
 
 # Recipes
 
